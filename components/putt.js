@@ -198,10 +198,22 @@ AFRAME.registerComponent("putt", {
       .normalize();
     directionOfPlayerToBall.y = 0;
 
-    var quaternion = new THREE.Quaternion();
-    quaternion.setFromUnitVectors(cameraDirection, directionOfPlayerToBall);
+    const crossCameraAndBall = new THREE.Vector3().crossVectors(
+      cameraDirection,
+      directionOfPlayerToBall
+    );
+    const directionFloat = crossCameraAndBall.dot(new THREE.Vector3(0, 1, 0));
+    let direction = 0;
 
-    this.cameraRig.object3D.applyQuaternion(quaternion);
+    if (directionFloat > 0.0) {
+      direction = 1.0;
+    } else if (directionFloat < 0.0) {
+      direction = -1.0;
+    }
+
+    let angle = cameraDirection.angleTo(directionOfPlayerToBall);
+
+    this.cameraRig.object3D.rotation.y += angle * direction;
     this.cameraRig.object3D.matrixNeedsUpdate = true;
   },
 
