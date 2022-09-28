@@ -1,8 +1,5 @@
 AFRAME.registerComponent("putt", {
-  // Game logic!
-  schema: {
-    handedness: { default: "right", type: "string" },
-  },
+  schema: {},
   init: function () {
     // Player els:
     this.clubRightEl = document.querySelector("#club-right");
@@ -128,6 +125,14 @@ AFRAME.registerComponent("putt", {
       "triggerdown",
       this.teleportToBall.bind(this)
     );
+    this.touchControllerL.addEventListener(
+      "triggerdown",
+      this.teleportToBall.bind(this)
+    );
+
+    document.addEventListener("handedness-changed", (e) => {
+      this.teleportToBall();
+    });
 
     /* Helper keybindings to position the ball for easier desktop dev & debugging */
     document.addEventListener("keydown", (event) => {
@@ -178,7 +183,7 @@ AFRAME.registerComponent("putt", {
     const flagPos = this.flagEl.object3D.position; // {x: 0, y: 0.125, z: -8}
     const dir = new THREE.Vector3().subVectors(flagPos, ballPos).normalize();
     dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(1); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
-    if (this.data.handedness === "right")
+    if (this.el.sceneEl.systems["handedness"].data.hand === "right")
       dir.subVectors(ballPos, dir); // if right-handed, subVectors
     else dir.addVectors(ballPos, dir); // if left-handed, addVectors
     this.cameraRig.object3D.position.copy(dir); // location is correct!
@@ -207,9 +212,9 @@ AFRAME.registerComponent("putt", {
       this.activeHoleScore++;
       this.scores[this.activeHoleIndex] = this.activeHoleScore;
       this.updateWatch();
-      if (this.data.handedness === "right") {
+      if (this.el.sceneEl.systems["handedness"].data.hand === "right") {
         this.touchControllerR.components.haptics.pulse(0.75, 200);
-      } else this.touchControllerR.components.haptics.pulse(0.75, 200);
+      } else this.touchControllerL.components.haptics.pulse(0.75, 200);
       this.ballParticles.object3D.position.copy(this.ballEl.object3D.position);
       this.ballParticles.components["particle-system"].startParticles();
       this.ballEl.components.sound.playSoundBound();
@@ -233,9 +238,9 @@ AFRAME.registerComponent("putt", {
         .querySelector(".floor")
         .removeAttribute("physx-body"); // remove colliders so the ball "falls through the hole"
       this.flagEl.components.sound.playSoundBound();
-      if (this.data.handedness === "right") {
+      if (this.el.sceneEl.systems["handedness"].data.hand === "right") {
         this.touchControllerR.components.haptics.pulse(1, 1000);
-      } else this.touchControllerR.components.haptics.pulse(1, 1000);
+      } else this.touchControllerL.components.haptics.pulse(1, 1000);
       const parString = this.parHandler(this.scores[this.activeHoleIndex]);
       this.hmdTextEl.setAttribute("text", `value:${parString}!;`);
       this.hmdTextEl.emit("cuehmdtextin");
