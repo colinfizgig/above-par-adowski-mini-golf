@@ -1,6 +1,13 @@
 /* jshint esversion: 9 */
 /* global THREE, AFRAME, gtag, Stats */
 
+document.addEventListener("DOMContentLoaded", (event) => {
+  document.querySelector("a-scene").setAttribute("webxr", {
+    optionalFeatures: "dom-overlay",
+    overlayElement: "#dom-overlay",
+  });
+});
+
 AFRAME.registerComponent("putt", {
   // Game logic!
   schema: {

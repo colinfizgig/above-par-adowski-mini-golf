@@ -1,0 +1,11 @@
+image: atlassian/default-image:3
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: "Deploying to Glitch"
+          deployment: production
+          script:
+            - git remote add glitch "$GLITCH_GIT_URL"
+            - git push glitch master:master -f
