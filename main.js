@@ -31,7 +31,9 @@ AFRAME.registerComponent("putt", {
     this.faderEl = document.querySelector("head-occlusion-fader");
     this.watchTextEl = document.querySelector(".watch-text");
     this.clubShadowEl = document.querySelector("#club-shadow");
-    this.shadowRaycaster = new THREE.Raycaster();
+    // this.shadowRaycaster = new THREE.Raycaster();
+    this.ballShadowRaycaster = new THREE.Raycaster();
+    this.clubShadowRaycaster = new THREE.Raycaster();
     // Course and scene els:
     this.ballEl = document.querySelector("#ball");
     this.ballShadowEl = document.querySelector("#ball-shadow");
