@@ -1,3 +1,5 @@
+<!-- @format -->
+
 <html>
   <head>
     <script>
@@ -457,7 +459,6 @@
         src="#environment-glb"
         visible="true"
       ></a-gltf-model>
-      
 
       <a-entity
         id="credits"
@@ -502,7 +503,7 @@
       </a-gltf-model>
 
       <!-- animated blocker in the main path to add a timing challenge -->
-      
+
       <a-box
         id="blocker"
         depth=".5"
@@ -514,7 +515,6 @@
         physx-body="type:kinematic;"
         visible="true"
       ></a-box>
-      
 
       <!-- navmesh based on environment glb, determines where character can walk/teleport -->
       <a-gltf-model
@@ -539,12 +539,12 @@
         physx-hidden-collision="true"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-one-floor-glb"
-           physx-body="type:static;angularDamping:.5;linearDamping:.5"
-           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
-           visible="false"
-           physx-hidden-collision="true"           
+          class="floor"
+          src="#hole-one-floor-glb"
+          physx-body="type:static;angularDamping:.5;linearDamping:.5"
+          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
+          visible="false"
+          physx-hidden-collision="true"
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -563,12 +563,12 @@
         physx-hidden-collision="true"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-two-floor-glb"
-           physx-body="type:static;angularDamping:.5;linearDamping:.5"
-           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
-           visible="false"
-           physx-hidden-collision="true"          
+          class="floor"
+          src="#hole-two-floor-glb"
+          physx-body="type:static;angularDamping:.5;linearDamping:.5"
+          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
+          visible="false"
+          physx-hidden-collision="true"
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -630,18 +630,26 @@
             <button onclick="closeModal()" id="myEnterVRButton">Close</button>
           </div>
         </div>
-        <section
-          style="
-            display: inline-block;
-            background: lavenderblush;
-            color: #333333;
-            border-radius: 1em;
-            padding: 1em;
-            margin: 0;
-            accent-color: hotpink;
-          "
-          id="my-interface"
-        >
+
+        <img
+          src="./assets/settings.png"
+          alt="settings icon"
+          class="settings icon"
+          id="settingsIcon"
+          onclick="openSettings(this)"
+        />
+
+        <section id="my-interface">
+          <div class="closeContainer">
+            <img
+              src="./assets/cancel.png"
+              alt="close settings icon"
+              class="icon"
+              id="closeSettingsIcon"
+              onclick="closeSettings(this)"
+            />
+          </div>
+
           <h2>Settings</h2>
           <fieldset style="border: none; margin-top: 0.5em">
             <legend>Left- or Right-Handed Putter</legend>
@@ -758,6 +766,16 @@
                 .querySelector(".floor")
                 .setAttribute("ground-listener", "handedness: left;");
             }
+          }
+
+          function openSettings() {
+            document.querySelector("#my-interface").style = "display:block;";
+            document.querySelector("#settingsIcon").style = "display:none;";
+          }
+
+          function closeSettings() {
+            document.querySelector("#my-interface").style = "display:none;";
+            document.querySelector("#settingsIcon").style = "display:block;";
           }
         </script>
       </div>

@@ -1,5 +1,7 @@
+/** @format */
+
 body {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .overlay-footer {
@@ -18,6 +20,13 @@ body {
 
 #my-interface {
   user-select: none;
+  display: none;
+  background: lavenderblush;
+  color: #333333;
+  border-radius: 1em;
+  padding: 1em;
+  margin: 0;
+  accent-color: hotpink;
 }
 
 #my-interface h2 {
@@ -38,8 +47,12 @@ body {
 
 .intro-modal-container {
   display: flex;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .intro-modal {
@@ -48,4 +61,31 @@ body {
   width: 40vw;
   display: flex;
   flex-direction: column;
+  border-radius: 20px;
+}
+
+#myEnterVRButton {
+  width: 50%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.settings {
+  position: fixed;
+  top: 2%;
+  left: 1%;
+  width: 30px;
+  display: block;
+  z-index: 9999;
+}
+
+.closeContainer {
+  display: flex;
+  justify-content: end;
+}
+
+#closeSettingsIcon {
+  width: 20px;
+  justify-self: end;
 }
