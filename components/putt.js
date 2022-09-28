@@ -169,9 +169,11 @@ AFRAME.registerComponent("putt", {
     gtag("event", "gameInit");
   },
 
+  /**
+   * Move and rotate the player to the ball
+   */
   teleportToBall: async function () {
-    // console.log("triggerdown called teleportToBall");
-    // this.faderEl.emit("cuefadeout");
+    // Move player towards the ball
     const ballPos = this.ballEl.object3D.position; // {x: 0, y: 0.125, z: -1.25}
     const flagPos = this.flagEl.object3D.position; // {x: 0, y: 0.125, z: -8}
     const dir = new THREE.Vector3().subVectors(flagPos, ballPos).normalize();
@@ -182,71 +184,20 @@ AFRAME.registerComponent("putt", {
     this.cameraRig.object3D.position.copy(dir); // location is correct!
 
     // Rotate player towards the ball
-    console.log(this.el.sceneEl.camera);
     const cameraDirection = new THREE.Vector3();
-
     this.el.sceneEl.camera.getWorldDirection(cameraDirection); //Already normalized
-    // console.log(cameraDirection);
-    // cameraDirection.normalize();
-    // console.log(cameraDirection);
-    // const cameraLookRotationInRadians = Math.atan2(
-    //   cameraDirection.x,
-    //   cameraDirection.z
-    // );
-
     cameraDirection.y = 0;
 
-    const directionOfUserToBall = new THREE.Vector3()
+    const directionOfPlayerToBall = new THREE.Vector3()
       .subVectors(ballPos, this.cameraRig.object3D.position)
       .normalize();
+    directionOfPlayerToBall.y = 0;
 
-    directionOfUserToBall.y = 0;
-
-    var quaternion = new THREE.Quaternion(); // create one and reuse it
-
-    quaternion.setFromUnitVectors(cameraDirection, directionOfUserToBall);
+    var quaternion = new THREE.Quaternion();
+    quaternion.setFromUnitVectors(cameraDirection, directionOfPlayerToBall);
 
     this.cameraRig.object3D.applyQuaternion(quaternion);
     this.cameraRig.object3D.matrixNeedsUpdate = true;
-
-    // const matrix = new THREE.Matrix4();
-    // const axis = new THREE.Vector3(0, 1, 0);
-    // axis.cross(cameraDirection, directionOfUserToBall);
-    // const angle = cameraDirection.angleTo(directionOfUserToBall);
-    // matrix.makeRotationAxis(axis, angle);
-    // this.cameraRig.object3D.applyMatrix(matrix);
-    // this.cameraRig.object3D.matrixNeedsUpdate = true;
-
-    // CLOSEST START
-    // let angle = cameraDirection.angleTo(directionOfUserToBall);
-
-    // this.cameraRig.object3D.rotation.y += angle;
-    // this.cameraRig.object3D.matrixNeedsUpdate = true;
-
-    // CLOSEST END
-
-    // console.log(angle);
-
-    // TODO: figure out appropriate lookAt vector
-    // A bunch of misbegotten attempts to rotate the player. */
-
-    // // First guess:
-    // const lookDir = new THREE.Vector3().subVectors(ballPos, this.cameraRig.object3D.position).normalize();
-    // const euler = new THREE.Euler().setFromVector3(new THREE.Vector3(0, lookDir.y, 0).normalize());  // should work, right? But it faces opposite the ball.
-    // // this.cameraRig.object3D.lookAt(ballPos.negate());  // negate is the negative of the vector,
-    // console.log(ballPos)
-    // console.log(this.cameraRig.object3D.rotation)
-    // // this.head.object3D.lookAt(ballPos);  // tried various negative values, no luck
-    // this.cameraRig.object3D.setRotationFromEuler(euler);
-    // // Also tried:
-    // // console.log(this.cameraRig.object3D.position)
-    // const euler = new THREE.Euler().setFromVector(lookDir);
-    // // this.cameraRig.object3D.setRotationFromEuler(euler)
-    // this.cameraRig.setAttribute("rotation", `0 ${lookDir.y} 0`); // this works once, but rotation on that rig breaks
-
-    // await new Promise(resolve => setTimeout(resolve, 1000));
-    // this.faderEl.emit("cuefadein");
-    // await new Promise(resolve => setTimeout(resolve, 1000));
   },
 
   putt: function () {
