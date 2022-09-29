@@ -21,7 +21,7 @@
 
     <!-- Our custom logic -->
     <script src="model-utils.js"></script>
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
     <script src="trail.js"></script>
     <script src="simple-navmesh-constraint.js"></script>
 
@@ -457,7 +457,6 @@
         src="#environment-glb"
         visible="true"
       ></a-gltf-model>
-      
 
       <a-entity
         id="credits"
@@ -502,7 +501,7 @@
       </a-gltf-model>
 
       <!-- animated blocker in the main path to add a timing challenge -->
-      
+
       <a-box
         id="blocker"
         depth=".5"
@@ -514,7 +513,6 @@
         physx-body="type:kinematic;"
         visible="true"
       ></a-box>
-      
 
       <!-- navmesh based on environment glb, determines where character can walk/teleport -->
       <a-gltf-model
@@ -539,12 +537,12 @@
         physx-hidden-collision="true"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-one-floor-glb"
-           physx-body="type:static;angularDamping:.5;linearDamping:.5"
-           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
-           visible="false"
-           physx-hidden-collision="true"           
+          class="floor"
+          src="#hole-one-floor-glb"
+          physx-body="type:static;angularDamping:.5;linearDamping:.5"
+          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
+          visible="false"
+          physx-hidden-collision="true"
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -563,12 +561,12 @@
         physx-hidden-collision="true"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-two-floor-glb"
-           physx-body="type:static;angularDamping:.5;linearDamping:.5"
-           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
-           visible="false"
-           physx-hidden-collision="true"          
+          class="floor"
+          src="#hole-two-floor-glb"
+          physx-body="type:static;angularDamping:.5;linearDamping:.5"
+          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
+          visible="false"
+          physx-hidden-collision="true"
         ></a-gltf-model>
       </a-gltf-model>
 
