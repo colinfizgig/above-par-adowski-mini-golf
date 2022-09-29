@@ -17,7 +17,6 @@ AFRAME.registerComponent("putt", {
     this.faderEl = document.querySelector("head-occlusion-fader");
     this.watchTextEl = document.querySelector(".watch-text");
     this.clubShadowEl = document.querySelector("#club-shadow");
-    // this.shadowRaycaster = new THREE.Raycaster();
     this.ballShadowRaycaster = new THREE.Raycaster();
     this.clubShadowRaycaster = new THREE.Raycaster();
     // Course and scene els:
@@ -46,7 +45,6 @@ AFRAME.registerComponent("putt", {
     this.activeHoleScore = 0;
     this.activeHoleIndex = 0;
     this.scores[this.activeHoleIndex] = 0;
-    this.totalParScore = 0;
     this.tickCounter = 0;
     this.parInfo = {
       "-3": {
@@ -263,70 +261,82 @@ AFRAME.registerComponent("putt", {
       this.activeHoleIndex++; // advance
     }
     if (this.activeHoleIndex < this.courseColliders.length) {
-      // if there are more holes, apply colliders
-      await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
-      this.flagEl.components["particle-system"].stopParticles();
-      this.faderEl.emit("cuefadeout");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      this.courseColliders[this.activeHoleIndex - 1].setAttribute(
-        "visible",
-        "false"
-      );
-      this.courseColliders[this.activeHoleIndex - 1]
-        .querySelector(".floor")
-        .removeAttribute("ground-listener");
-      this.courseColliders[this.activeHoleIndex - 1]
-        .querySelector(".floor")
-        .classList.remove("floor");
-      //this.courseColliders[this.activeHoleIndex].setAttribute("visible", "true");
-      this.courseColliders[this.activeHoleIndex].setAttribute(
-        "physx-body",
-        "type:static;angularDamping:.8;linearDamping:.8"
-      );
-      this.courseColliders[this.activeHoleIndex].setAttribute(
-        "physx-material",
-        "restitution:.99; dynamicFriction:.25; staticFriction:.65;"
-      );
-      //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
-      this.courseColliders[this.activeHoleIndex]
-        .querySelector(".floor")
-        .setAttribute(
-          "physx-material",
-          "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
-        );
-
-      this.courseColliders[this.activeHoleIndex]
-        .querySelector(".floor")
-        .setAttribute("ground-listener", "");
-      this.updateWatch();
-      this.flagEl.setAttribute(
-        "position",
-        this.courseColliders[this.activeHoleIndex].dataset.flag
-      );
-      this.cameraRig.setAttribute(
-        "position",
-        this.courseColliders[this.activeHoleIndex].dataset.startpos
-      );
-      this.cameraRig.setAttribute("rotation", "0 0 0");
-      this.faderEl.emit("cuefadein");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
-      this.holeOver = false;
+      this.nextHole();
     } else {
       // game over
       this.gameOver = true;
+
       this.credits.setAttribute("visible", true);
       this.credits.emit("rollCredits", null, true);
+
       gtag("event", "finishedGame");
+
+      // Till we have an end screen & ui
+      setTimeout(() => {
+        this.restartGame();
+      }, 5000);
     }
+  },
+
+  async nextHole() {
+    console.log("NEXT HOLE CODE");
+    // if there are more holes, apply colliders
+    await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
+    this.flagEl.components["particle-system"].stopParticles();
+    this.faderEl.emit("cuefadeout");
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const lastHoleIndex =
+      this.activeHoleIndex == 0
+        ? this.courseColliders.length - 1
+        : this.activeHoleIndex - 1;
+
+    if (lastHoleIndex != this.activeHoleIndex) {
+      this.courseColliders[lastHoleIndex].setAttribute("visible", "false");
+      this.courseColliders[lastHoleIndex]
+        .querySelector(".floor")
+        .removeAttribute("ground-listener");
+    }
+    //this.courseColliders[this.activeHoleIndex].setAttribute("visible", "true");
+    this.courseColliders[this.activeHoleIndex].setAttribute(
+      "physx-body",
+      "type:static;angularDamping:.8;linearDamping:.8"
+    );
+    this.courseColliders[this.activeHoleIndex].setAttribute(
+      "physx-material",
+      "restitution:.99; dynamicFriction:.25; staticFriction:.65;"
+    );
+    //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
+    this.courseColliders[this.activeHoleIndex]
+      .querySelector(".floor")
+      .setAttribute(
+        "physx-material",
+        "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
+      );
+
+    this.courseColliders[this.activeHoleIndex]
+      .querySelector(".floor")
+      .setAttribute("ground-listener", "");
+    this.updateWatch();
+    this.flagEl.setAttribute(
+      "position",
+      this.courseColliders[this.activeHoleIndex].dataset.flag
+    );
+    this.cameraRig.setAttribute(
+      "position",
+      this.courseColliders[this.activeHoleIndex].dataset.startpos
+    );
+    this.cameraRig.setAttribute("rotation", "0 0 0");
+    this.faderEl.emit("cuefadein");
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
+    this.holeOver = false;
   },
 
   parHandler: function (score) {
     let parScore =
       score - this.courseColliders[this.activeHoleIndex].dataset.par;
     console.log(parScore);
-    this.totalParScore += parScore;
-    console.log(this.totalParScore);
     if (parScore > 4) parScore = 4; // for purposes of accessing parInfo for SFX and VFX
     let parString = this.parInfo[parScore]?.name;
     this.parInfo[parScore].soundEl.play();
@@ -402,7 +412,8 @@ AFRAME.registerComponent("putt", {
       this.courseColliders[this.activeHoleIndex].dataset.par.toString() +
       "\n";
     watchString += "Score: " + this.activeHoleScore.toString() + "\n";
-    watchString += "Overall: " + this.totalParScore.toString() + "\n";
+    watchString +=
+      "Overall: " + this.scores.reduce((a, b) => a + b).toString() + "\n";
     this.watchTextEl.setAttribute("text", `value:${watchString};`);
   },
 
@@ -418,6 +429,23 @@ AFRAME.registerComponent("putt", {
       // TODO: modulate bounce sound depending on velocity of ball
       this.ballEl.components.sound.playSoundBound();
     }
+  },
+
+  restartGame() {
+    // Reset overall game state
+    this.gameOver = false;
+    this.activeHoleIndex = 0;
+    this.scores = new Array(this.courseColliders.length).fill("0");
+
+    // Hide the credits or endscreen content
+    this.credits.setAttribute("visible", false);
+    this.credits.emit("pauseCredits", null, true);
+
+    // Start Next Game
+    this.nextHole();
+
+    // Track analytics of user choice to restart
+    gtag("event", "restartGame");
   },
 
   tick: function (t, dt) {
