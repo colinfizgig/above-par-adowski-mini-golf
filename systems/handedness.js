@@ -14,8 +14,14 @@ AFRAME.registerSystem("handedness", {
     this.touchControllerR.addEventListener("abuttondown", () => {
       this.setHand("right");
     });
+    this.touchControllerR.addEventListener("bbuttondown", () => {
+      this.setHand("right");
+    });
 
     this.touchControllerL.addEventListener("xbuttondown", () => {
+      this.setHand("left");
+    });
+    this.touchControllerL.addEventListener("ybuttondown", () => {
       this.setHand("left");
     });
   },

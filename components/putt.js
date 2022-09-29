@@ -130,10 +130,6 @@ AFRAME.registerComponent("putt", {
       this.teleportToBall.bind(this)
     );
 
-    document.addEventListener("handedness-changed", (e) => {
-      this.teleportToBall();
-    });
-
     /* Helper keybindings to position the ball for easier desktop dev & debugging */
     document.addEventListener("keydown", (event) => {
       console.log("onkeydown Button " + event.code);
