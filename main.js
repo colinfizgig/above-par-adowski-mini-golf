@@ -1,6 +1,7 @@
 /* jshint esversion: 9 */
 /* global THREE, AFRAME, gtag, Stats */
 
+import "./systems/handedness.js";
 import "./components/putt.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -12,9 +13,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 /* This component automatically sets club height based on raycast intersections w/ the floor */
 AFRAME.registerComponent("ground-listener", {
-  schema: {
-    handedness: { type: "string", default: "right" },
-  },
+  schema: {},
   init: function () {
     this.raycasterEl;
     this.clubShaft = document.querySelector(".club-shaft");
@@ -28,10 +27,14 @@ AFRAME.registerComponent("ground-listener", {
     this.el.addEventListener("raycaster-intersected-cleared", (evt) => {
       this.raycasterEl = null;
     });
+
+    document.addEventListener("handedness-changed", (e) => {
+      this.updateHand(e.detail.hand);
+    });
   },
 
-  update: function () {
-    if (this.data.handedness == "right") {
+  updateHand: function (hand) {
+    if (hand == "right") {
       this.clubShaft = document.querySelector("#club-right .club-shaft");
       this.clubHeadContainer = document.querySelector(
         "#club-right .club-head-container"
