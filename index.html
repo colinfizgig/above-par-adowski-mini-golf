@@ -69,8 +69,44 @@
   <body>
     <!-- Non-positional audio outside of a-scene to save on three Groups -->
     <audio
-      id="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Mario%20Crossing%202.mp3?v=1660053042502"
+      id="backing-track-1"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Seaside_Samba_instrumental_1_44.mp3?v=1664479195583"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-2"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Cidade_Da_Paixao_instrumental_2_34.mp3?v=1664479195369"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-3"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Clash_Of_The_Claves_instrumental_1_48.mp3?v=1664479195434"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-4"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Coastal_Dreaming_instrumental_3_17.mp3?v=1664479195562"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-5"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Soul_Salsa_instrumental_3_53.mp3?v=1664479195614"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-6"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_In_The_Money_instrumental_2_02.mp3?v=1664479195670"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
@@ -622,8 +658,26 @@
         </section>
 
         <script>
-          const backingTrack = document.querySelector("#backing-track");
-          backingTrack.volume = 0.5;
+          const backingTracks = document.querySelectorAll('.backing-track')
+          let trackIndex = 0
+          let trackCount = backingTracks.length
+          let backingTrack = backingTracks[trackIndex]
+          
+          let playNextTrack = () => {            
+            trackIndex++
+            if(trackIndex == trackCount) trackIndex = 0
+            backingTrack = backingTracks[trackIndex]
+            backingTrack.play()
+          }
+          
+          for (var i=0; i<trackCount; i++){
+            let t = backingTracks[i]
+            t.volume = 0.25
+            t.addEventListener('ended', playNextTrack)
+          }          
+
+          // const backingTrack = document.querySelector("#backing-track");
+          // backingTrack.volume = 0.5;
 
           let movementType = "teleport";
           const cameraRig = document.querySelector("#cameraRig");
