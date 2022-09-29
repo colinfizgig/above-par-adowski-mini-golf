@@ -1,21 +1,14 @@
 /** @format */
 
 body {
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  /* font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif; */
+  font-family: new-reason, sans-serif;
+  font-weight: 100;
+  font-style: normal;
 }
 
 .overlay-footer {
   position: absolute;
-}
-
-.a-dom-overlay button {
-  padding: 1em;
-  appearance: none;
-  background: #00000055;
-  border: 3px solid white;
-  border-radius: 1em;
-  margin: 1em 1em 0 0;
-  color: white;
 }
 
 #my-interface {
@@ -45,39 +38,144 @@ body {
   color: white;
 }
 
-.intro-modal-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
+/* main menu */
 
-.intro-modal {
-  padding: 1em 2em;
-  background: white;
-  width: 40vw;
+.main-menu {
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%);
 }
 
-#myEnterVRButton {
-  width: 50%;
+.main-menu-container {
+  position: relative;
+}
+
+#sign {
+  height: 90vh;
+}
+
+.main-content {
+  position: absolute;
+  left: 49%;
+  transform: translateX(-50%);
+  bottom: 17.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainButton {
+  color: #ffffd5;
+  border: none;
+  background-color: #f0693f;
+  padding: 5% 10%;
+  box-shadow: 5px 5px 0px#de4d1f;
+}
+
+.mainButton:hover {
+  background-color: #de4d1f;
+  box-shadow: 5px 5px 0px#b13f1c;
+}
+
+.main-content .mainButton {
+  font-size: 2em;
+  margin-bottom: 10%;
+}
+
+.textButton {
+  color: #0e8d49;
+  background-color: Transparent;
+  border: none;
+  font-size: 2em;
+}
+
+/* ------- modal ------------------------------------------ */
+
+.intro-modal {
+  background-color: #0e8d49;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.intro-modal-container {
+  background-color: pink;
+}
+
+.modal-content {
+  position: relative;
+}
+
+.modal-text {
+  position: absolute;
+  right: 5%;
+  top: 18%;
+  width: 30%;
+  text-align: center;
+}
+
+.modalButtons {
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%);
+  padding-top: 10%;
+  width: 50%;
+  text-align: center;
 }
 
+.modalButtons button {
+  margin: auto;
+  padding: 10% 20%;
+  margin-bottom: 10%;
+}
+
+#modalBackground {
+  width: 75vw;
+}
+
+hr {
+  height: 3px;
+  width: 12px;
+  background-color: #ecec43;
+  border: none;
+}
+
+h1 {
+  color: #ecec43;
+  font-size: 1.98em;
+  text-transform: uppercase;
+}
+
+.bodyText {
+  color: #fffed5;
+  font-size: 1em;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.instructionIcons {
+  height: 24px;
+  padding: 3%;
+}
+
+/* settings ------------------------------------------------- */
 .settings {
   position: fixed;
   top: 2%;
   left: 1%;
   width: 30px;
   display: block;
-  z-index: 9999;
+  /* z-index: 9999; */
 }
 
 .closeContainer {

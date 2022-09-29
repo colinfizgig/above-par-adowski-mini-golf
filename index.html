@@ -2,6 +2,7 @@
 
 <html>
   <head>
+    <link rel="stylesheet" href="https://use.typekit.net/xfo5grg.css" />
     <script>
       // WebXR requires https: to work so ensure redirected if needed.
       if (
@@ -602,32 +603,95 @@
 
     <div id="dom-overlay">
       <div class="overlay-footer">
-        <div class="intro-modal-container">
-          <div class="intro-modal">
-            <h1>Above Par-adowski Mini-Golf, Par-t 2</h1>
-            <h3>
-              WebXR putt putt from prototype to polished feature built for the
-              Meta Quest 2 browser.
-            </h3>
-            <p>
-              This game started out as a
-              <a
-                href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
-                target="_blank"
-                >40-hour WebXR prototype</a
-              >, but now aspires to compete in quality with native VR apps. I
-              blogged about this process here.
-            </p>
-            <p>
-              This game is designed to use one Quest 2 controller. Select left
-              or right-handed settings before beginning. Use the joystick to
-              teleport manually, or use the trigger to teleport right to the
-              ball. The club will adjust to your height. Your score will be
-              visible on your wrist watch. Enter VR to start.
-            </p>
-            <p>Test commit from localhost!</p>
-            <p>-- James C. Kane.</p>
-            <button onclick="closeModal()" id="myEnterVRButton">Close</button>
+        <div class="main-menu">
+          <div class="main-menu-container">
+            <div class="main-content">
+              <button class="mainButton" id="playInVr">PLAY IN VR</button>
+              <button class="textButton aboutBtn">ABOUT</button>
+              <button class="textButton" id="howToPlayButtonMain">
+                HOW TO PLAY
+              </button>
+            </div>
+
+            <img src="./assets/sign.png" alt="" id="sign" />
+          </div>
+        </div>
+
+        <div class="intro-modal">
+          <div class="intro-modal-container">
+            <div class="modal-content">
+              <div class="modal-text" id="aboutContent">
+                <h1>Above Par-adowski</h1>
+                <p class="bodyText">
+                  A WebXR putt putt game built for the Meta Quest 2 browser.
+                </p>
+                <hr class="yellowHr" />
+                <p class="bodyText">
+                  This game started out as a 40-hour WebXR prototype, but now
+                  aspires to compete in quality with native VR apps.
+                </p>
+                <hr class="yellowHr" />
+                <a
+                  class="bodyText"
+                  href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
+                  target="_blank"
+                  >Read more about our process here.
+                </a>
+
+                <div class="modalButtons">
+                  <button class="mainButton" id="playInVrAbout">
+                    PLAY IN VR
+                  </button>
+                  <button class="mainButton" id="howToPlayButtonModal">
+                    HOW TO PLAY
+                  </button>
+                </div>
+              </div>
+
+              <div class="modal-text" id="howToContent">
+                <h1>How to play</h1>
+
+                <div class="iconContainer">
+                  <img
+                    src="./assets/xy.png"
+                    alt="x and y buttons"
+                    class="instructionIcons"
+                  />
+                  <p class="bodyText">or</p>
+                  <img
+                    src="./assets/ab.png"
+                    alt="a and b buttons"
+                    class="instructionIcons"
+                  />
+                </div>
+
+                <p class="bodyText">
+                  Once the game begins, press the X/Y or A/B buttons on either
+                  controller to change your club hand.
+                </p>
+                <hr class="yellowHr" />
+                <p class="bodyText">
+                  Use the joystick to navigate manually, or use the trigger to
+                  teleport directly to the ball. The club will adjust to your
+                  height.
+                </p>
+                <hr class="yellowHr" />
+                <p class="bodyText">
+                  Sink your putt in as few strokes as possible. Par or under is
+                  the goal.
+                </p>
+                <button class="mainButton" id="playInVrHowTo">
+                  PLAY IN VR
+                </button>
+              </div>
+
+              <img
+                src="./assets/popup_bg.png"
+                alt=""
+                class="modal"
+                id="modalBackground"
+              />
+            </div>
           </div>
         </div>
 
@@ -636,7 +700,6 @@
           alt="settings icon"
           class="settings icon"
           id="settingsIcon"
-          onclick="openSettings(this)"
         />
 
         <section id="my-interface">
@@ -646,7 +709,6 @@
               alt="close settings icon"
               class="icon"
               id="closeSettingsIcon"
-              onclick="closeSettings(this)"
             />
           </div>
 
@@ -694,11 +756,6 @@
           sceneEl.addEventListener("exit-vr", function () {
             cameraRig.setAttribute("movement-controls", "enabled", true);
           });
-
-          function closeModal() {
-            document.querySelector(".intro-modal").style = "display:none;";
-            backingTrack.play();
-          }
 
           // This is probably overly complicated and repetitive, should just swap the container DOM node
           function addPhysics(el) {
@@ -767,18 +824,10 @@
                 .setAttribute("ground-listener", "handedness: left;");
             }
           }
-
-          function openSettings() {
-            document.querySelector("#my-interface").style = "display:block;";
-            document.querySelector("#settingsIcon").style = "display:none;";
-          }
-
-          function closeSettings() {
-            document.querySelector("#my-interface").style = "display:none;";
-            document.querySelector("#settingsIcon").style = "display:block;";
-          }
         </script>
       </div>
     </div>
+
+    <script src="modals.js"></script>
   </body>
 </html>
