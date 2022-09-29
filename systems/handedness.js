@@ -1,6 +1,6 @@
 AFRAME.registerSystem("handedness", {
   schema: {
-    hand: { default: "right", type: "string" },
+    hand: { default: "none", type: "string" },
   },
 
   init: function () {
@@ -24,57 +24,24 @@ AFRAME.registerSystem("handedness", {
     this.touchControllerL.addEventListener("ybuttondown", () => {
       this.setHand("left");
     });
-  },
 
-  addPhysics(el) {
-    el.querySelector(".club-head-container").setAttribute(
-      "physx-body",
-      "type:kinematic;highPrecision:true;"
-    );
-    el.querySelector(".club-head-container").setAttribute(
-      "physx-material",
-      "restitution:.6;"
-    );
-    el.querySelector(".club-head").setAttribute("physx-no-collision", "");
-    el.querySelector(".club-collider").setAttribute(
-      "physx-hidden-collision",
-      ""
-    );
-    el.setAttribute("raycaster", "objects:.floor;showLine:false;far:1.5;");
-  },
-
-  removePhysics(el) {
-    el.querySelector(".club-collider").removeAttribute(
-      "physx-hidden-collision"
-    );
-    el.querySelector(".club-head").removeAttribute("physx-no-collision");
-    el.querySelector(".club-head-container").removeAttribute("physx-material");
-    el.querySelector(".club-head-container").removeAttribute("physx-body");
-    el.removeAttribute("raycaster");
+    // Might be a better way to check for ready
+    document.addEventListener("DOMContentLoaded", (event) => {
+      this.setHand("right");
+    });
   },
 
   updateClubVisuals(hand) {
     const leftController = document.querySelector("#left-controller");
     const rightController = document.querySelector("#right-controller");
-    const clubR = document.querySelector("#club-right");
-    const clubL = document.querySelector("#club-left");
+    const clubWrapper = document.querySelector("#club-wrapper");
 
     if (hand === "right") {
-      leftController.setAttribute("visible", "false");
-      rightController.setAttribute("visible", "true");
-      this.removePhysics(clubL);
-      this.addPhysics(clubR);
-      document
-        .querySelector(".floor")
-        .setAttribute("ground-listener", "handedness: right;");
+      rightController.object3D.add(clubWrapper.object3D);
+      clubWrapper.object3D.scale.set(1, 1, 1);
     } else if (hand === "left") {
-      leftController.setAttribute("visible", "true");
-      rightController.setAttribute("visible", "false");
-      this.removePhysics(clubR);
-      this.addPhysics(clubL);
-      document
-        .querySelector(".floor")
-        .setAttribute("ground-listener", "handedness: left;");
+      leftController.object3D.add(clubWrapper.object3D);
+      clubWrapper.object3D.scale.set(-1, 1, 1);
     }
   },
 

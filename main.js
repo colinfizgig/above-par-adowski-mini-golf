@@ -16,8 +16,10 @@ AFRAME.registerComponent("ground-listener", {
   schema: {},
   init: function () {
     this.raycasterEl;
-    this.clubShaft = document.querySelector(".club-shaft");
-    this.clubHeadContainer = document.querySelector(".club-head-container");
+    this.clubShaft = document.querySelector("#club-wrapper .club-shaft");
+    this.clubHeadContainer = document.querySelector(
+      "#club-wrapper .club-head-container"
+    );
     this.clubShaft.object3D.scale.setZ(1.5 - 0.13);
     this.clubHeadContainer.object3D.position.setZ(-1.5 + 0.13);
     // Use events to figure out what raycaster is listening
@@ -27,36 +29,14 @@ AFRAME.registerComponent("ground-listener", {
     this.el.addEventListener("raycaster-intersected-cleared", (evt) => {
       this.raycasterEl = null;
     });
-
-    document.addEventListener("handedness-changed", (e) => {
-      this.updateHand(e.detail.hand);
-    });
-  },
-
-  updateHand: function (hand) {
-    if (hand == "right") {
-      this.clubShaft = document.querySelector("#club-right .club-shaft");
-      this.clubHeadContainer = document.querySelector(
-        "#club-right .club-head-container"
-      );
-    } else {
-      this.clubShaft = document.querySelector("#club-left .club-shaft");
-      this.clubHeadContainer = document.querySelector(
-        "#club-left .club-head-container"
-      );
-    }
   },
 
   tick: function () {
-    if (!this.raycasterEl) {
-      return;
-    } // Not intersecting.
+    if (!this.raycasterEl) return; // Not intersecting.
     let intersection = this.raycasterEl.components.raycaster.getIntersection(
       this.el
     );
-    if (!intersection) {
-      return;
-    }
+    if (!intersection) return;
     this.clubShaft.object3D.scale.setZ(intersection.distance - 0.13);
     this.clubHeadContainer.object3D.position.setZ(
       -intersection.distance + 0.13

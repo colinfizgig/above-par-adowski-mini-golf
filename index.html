@@ -260,125 +260,88 @@
         </a-entity>
 
         <a-entity class="controller-container">
+          <!-- The club model and colliders -->
           <a-entity
-            id="right-controller"
-            data-right="ray"
-            mixin="blink"
-            blink-controls
-            haptics
-            hp-mixed-reality-controls="hand:right;model:false;"
-            oculus-touch-controls="hand:right;model:false;"
-            vive-controls="hand:right;model:false;"
-            position="0 1 0"
+            id="club-wrapper"
+            class="club"
+            rotation="34 0 0"
+            raycaster="objects:.floor;showLine:false;far:1.5;"
           >
-            <!-- The club model and colliders -->
+            <a-gltf-model
+              class="club-handle"
+              src="#club-handle-glb"
+              position="0 0 .15"
+            >
+              <!-- A wrist watch containing a text element with score info -->
+              <a-entity
+                class="watch-text"
+                position=".072 -.01 -.027"
+                rotation="22.748 112.868 162.974"
+                text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;width:.08;color:white;align:center;
+        font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
+        font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
+              ></a-entity>
+            </a-gltf-model>
+            <!-- gets scaled by ground-listener -->
+            <a-gltf-model
+              class="club-shaft"
+              src="#club-shaft-glb"
+            ></a-gltf-model>
+            <!-- gets translated by ground-listener -->
             <a-entity
-              id="club-right"
-              class="club"
-              rotation="34 0 0"
-              raycaster="objects:.floor;showLine:false;far:1.5;"
+              class="club-head-container"
+              position="0 0 -1"
+              physx-body="type:kinematic;highPrecision:true;"
+              physx-material="restitution: .6;"
             >
               <a-gltf-model
-                class="club-handle"
-                src="#club-handle-glb"
-                position="0 0 .15"
-              >
-                <!-- A wrist watch containing a text element with score info -->
-                <a-entity
-                  class="watch-text"
-                  position=".072 -.01 -.027"
-                  rotation="22.748 112.868 162.974"
-                  text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;width:.08;color:white;align:center;
-                    font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
-                    font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
-                ></a-entity>
-              </a-gltf-model>
-              <!-- gets scaled by ground-listener -->
-              <a-gltf-model
-                class="club-shaft"
-                src="#club-shaft-glb"
-              ></a-gltf-model>
-              <!-- gets translated by ground-listener -->
-              <a-entity
-                class="club-head-container"
-                position="0 0 -1"
-                physx-body="type:kinematic;highPrecision:true;"
-                physx-material="restitution: .6;"
-              >
-                <a-gltf-model
-                  class="club-head"
-                  src="#club-head-glb"
-                  highlight="coreOpacity: 0.5;"
-                  physx-no-collision=""
-                >
-                  <a-entity
-                    class="club-head-center"
-                    width="0.125"
-                    height="=0.125"
-                    position="0.023 0.013 -.13"
-                    visible="false"
-                    physx-no-collision=""
-                  ></a-entity>
-                </a-gltf-model>
-                <a-gltf-model
-                  class="club-collider"
-                  src="#club-collider-glb"
-                  visible="true"
-                  physx-hidden-collision="false"
-                ></a-gltf-model>
-              </a-entity>
-            </a-entity>
-          </a-entity>
-
-          <a-entity
-            id="left-controller"
-            data-left="ray"
-            mixin="blink"
-            blink-controls
-            haptics
-            hp-mixed-reality-controls="hand:left;model:false;"
-            oculus-touch-controls="hand:left;model:false;"
-            vive-controls="hand:left;model:false;"
-            visible="false"
-          >
-            <!-- NOTE/TODO: This is a duplicate of the R-handed club, w/ some reversed rotations and inverse X scale on the model.
-                            Tried to improve by removing the extra club, and appending a single club container here instead 
-                            But this has proven difficult so far - the physics system complains (even if I remove the physics system) -->
-            <a-entity id="club-left" rotation="34 0 0" scale="-1 1 1">
-              <a-gltf-model
-                class="club-handle"
-                src="#club-handle-glb"
-                position="0 0 .15"
+                class="club-head"
+                src="#club-head-glb"
+                highlight="coreOpacity: 0.5;"
+                physx-no-collision=""
               >
                 <a-entity
-                  class="watch-text"
-                  position=".072 -.01 -.027"
-                  rotation="22.748 112.868 162.974"
-                  text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;
-                  width:.08;color:white;align:center;
-                  font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
-                  font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
-                ></a-entity>
-              </a-gltf-model>
-              <a-gltf-model
-                class="club-shaft"
-                src="#club-shaft-glb"
-              ></a-gltf-model>
-              <a-entity class="club-head-container" position="0 0 -1">
-                <!-- this gets translated by ground-listener -->
-                <a-gltf-model
-                  class="club-head"
-                  src="#club-head-glb"
-                  highlight="coreOpacity: 0.5;"
-                ></a-gltf-model>
-                <a-gltf-model
-                  class="club-collider"
-                  src="#club-collider-glb"
+                  class="club-head-center"
+                  width="0.125"
+                  height="=0.125"
+                  position="0.023 0.013 -.13"
                   visible="false"
-                ></a-gltf-model>
-              </a-entity>
+                  physx-no-collision=""
+                ></a-entity>
+              </a-gltf-model>
+              <a-gltf-model
+                class="club-collider"
+                src="#club-collider-glb"
+                visible="true"
+                physx-hidden-collision="false"
+              ></a-gltf-model>
             </a-entity>
           </a-entity>
+        </a-entity>
+
+        <a-entity
+          id="right-controller"
+          data-right="ray"
+          mixin="blink"
+          blink-controls
+          haptics
+          hp-mixed-reality-controls="hand:right;model:false;"
+          oculus-touch-controls="hand:right;model:false;"
+          vive-controls="hand:right;model:false;"
+          position="0 1 0"
+        >
+        </a-entity>
+
+        <a-entity
+          id="left-controller"
+          data-left="ray"
+          mixin="blink"
+          blink-controls
+          haptics
+          hp-mixed-reality-controls="hand:left;model:false;"
+          oculus-touch-controls="hand:left;model:false;"
+          vive-controls="hand:left;model:false;"
+        >
         </a-entity>
       </a-entity>
 
