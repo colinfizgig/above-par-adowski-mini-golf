@@ -2,9 +2,8 @@ AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
     // Player els:
-    this.clubRightEl = document.querySelector("#club-right");
-    this.clubLeftEl = document.querySelector("#club-left");
-    this.clubHeadCenterEl = this.clubRightEl.querySelector(".club-head-center");
+    this.clubEl = document.querySelector("#club-wrapper");
+    this.clubHeadCenterEl = this.clubEl.querySelector(".club-head-center");
     this.hmdTextEl = document.querySelector("#hmdText");
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
