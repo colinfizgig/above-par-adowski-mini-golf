@@ -22,7 +22,7 @@ const mainInGame = document.querySelector("#mainInGame");
 mainInGame.style = "display:none;";
 
 resumeBtn.onclick = function () {
-  //TODO: add enter vr here
+  sceneEl.enterVR();
   mainMenu.style = "display:none;";
   mainIntro.style = "display:none;";
   mainInGame.style = "display:none;";
@@ -76,7 +76,7 @@ function startGame() {
   mainMenu.style = "display:none;";
   closeModal();
   backingTrack.play();
-  //TODO: add enter vr here
+  sceneEl.enterVR();
 }
 
 function showAbout() {
