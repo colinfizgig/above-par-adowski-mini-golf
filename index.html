@@ -1,3 +1,5 @@
+<!-- @format -->
+
 <html>
   <head>
     <script>
@@ -596,34 +598,110 @@
 
     <div id="dom-overlay">
       <div class="overlay-footer">
-        <div class="intro-modal-container">
-          <div class="intro-modal">
-            <h1>Above Par-adowski Mini-Golf, Par-t 2</h1>
-            <h3>
-              WebXR putt putt from prototype to polished feature built for the
-              Meta Quest 2 browser.
-            </h3>
-            <p>
-              This game started out as a
-              <a
-                href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
-                target="_blank"
-                >40-hour WebXR prototype</a
-              >, but now aspires to compete in quality with native VR apps. I
-              blogged about this process here.
-            </p>
-            <p>
-              This game is designed to use one Quest 2 controller. Select left
-              or right-handed settings before beginning. Use the joystick to
-              teleport manually, or use the trigger to teleport right to the
-              ball. The club will adjust to your height. Your score will be
-              visible on your wrist watch. Enter VR to start.
-            </p>
-            <p>Test commit from localhost!</p>
-            <p>-- James C. Kane.</p>
-            <button onclick="closeModal()" id="myEnterVRButton">Close</button>
+        <div class="main-menu">
+          <div class="main-menu-container">
+            <div class="main-content">
+              <button class="mainButton" id="playInVr">PLAY IN VR</button>
+              <button class="textButton aboutBtn">ABOUT</button>
+              <button class="textButton" id="howToPlayButtonMain">
+                HOW TO PLAY
+              </button>
+            </div>
+
+            <img
+              src="./assets/sign.png"
+              alt="image of a stylized road sign that says above par-a-dowski, mini golf, webXR"
+              id="sign"
+            />
           </div>
         </div>
+
+        <div class="intro-modal">
+          <div class="intro-modal-container">
+            <div class="modal-content">
+              <div class="closeBtnConatiner">
+                <img src="./assets/close.png" alt="x icon" class="closeBtn" />
+              </div>
+              <div class="modal-text" id="aboutContent">
+                <h1>
+                  Above <br />
+                  Par-adowski
+                </h1>
+                <p class="bodyText">
+                  A WebXR putt putt game <br />
+                  built for the Meta Quest 2 browser.
+                </p>
+                <hr class="yellowHr" />
+                <p class="bodyText">
+                  This game started out as a 40-hour <br />
+                  WebXR prototype, but now aspires to compete in quality with
+                  native VR apps.
+                </p>
+                <hr class="yellowHr" id="hr2" />
+                <a
+                  class="bodyText"
+                  href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
+                  target="_blank"
+                  >Read more about our process here.
+                </a>
+
+                <div class="modalButtons">
+                  <button class="mainButton" id="playInVrAbout">
+                    PLAY IN VR
+                  </button>
+                  <button class="mainButton" id="howToPlayButtonModal">
+                    HOW TO PLAY
+                  </button>
+                </div>
+              </div>
+
+              <div class="modal-text" id="howToContent">
+                <h1>How to play</h1>
+
+                <div class="iconContainer">
+                  <img
+                    src="./assets/xy.png"
+                    alt="x and y buttons"
+                    class="instructionIcons"
+                  />
+                  <p class="bodyText">or</p>
+                  <img
+                    src="./assets/ab.png"
+                    alt="a and b buttons"
+                    class="instructionIcons"
+                  />
+                </div>
+
+                <p class="bodyText">
+                  Once the game begins, <br />press the X/Y or A/B buttons on
+                  either <br />controller to change your club hand.
+                </p>
+                <hr class="yellowHr" />
+                <p class="bodyText">
+                  Use the joystick to navigate manually, <br />
+                  or use the trigger to teleport directly to the ball. The club
+                  will adjust to your height.
+                </p>
+                <hr class="yellowHr" />
+                <p class="bodyText">
+                  Sink your putt in as few strokes as <br />
+                  possible. Par or under is the goal.
+                </p>
+                <button class="mainButton" id="playInVrHowTo">
+                  PLAY IN VR
+                </button>
+              </div>
+
+              <img
+                src="./assets/popup_bg.png"
+                alt=""
+                class="modal"
+                id="modalBackground"
+              />
+            </div>
+          </div>
+        </div>
+
         <section
           style="
             display: inline-block;
@@ -705,5 +783,7 @@
         </script>
       </div>
     </div>
+
+    <script src="modals.js"></script>
   </body>
 </html>
