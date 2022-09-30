@@ -25,7 +25,7 @@ AFRAME.registerComponent("putt", {
     this.ballHaloEl = document.querySelector("#ballHalo");
     this.flagEl = document.querySelector("#flag");
     this.courseColliders = document.querySelectorAll(".colliders");
-    this.blocker = document.querySelector("#blocker");
+    //this.blocker = document.querySelector("#blocker");
     this.credits = document.querySelector("#credits");
     this.ballParticles = document.querySelector("#ballParticles");
     this.floors = document.querySelectorAll(".floor");
@@ -94,7 +94,7 @@ AFRAME.registerComponent("putt", {
     );
 
     // Start the animated blocker, which can't autoplay due to setting the startEvents prop
-    this.blocker.emit("startanimup", null, true);
+    //this.blocker.emit("startanimup", null, true);
 
     this.el.addEventListener("loaded", () => {
       this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
@@ -306,6 +306,11 @@ AFRAME.registerComponent("putt", {
       "physx-material",
       "restitution:.99; dynamicFriction:.25; staticFriction:.65;"
     );
+	//add hidden collision attribute to hide the colliders.  make this false to see them.
+	this.courseColliders[this.activeHoleIndex].setAttribute(
+		"physx-hidden-collision",
+		"true"
+	);
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
     this.courseColliders[this.activeHoleIndex]
       .querySelector(".floor")
@@ -317,6 +322,11 @@ AFRAME.registerComponent("putt", {
     this.courseColliders[this.activeHoleIndex]
       .querySelector(".floor")
       .setAttribute("ground-listener", "");
+	//set floor collider invisible but still colliding, false to make it visible
+	this.courseColliders[this.activeHoleIndex]
+		.querySelector(".floor")
+		.setAttribute("physx-hidden-collision", "true");
+	
     this.updateWatch();
     this.flagEl.setAttribute(
       "position",
