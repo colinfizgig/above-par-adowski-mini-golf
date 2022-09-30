@@ -1,10 +1,19 @@
 /** @format */
+@import url("https://use.typekit.net/xfo5grg.css");
+
+@font-face {
+  font-family: "knockouthtf48-featherweight";
+  src: url("./assets/fonts/knockout-htf48-featherweight-webfont.woff")
+      format("woff"),
+    url("./assets//fonts/knockout-htf48-featherweight-webfont.woff2")
+      format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
 
 body {
-  /* font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif; */
   font-family: new-reason, sans-serif;
-  font-weight: 100;
-  font-style: normal;
+  font-weight: bold;
 }
 
 .overlay-footer {
@@ -38,7 +47,7 @@ body {
   color: white;
 }
 
-/* main menu */
+/* ------- main menu ------------------------------------------*/
 
 .main-menu {
   display: flex;
@@ -59,21 +68,24 @@ body {
 
 .main-content {
   position: absolute;
-  left: 49%;
+  left: 48%;
   transform: translateX(-50%);
-  bottom: 17.5%;
+  bottom: 16%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 30%;
 }
 
 .mainButton {
   color: #ffffd5;
   border: none;
   background-color: #f0693f;
-  padding: 5% 10%;
+  padding: 15px 20px;
   box-shadow: 5px 5px 0px#de4d1f;
+  font-family: new-reason, sans-serif;
+  font-weight: bold;
 }
 
 .mainButton:hover {
@@ -82,7 +94,7 @@ body {
 }
 
 .main-content .mainButton {
-  font-size: 2em;
+  font-size: 1.25em;
   margin-bottom: 10%;
 }
 
@@ -91,6 +103,7 @@ body {
   background-color: Transparent;
   border: none;
   font-size: 2em;
+  font-family: "knockouthtf48-featherweight";
 }
 
 /* ------- modal ------------------------------------------ */
@@ -120,23 +133,36 @@ body {
   text-align: center;
 }
 
+.modal-text button {
+  font-size: 1.2em;
+  padding: 15px 30px;
+  letter-spacing: 0.06em;
+  margin-top: 10%;
+}
+
 .modalButtons {
   position: relative;
   left: 50%;
   transform: translate(-50%);
   padding-top: 10%;
-  width: 50%;
+  width: 55%;
   text-align: center;
 }
 
 .modalButtons button {
   margin: auto;
-  padding: 10% 20%;
   margin-bottom: 10%;
+  letter-spacing: 0.06em;
+}
+
+#playInVrAbout {
+  padding: 15px 45px;
 }
 
 #modalBackground {
   width: 75vw;
+  min-height: 600px;
+  min-width: 1110px;
 }
 
 hr {
@@ -144,17 +170,26 @@ hr {
   width: 12px;
   background-color: #ecec43;
   border: none;
+  margin-bottom: 0.8em;
+  margin-top: 1em;
 }
 
 h1 {
   color: #ecec43;
   font-size: 1.98em;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .bodyText {
   color: #fffed5;
   font-size: 1em;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+#firstHowTo {
+  margin: 0;
 }
 
 .iconContainer {
@@ -164,26 +199,8 @@ h1 {
 }
 
 .instructionIcons {
-  height: 24px;
+  margin: 0;
+  padding: 0;
+  height: 2em;
   padding: 3%;
-}
-
-/* settings ------------------------------------------------- */
-.settings {
-  position: fixed;
-  top: 2%;
-  left: 1%;
-  width: 30px;
-  display: block;
-  /* z-index: 9999; */
-}
-
-.closeContainer {
-  display: flex;
-  justify-content: end;
-}
-
-#closeSettingsIcon {
-  width: 20px;
-  justify-self: end;
 }

@@ -2,7 +2,6 @@
 
 <html>
   <head>
-    <link rel="stylesheet" href="https://use.typekit.net/xfo5grg.css" />
     <script>
       // WebXR requires https: to work so ensure redirected if needed.
       if (
@@ -621,16 +620,21 @@
           <div class="intro-modal-container">
             <div class="modal-content">
               <div class="modal-text" id="aboutContent">
-                <h1>Above Par-adowski</h1>
+                <h1>
+                  Above <br />
+                  Par-adowski
+                </h1>
                 <p class="bodyText">
-                  A WebXR putt putt game built for the Meta Quest 2 browser.
+                  A WebXR putt putt game <br />
+                  built for the Meta Quest 2 browser.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
-                  This game started out as a 40-hour WebXR prototype, but now
-                  aspires to compete in quality with native VR apps.
+                  This game started out as a 40-hour <br />
+                  WebXR prototype, but now aspires to compete in quality with
+                  native VR apps.
                 </p>
-                <hr class="yellowHr" />
+                <hr class="yellowHr"/>
                 <a
                   class="bodyText"
                   href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
@@ -665,20 +669,20 @@
                   />
                 </div>
 
-                <p class="bodyText">
-                  Once the game begins, press the X/Y or A/B buttons on either
-                  controller to change your club hand.
+                <p class="bodyText>
+                  Once the game begins, <br />press the X/Y or A/B buttons on
+                  either <br />controller to change your club hand.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
-                  Use the joystick to navigate manually, or use the trigger to
-                  teleport directly to the ball. The club will adjust to your
-                  height.
+                  Use the joystick to navigate manually, <br />
+                  or use the trigger to teleport directly to the ball. The club
+                  will adjust to your height.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
-                  Sink your putt in as few strokes as possible. Par or under is
-                  the goal.
+                  Sink your putt in as few strokes as <br />
+                  possible. Par or under is the goal.
                 </p>
                 <button class="mainButton" id="playInVrHowTo">
                   PLAY IN VR
@@ -694,44 +698,6 @@
             </div>
           </div>
         </div>
-
-        <img
-          src="./assets/settings.png"
-          alt="settings icon"
-          class="settings icon"
-          id="settingsIcon"
-        />
-
-        <section id="my-interface">
-          <div class="closeContainer">
-            <img
-              src="./assets/cancel.png"
-              alt="close settings icon"
-              class="icon"
-              id="closeSettingsIcon"
-            />
-          </div>
-
-          <h2>Settings</h2>
-          <fieldset style="border: none; margin-top: 0.5em">
-            <legend>Left- or Right-Handed Putter</legend>
-            <input
-              onclick="toggleHandedness(this)"
-              type="radio"
-              id="handedness-left"
-              name="thumbstick"
-              value="left"
-            /><label for="handedness-left"> Left</label>
-            <input
-              onclick="toggleHandedness(this)"
-              type="radio"
-              id="handedness-right"
-              name="thumbstick"
-              value="right"
-              checked
-            /><label for="handedness-right"> Right</label>
-          </fieldset>
-        </section>
 
         <script>
           const backingTrack = document.querySelector("#backing-track");
