@@ -13,6 +13,12 @@ const aboutContent = document.querySelector("#aboutContent");
 const howToContent = document.querySelector("#howToContent");
 const howToPlayButtonMain = document.querySelector("#howToPlayButtonMain");
 const howToPlayButtonModal = document.querySelector("#howToPlayButtonModal");
+const closeBtn = document.querySelector(".closeBtn");
+
+closeBtn.onclick = function () {
+  closeModal();
+  mainMenu.style = "display:block;";
+};
 
 howToPlayButtonMain.onclick = function () {
   showHowTo();

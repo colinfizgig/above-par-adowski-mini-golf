@@ -109,7 +109,6 @@ body {
 /* ------- modal ------------------------------------------ */
 
 .intro-modal {
-  background-color: #0e8d49;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -117,12 +116,28 @@ body {
   display: none;
 }
 
-.intro-modal-container {
-  background-color: pink;
-}
-
 .modal-content {
   position: relative;
+}
+
+.closeBtnConatiner {
+  display: flex;
+  justify-content: end;
+  position: absolute;
+  right: 0%;
+  top: -1.5%;
+}
+
+.closeBtn {
+  border: none;
+  background-color: #f0693f;
+  padding: 15px;
+  box-shadow: 5px 5px 0px#de4d1f;
+}
+
+.closeBtn:hover {
+  background-color: #de4d1f;
+  box-shadow: 5px 5px 0px#b13f1c;
 }
 
 .modal-text {
