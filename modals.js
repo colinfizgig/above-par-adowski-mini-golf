@@ -57,6 +57,7 @@ function startGame() {
   mainMenu.style = "display:none;";
   closeModal();
   backingTrack.play();
+  sceneEl.enterVR();
 }
 
 function showAbout() {
