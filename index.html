@@ -23,7 +23,7 @@
 
     <!-- Our custom logic -->
     <script src="model-utils.js"></script>
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
     <script src="trail.js"></script>
     <script src="simple-navmesh-constraint.js"></script>
 
@@ -71,8 +71,44 @@
   <body>
     <!-- Non-positional audio outside of a-scene to save on three Groups -->
     <audio
-      id="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Mario%20Crossing%202.mp3?v=1660053042502"
+      id="backing-track-1"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Seaside_Samba_instrumental_1_44.mp3?v=1664479195583"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-2"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Cidade_Da_Paixao_instrumental_2_34.mp3?v=1664479195369"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-3"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Clash_Of_The_Claves_instrumental_1_48.mp3?v=1664479195434"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-4"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Coastal_Dreaming_instrumental_3_17.mp3?v=1664479195562"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-5"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_Soul_Salsa_instrumental_3_53.mp3?v=1664479195614"
+      preload="auto"
+      crossorigin="anonymous"
+    ></audio>
+    <audio
+      id="backing-track-6"
+      class="backing-track"
+      src="https://cdn.glitch.global/d3667578-651d-42b2-8933-b184f357d5c9/King_Flamingo_In_The_Money_instrumental_2_02.mp3?v=1664479195670"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
@@ -122,7 +158,7 @@
       exposure="1.5"
       renderer="highRefreshRate:true;depth:true;"
       gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
-      putt="handedness:right;"
+      putt=""
     >
       <a-assets>
         <!-- env art asset imports -->
@@ -237,7 +273,7 @@
           <a-entity
             id="hmdText"
             position="0 .25 -1"
-            text="value:;align:center;width:2;opacity:0;
+            text="value:Placeholder;align:center;width:2;opacity:0;
             font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
             font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
             animation__hmdtextin="startEvents:cuehmdtextin;property:text.opacity;to:1;dur:2000;easing:easeOutBack;"
@@ -262,125 +298,88 @@
         </a-entity>
 
         <a-entity class="controller-container">
+          <!-- The club model and colliders -->
           <a-entity
-            id="right-controller"
-            data-right="ray"
-            mixin="blink"
-            blink-controls
-            haptics
-            hp-mixed-reality-controls="hand:right;model:false;"
-            oculus-touch-controls="hand:right;model:false;"
-            vive-controls="hand:right;model:false;"
-            position="0 1 0"
+            id="club-wrapper"
+            class="club"
+            rotation="34 0 0"
+            raycaster="objects:.floor;showLine:false;far:1.5;"
           >
-            <!-- The club model and colliders -->
+            <a-gltf-model
+              class="club-handle"
+              src="#club-handle-glb"
+              position="0 0 .15"
+            >
+              <!-- A wrist watch containing a text element with score info -->
+              <a-entity
+                class="watch-text"
+                position=".072 -.01 -.027"
+                rotation="22.748 112.868 162.974"
+                text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;width:.08;color:white;align:center;
+        font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
+        font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
+              ></a-entity>
+            </a-gltf-model>
+            <!-- gets scaled by ground-listener -->
+            <a-gltf-model
+              class="club-shaft"
+              src="#club-shaft-glb"
+            ></a-gltf-model>
+            <!-- gets translated by ground-listener -->
             <a-entity
-              id="club-right"
-              class="club"
-              rotation="34 0 0"
-              raycaster="objects:.floor;showLine:false;far:1.5;"
+              class="club-head-container"
+              position="0 0 -1"
+              physx-body="type:kinematic;highPrecision:true;"
+              physx-material="restitution: .6;"
             >
               <a-gltf-model
-                class="club-handle"
-                src="#club-handle-glb"
-                position="0 0 .15"
-              >
-                <!-- A wrist watch containing a text element with score info -->
-                <a-entity
-                  class="watch-text"
-                  position=".072 -.01 -.027"
-                  rotation="22.748 112.868 162.974"
-                  text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;width:.08;color:white;align:center;
-                    font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
-                    font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
-                ></a-entity>
-              </a-gltf-model>
-              <!-- gets scaled by ground-listener -->
-              <a-gltf-model
-                class="club-shaft"
-                src="#club-shaft-glb"
-              ></a-gltf-model>
-              <!-- gets translated by ground-listener -->
-              <a-entity
-                class="club-head-container"
-                position="0 0 -1"
-                physx-body="type:kinematic;highPrecision:true;"
-                physx-material="restitution: .6;"
-              >
-                <a-gltf-model
-                  class="club-head"
-                  src="#club-head-glb"
-                  highlight="coreOpacity: 0.5;"
-                  physx-no-collision=""
-                >
-                  <a-entity
-                    class="club-head-center"
-                    width="0.125"
-                    height="=0.125"
-                    position="0.023 0.013 -.13"
-                    visible="false"
-                    physx-no-collision=""
-                  ></a-entity>
-                </a-gltf-model>
-                <a-gltf-model
-                  class="club-collider"
-                  src="#club-collider-glb"
-                  visible="true"
-                  physx-hidden-collision="false"
-                ></a-gltf-model>
-              </a-entity>
-            </a-entity>
-          </a-entity>
-
-          <a-entity
-            id="left-controller"
-            data-left="ray"
-            mixin="blink"
-            blink-controls
-            haptics
-            hp-mixed-reality-controls="hand:left;model:false;"
-            oculus-touch-controls="hand:left;model:false;"
-            vive-controls="hand:left;model:false;"
-            visible="false"
-          >
-            <!-- NOTE/TODO: This is a duplicate of the R-handed club, w/ some reversed rotations and inverse X scale on the model.
-                            Tried to improve by removing the extra club, and appending a single club container here instead 
-                            But this has proven difficult so far - the physics system complains (even if I remove the physics system) -->
-            <a-entity id="club-left" rotation="34 0 0" scale="-1 1 1">
-              <a-gltf-model
-                class="club-handle"
-                src="#club-handle-glb"
-                position="0 0 .15"
+                class="club-head"
+                src="#club-head-glb"
+                highlight="coreOpacity: 0.5;"
+                physx-no-collision=""
               >
                 <a-entity
-                  class="watch-text"
-                  position=".072 -.01 -.027"
-                  rotation="22.748 112.868 162.974"
-                  text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;
-                  width:.08;color:white;align:center;
-                  font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
-                  font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
-                ></a-entity>
-              </a-gltf-model>
-              <a-gltf-model
-                class="club-shaft"
-                src="#club-shaft-glb"
-              ></a-gltf-model>
-              <a-entity class="club-head-container" position="0 0 -1">
-                <!-- this gets translated by ground-listener -->
-                <a-gltf-model
-                  class="club-head"
-                  src="#club-head-glb"
-                  highlight="coreOpacity: 0.5;"
-                ></a-gltf-model>
-                <a-gltf-model
-                  class="club-collider"
-                  src="#club-collider-glb"
+                  class="club-head-center"
+                  width="0.125"
+                  height="=0.125"
+                  position="0.023 0.013 -.13"
                   visible="false"
-                ></a-gltf-model>
-              </a-entity>
+                  physx-no-collision=""
+                ></a-entity>
+              </a-gltf-model>
+              <a-gltf-model
+                class="club-collider"
+                src="#club-collider-glb"
+                visible="true"
+                physx-hidden-collision="false"
+              ></a-gltf-model>
             </a-entity>
           </a-entity>
+        </a-entity>
+
+        <a-entity
+          id="right-controller"
+          data-right="ray"
+          mixin="blink"
+          blink-controls
+          haptics
+          hp-mixed-reality-controls="hand:right;model:false;"
+          oculus-touch-controls="hand:right;model:false;"
+          vive-controls="hand:right;model:false;"
+          position="0 1 0"
+        >
+        </a-entity>
+
+        <a-entity
+          id="left-controller"
+          data-left="ray"
+          mixin="blink"
+          blink-controls
+          haptics
+          hp-mixed-reality-controls="hand:left;model:false;"
+          oculus-touch-controls="hand:left;model:false;"
+          vive-controls="hand:left;model:false;"
+        >
         </a-entity>
       </a-entity>
 
@@ -468,7 +467,7 @@
         text="width:20; color:black; align:center;
         font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;
         value:Created By:\n\n\nJames C. Kane\nDev & Design Lead\n\nAJ Johri\nColin Freeman\n3D Art\n\nEthan Michalicek\nSr. Dev\n\nSpecial thanks to:\nParadowski Creative\nAshford Stamper\nChris Prestemon\nCaroline May\nAda Rose Cannon\nNoeri Huisman\nWebXR Discord\n;"
-        animation__credits="property:object3D.position.y;to:20; dur: 30000; easing: linear; loop: true; startEvents: rollCredits;"
+        animation__credits="property:object3D.position.y;to:20; dur: 30000; easing: linear; loop: true; startEvents: rollCredits; pauseEvents: pauseCredits;"
       ></a-entity>
 
       <!-- 50m^2 box  positioned 5m below the playable area to detect when the ball goes out of bounds -->
@@ -595,9 +594,6 @@
           physx-hidden-collision="true"
         ></a-gltf-model>
       </a-gltf-model>
-
-      <!-- TODO: hole 3 colliders -->
-      <!-- <a-entity class="colliders"  data-hole="3" visible="false"></a-entity> -->
     </a-scene>
 
     <div id="dom-overlay">
@@ -706,12 +702,62 @@
           </div>
         </div>
 
+        <section
+          style="
+            display: inline-block;
+            background: lavenderblush;
+            color: #333333;
+            border-radius: 1em;
+            padding: 1em;
+            margin: 0;
+            accent-color: hotpink;
+          "
+          id="my-interface"
+        >
+          <h2>Settings</h2>
+          <fieldset style="border: none; margin-top: 0.5em">
+            <legend>Left- or Right-Handed Putter</legend>
+            <input
+              onclick="document.querySelector('a-scene').sceneEl.systems['handedness'].setHand('left')"
+              type="radio"
+              id="handedness-left"
+              name="thumbstick"
+              value="left"
+            /><label for="handedness-left"> Left</label>
+            <input
+              onclick="document.querySelector('a-scene').sceneEl.systems['handedness'].setHand('right')"
+              type="radio"
+              id="handedness-right"
+              name="thumbstick"
+              value="right"
+              checked
+            /><label for="handedness-right"> Right</label>
+          </fieldset>
+        </section>
+
         <script>
-          const backingTrack = document.querySelector("#backing-track");
-          backingTrack.volume = 0.5;
+          const backingTracks = document.querySelectorAll('.backing-track')
+          let trackIndex = 0
+          let trackCount = backingTracks.length
+          let backingTrack = backingTracks[trackIndex]
+          
+          let playNextTrack = () => {            
+            trackIndex++
+            if(trackIndex == trackCount) trackIndex = 0
+            backingTrack = backingTracks[trackIndex]
+            backingTrack.play()
+          }
+          
+          for (var i=0; i<trackCount; i++){
+            let t = backingTracks[i]
+            t.volume = 0.25
+            t.addEventListener('ended', playNextTrack)
+          }          
+
+          // const backingTrack = document.querySelector("#backing-track");
+          // backingTrack.volume = 0.5;
 
           let movementType = "teleport";
-          let handedness = "right";
           const cameraRig = document.querySelector("#cameraRig");
 
           // If the user is teleporting disable movement-controls in XR
@@ -730,72 +776,9 @@
             cameraRig.setAttribute("movement-controls", "enabled", true);
           });
 
-          // This is probably overly complicated and repetitive, should just swap the container DOM node
-          function addPhysics(el) {
-            el.querySelector(".club-head-container").setAttribute(
-              "physx-body",
-              "type:kinematic;highPrecision:true;"
-            );
-            el.querySelector(".club-head-container").setAttribute(
-              "physx-material",
-              "restitution:.6;"
-            );
-            el.querySelector(".club-head").setAttribute(
-              "physx-no-collision",
-              ""
-            );
-            el.querySelector(".club-collider").setAttribute(
-              "physx-hidden-collision",
-              ""
-            );
-            el.setAttribute(
-              "raycaster",
-              "objects:.floor;showLine:false;far:1.5;"
-            );
-          }
-
-          function removePhysics(el) {
-            el.querySelector(".club-collider").removeAttribute(
-              "physx-hidden-collision"
-            );
-            el.querySelector(".club-head").removeAttribute(
-              "physx-no-collision"
-            );
-            el.querySelector(".club-head-container").removeAttribute(
-              "physx-material"
-            );
-            el.querySelector(".club-head-container").removeAttribute(
-              "physx-body"
-            );
-            el.removeAttribute("raycaster");
-          }
-
-          const leftController = document.querySelector("#left-controller");
-          const rightController = document.querySelector("#right-controller");
-          const clubR = document.querySelector("#club-right");
-          const clubL = document.querySelector("#club-left");
-          console.log(leftController, rightController, clubR, clubL);
-
-          function toggleHandedness(detail) {
-            handedness = detail.value;
-            sceneEl.setAttribute("putt", "handedness:" + handedness);
-            if (handedness === "right") {
-              leftController.setAttribute("visible", "false");
-              rightController.setAttribute("visible", "true");
-              removePhysics(clubL);
-              addPhysics(clubR);
-              document
-                .querySelector(".floor")
-                .setAttribute("ground-listener", "handedness: right;");
-            } else if (handedness === "left") {
-              leftController.setAttribute("visible", "true");
-              rightController.setAttribute("visible", "false");
-              removePhysics(clubR);
-              addPhysics(clubL);
-              document
-                .querySelector(".floor")
-                .setAttribute("ground-listener", "handedness: left;");
-            }
+          function closeModal() {
+            document.querySelector(".intro-modal").style = "display:none;";
+            backingTrack.play();
           }
         </script>
       </div>
