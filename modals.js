@@ -58,6 +58,7 @@ function startGame() {
   closeModal();
   backingTrack.play();
   sceneEl.enterVR();
+  document.querySelector(".a-enter-vr-button").style.display = "block";
 }
 
 function showAbout() {

@@ -237,6 +237,8 @@ AFRAME.registerComponent("putt", {
   madePutt: async function () {
     if (!this.holeOver) {
       console.log("MADE PUTT");
+      this.ballShadowEl.components.visible = false;
+      this.clubShadowEl.components.visible = false;
       this.ballFinderEl.removeAttribute("ball-finder");
       this.courseColliders[this.activeHoleIndex].removeAttribute("physx-body"); // remove colliders so the ball "falls through the hole"
       this.courseColliders[this.activeHoleIndex]
@@ -337,9 +339,11 @@ AFRAME.registerComponent("putt", {
       this.courseColliders[this.activeHoleIndex].dataset.startpos
     );
     this.cameraRig.setAttribute("rotation", "0 0 0");
+    this.clubShadowEl.components.visible = true;
     this.faderEl.emit("cuefadein");
     await new Promise((resolve) => setTimeout(resolve, 2000));
     this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
+    this.ballShadowEl.components.visible = true;
     this.holeOver = false;
   },
 
