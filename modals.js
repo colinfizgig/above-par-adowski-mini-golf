@@ -14,6 +14,25 @@ const howToContent = document.querySelector("#howToContent");
 const howToPlayButtonMain = document.querySelector("#howToPlayButtonMain");
 const howToPlayButtonModal = document.querySelector("#howToPlayButtonModal");
 const closeBtn = document.querySelector(".closeBtn");
+const resumeBtn = document.querySelector("#resumeBtn");
+const startOverBtn = document.querySelector("#startOverBtn");
+const mainIntro = document.querySelector("#mainIntro");
+const mainInGame = document.querySelector("#mainInGame");
+
+mainInGame.style = "display:none;";
+
+resumeBtn.onclick = function () {
+  //TODO: add enter vr here
+  mainMenu.style = "display:none;";
+  mainIntro.style = "display:none;";
+  mainInGame.style = "display:none;";
+};
+
+startOverBtn.onclick = function () {
+  mainMenu.style = "display:block;";
+  mainIntro.style = "display:block;";
+  mainInGame.style = "display:none;";
+};
 
 closeBtn.onclick = function () {
   closeModal();
@@ -57,6 +76,7 @@ function startGame() {
   mainMenu.style = "display:none;";
   closeModal();
   backingTrack.play();
+  //TODO: add enter vr here
 }
 
 function showAbout() {

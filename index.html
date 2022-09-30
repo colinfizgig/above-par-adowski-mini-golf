@@ -217,7 +217,7 @@
           preload="auto"
           crossorigin="anonymous"
         ></audio>
-         <!-- convex physics collider asset imports, hole 1 -->
+        <!-- convex physics collider asset imports, hole 1 -->
         <a-asset-item
           id="hole-one-floor-glb"
           src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%201%20floor.glb?v=1664513857973"
@@ -593,12 +593,12 @@
         physx-hidden-collision="true"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-one-floor-glb"
-           physx-body="type:static;angularDamping:.5;linearDamping:.5"
-           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
-           visible="false"
-           physx-hidden-collision="true"           
+          class="floor"
+          src="#hole-one-floor-glb"
+          physx-body="type:static;angularDamping:.5;linearDamping:.5"
+          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
+          visible="false"
+          physx-hidden-collision="true"
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -614,9 +614,9 @@
         data-balldrop="-50.242 4.527 -10.606"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-two-floor-glb"
-           visible="false"         
+          class="floor"
+          src="#hole-two-floor-glb"
+          visible="false"
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -637,7 +637,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-four-walls-glb"
@@ -655,7 +655,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-five-walls-glb"
@@ -673,7 +673,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-six-walls-glb"
@@ -691,7 +691,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-seven-walls-glb"
@@ -709,7 +709,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-eight-walls-glb"
@@ -727,7 +727,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-nine-walls-glb"
@@ -751,8 +751,18 @@
       <div class="overlay-footer">
         <div class="main-menu">
           <div class="main-menu-container">
-            <div class="main-content">
+            <div class="main-content" id="mainIntro">
               <button class="mainButton" id="playInVr">PLAY IN VR</button>
+              <button class="textButton aboutBtn">ABOUT</button>
+              <button class="textButton" id="howToPlayButtonMain">
+                HOW TO PLAY
+              </button>
+            </div>
+            <div class="main-content" id="mainInGame">
+              <div class="gameplayButtons">
+                <button class="mainButton" id="resumeBtn">RESUME</button>
+                <button class="mainButton" id="startOverBtn">START OVER</button>
+              </div>
               <button class="textButton aboutBtn">ABOUT</button>
               <button class="textButton" id="howToPlayButtonMain">
                 HOW TO PLAY
@@ -853,7 +863,7 @@
           </div>
         </div>
 
-        <section
+        <!-- <section
           style="
             display: inline-block;
             background: lavenderblush;
@@ -884,26 +894,26 @@
               checked
             /><label for="handedness-right"> Right</label>
           </fieldset>
-        </section>
+        </section> -->
 
         <script>
-          const backingTracks = document.querySelectorAll('.backing-track')
-          let trackIndex = 0
-          let trackCount = backingTracks.length
-          let backingTrack = backingTracks[trackIndex]
-          
-          let playNextTrack = () => {            
-            trackIndex++
-            if(trackIndex == trackCount) trackIndex = 0
-            backingTrack = backingTracks[trackIndex]
-            backingTrack.play()
+          const backingTracks = document.querySelectorAll(".backing-track");
+          let trackIndex = 0;
+          let trackCount = backingTracks.length;
+          let backingTrack = backingTracks[trackIndex];
+
+          let playNextTrack = () => {
+            trackIndex++;
+            if (trackIndex == trackCount) trackIndex = 0;
+            backingTrack = backingTracks[trackIndex];
+            backingTrack.play();
+          };
+
+          for (var i = 0; i < trackCount; i++) {
+            let t = backingTracks[i];
+            t.volume = 0.25;
+            t.addEventListener("ended", playNextTrack);
           }
-          
-          for (var i=0; i<trackCount; i++){
-            let t = backingTracks[i]
-            t.volume = 0.25
-            t.addEventListener('ended', playNextTrack)
-          }          
 
           // const backingTrack = document.querySelector("#backing-track");
           // backingTrack.volume = 0.5;
@@ -925,6 +935,9 @@
           });
           sceneEl.addEventListener("exit-vr", function () {
             cameraRig.setAttribute("movement-controls", "enabled", true);
+            mainMenu.style = "display:block;";
+            mainIntro.style = "display:block;";
+            mainInGame.style = "display:none;";
           });
 
           function closeModal() {
