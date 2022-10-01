@@ -285,8 +285,6 @@ AFRAME.registerComponent("putt", {
     // if there are more holes, apply colliders
     await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
     this.flagEl.components["particle-system"].stopParticles();
-    this.faderEl.emit("cuefadeout");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const lastHoleIndex =
       this.activeHoleIndex == 0
@@ -330,19 +328,17 @@ AFRAME.registerComponent("putt", {
 		.setAttribute("physx-hidden-collision", "");
 	
     this.updateWatch();
+    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
+    this.faderEl.emit("cuefadeout");
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     this.flagEl.setAttribute(
-      "position",
-      this.courseColliders[this.activeHoleIndex].dataset.flag
+        "position",
+        this.courseColliders[this.activeHoleIndex].dataset.flag
     );
-    this.cameraRig.setAttribute(
-      "position",
-      this.courseColliders[this.activeHoleIndex].dataset.startpos
-    );
-    this.cameraRig.setAttribute("rotation", "0 0 0");
+    await this.teleportToBall();
     this.clubShadowEl.object3D.visible = true;
     this.faderEl.emit("cuefadein");
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
     this.ballShadowEl.object3D.visible = true;
     this.holeOver = false;
   },
