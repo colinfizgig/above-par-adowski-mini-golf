@@ -237,8 +237,8 @@ AFRAME.registerComponent("putt", {
   madePutt: async function () {
     if (!this.holeOver) {
       console.log("MADE PUTT");
-      this.ballShadowEl.components.visible = false;
-      this.clubShadowEl.components.visible = false;
+      this.ballShadowEl.object3D.visible = false;
+      this.clubShadowEl.object3D.visible = false;
       this.ballFinderEl.removeAttribute("ball-finder");
       this.courseColliders[this.activeHoleIndex].removeAttribute("physx-body"); // remove colliders so the ball "falls through the hole"
       this.courseColliders[this.activeHoleIndex]
@@ -311,7 +311,7 @@ AFRAME.registerComponent("putt", {
 	//add hidden collision attribute to hide the colliders.  make this false to see them.
 	this.courseColliders[this.activeHoleIndex].setAttribute(
 		"physx-hidden-collision",
-		"true"
+		""
 	);
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
     this.courseColliders[this.activeHoleIndex]
@@ -327,7 +327,7 @@ AFRAME.registerComponent("putt", {
 	//set floor collider invisible but still colliding, false to make it visible
 	this.courseColliders[this.activeHoleIndex]
 		.querySelector(".floor")
-		.setAttribute("physx-hidden-collision", "true");
+		.setAttribute("physx-hidden-collision", "");
 	
     this.updateWatch();
     this.flagEl.setAttribute(
@@ -339,11 +339,11 @@ AFRAME.registerComponent("putt", {
       this.courseColliders[this.activeHoleIndex].dataset.startpos
     );
     this.cameraRig.setAttribute("rotation", "0 0 0");
-    this.clubShadowEl.components.visible = true;
+    this.clubShadowEl.object3D.visible = true;
     this.faderEl.emit("cuefadein");
     await new Promise((resolve) => setTimeout(resolve, 2000));
     this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
-    this.ballShadowEl.components.visible = true;
+    this.ballShadowEl.object3D.visible = true;
     this.holeOver = false;
   },
 
