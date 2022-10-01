@@ -37,6 +37,7 @@ AFRAME.registerComponent("putt", {
     this.bogeySoundEl = document.querySelector("#bogey-sound");
     this.doubleBogeySoundEl = document.querySelector("#double-bogey-sound");
     this.tripleBogeySoundEl = document.querySelector("#triple-bogey-sound");
+    this.lastHit = new THREE.Vector3();
     // Game logic and scoring stuff:
     this.holeOver = false;
     this.gameOver = false;
@@ -85,7 +86,9 @@ AFRAME.registerComponent("putt", {
       },
     };
 
+    // Set/update the values on the player's 3D watch in VR
     this.updateWatch();
+    this.teleportToBall();
 
     // Set up listener for first ball collisions
     this.ballEl.addEventListener(
@@ -111,13 +114,13 @@ AFRAME.registerComponent("putt", {
     this.el.addEventListener("enter-vr", function () {
       document.querySelector(".floor").setAttribute("ground-listener", "");
       gtag("event", "enteredVR");
-    });
+    }.bind(this));
     this.el.addEventListener("exit-vr", function () {
       document.querySelector(".floor").removeAttribute("ground-listener");
       gtag("event", "exitedVR");
     });
 
-    // On trigger, teleport to ball - logic in handler below. WIP since rotation is still weird.
+    // On trigger, teleport to ball - logic in handler below
     this.touchControllerR.addEventListener(
       "triggerdown",
       this.teleportToBall.bind(this)
@@ -213,6 +216,7 @@ AFRAME.registerComponent("putt", {
   putt: function () {
     if (!this.puttDebounce) {
       console.log("PUTT");
+      this.lastHit.copy(this.ballEl.object3D.position);
       this.puttDebounce = true;
       this.activeHoleScore++;
       this.scores[this.activeHoleIndex] = this.activeHoleScore;
@@ -336,6 +340,7 @@ AFRAME.registerComponent("putt", {
         this.courseColliders[this.activeHoleIndex].dataset.flag
     );
     await this.teleportToBall();
+    this.lastHit.copy(this.ballEl.object3D.position);
     this.clubShadowEl.object3D.visible = true;
     this.faderEl.emit("cuefadein");
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -375,7 +380,7 @@ AFRAME.registerComponent("putt", {
           this.hmdTextEl.setAttribute("text", `value:;`);
         }, 2000);
       }, 2000);
-      this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
+      this.newBall(`${this.lastHit.x} ${this.lastHit.y} ${this.lastHit.z}`);
     }
   },
 
