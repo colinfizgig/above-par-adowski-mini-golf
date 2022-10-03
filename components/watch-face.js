@@ -32,18 +32,23 @@ AFRAME.registerComponent("watch-face", {
     const details = document.createElement("a-entity");
     this.details = details;
     details.setAttribute("troika-text", {
-      value: `HOLE:  ${this.data.holeNumber}         PAR:  ${this.data.holePar}\n\n\n\n\n\n\n\n\nTOTAL  SCORE:  ${this.data.totalScore}`,
-      fontSize: 0.0025,
+      value: this.getDetailText(),
+      fontSize: 0.0037,
       color: offWhite,
       font: font,
+      align: "center",
     });
     details.setAttribute("position", `0 0 0.0001`);
     this.el.appendChild(details);
   },
 
+  getDetailText() {
+    return `Hole: ${this.data.holeNumber}     Par: ${this.data.holePar}\n\n\n\n\n\nTotal: ${this.data.totalScore}`;
+  },
+
   update(oldData) {
     this.details.setAttribute("troika-text", {
-      value: `HOLE:  ${this.data.holeNumber}         PAR:  ${this.data.holePar}\n\n\n\n\n\n\n\n\nTOTAL  SCORE:  ${this.data.totalScore}`,
+      value: this.getDetailText(),
     });
 
     this.holeScore.setAttribute("troika-text", {
