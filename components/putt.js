@@ -111,10 +111,13 @@ AFRAME.registerComponent("putt", {
     });
 
     // Don't start listening to raycaster until VR is entered
-    this.el.addEventListener("enter-vr", function () {
-      document.querySelector(".floor").setAttribute("ground-listener", "");
-      gtag("event", "enteredVR");
-    }.bind(this));
+    this.el.addEventListener(
+      "enter-vr",
+      function () {
+        document.querySelector(".floor").setAttribute("ground-listener", "");
+        gtag("event", "enteredVR");
+      }.bind(this)
+    );
     this.el.addEventListener("exit-vr", function () {
       document.querySelector(".floor").removeAttribute("ground-listener");
       gtag("event", "exitedVR");
@@ -310,11 +313,11 @@ AFRAME.registerComponent("putt", {
       "physx-material",
       "restitution:.99; dynamicFriction:.25; staticFriction:.65;"
     );
-	//add hidden collision attribute to hide the colliders.  make this false to see them.
-	this.courseColliders[this.activeHoleIndex].setAttribute(
-		"physx-hidden-collision",
-		""
-	);
+    //add hidden collision attribute to hide the colliders.  make this false to see them.
+    this.courseColliders[this.activeHoleIndex].setAttribute(
+      "physx-hidden-collision",
+      ""
+    );
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
     this.courseColliders[this.activeHoleIndex]
       .querySelector(".floor")
@@ -326,18 +329,18 @@ AFRAME.registerComponent("putt", {
     this.courseColliders[this.activeHoleIndex]
       .querySelector(".floor")
       .setAttribute("ground-listener", "");
-	//set floor collider invisible but still colliding, false to make it visible
-	this.courseColliders[this.activeHoleIndex]
-		.querySelector(".floor")
-		.setAttribute("physx-hidden-collision", "");
-	
+    //set floor collider invisible but still colliding, false to make it visible
+    this.courseColliders[this.activeHoleIndex]
+      .querySelector(".floor")
+      .setAttribute("physx-hidden-collision", "");
+
     this.updateWatch();
     this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
     this.faderEl.emit("cuefadeout");
     await new Promise((resolve) => setTimeout(resolve, 2000));
     this.flagEl.setAttribute(
-        "position",
-        this.courseColliders[this.activeHoleIndex].dataset.flag
+      "position",
+      this.courseColliders[this.activeHoleIndex].dataset.flag
     );
     await this.teleportToBall();
     this.lastHit.copy(this.ballEl.object3D.position);
@@ -420,16 +423,14 @@ AFRAME.registerComponent("putt", {
   },
 
   updateWatch: function () {
-    let watchString = "Above\nPar-adowski\n";
-    watchString += "Hole #" + (this.activeHoleIndex + 1).toString() + "\n";
-    watchString +=
-      "Par " +
-      this.courseColliders[this.activeHoleIndex].dataset.par.toString() +
-      "\n";
-    watchString += "Score: " + this.activeHoleScore.toString() + "\n";
-    watchString +=
-      "Overall: " + this.scores.reduce((a, b) => a + b).toString() + "\n";
-    this.watchTextEl.setAttribute("text", `value:${watchString};`);
+    const watch = document.querySelector("[watch-face]");
+
+    watch.setAttribute("watch-face", {
+      holeNumber: this.activeHoleIndex + 1,
+      holeScore: this.activeHoleScore,
+      holePar: this.courseColliders[this.activeHoleIndex].dataset.par,
+      totalScore: this.scores.reduce((a, b) => parseInt(a) + parseInt(b)),
+    });
   },
 
   collisionHandler: function (e) {
