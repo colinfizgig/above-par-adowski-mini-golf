@@ -39,6 +39,7 @@ AFRAME.registerComponent("putt", {
     this.bogeySoundEl = document.querySelector("#bogey-sound");
     this.doubleBogeySoundEl = document.querySelector("#double-bogey-sound");
     this.tripleBogeySoundEl = document.querySelector("#triple-bogey-sound");
+    this.lastHit = new THREE.Vector3();
     // Game logic and scoring stuff:
     this.holeOver = false;
     this.gameOver = false;
@@ -87,7 +88,9 @@ AFRAME.registerComponent("putt", {
       },
     };
 
+    // Set/update the values on the player's 3D watch in VR
     this.updateWatch();
+    this.teleportToBall();
 
     // Set up listener for first ball collisions
     this.ballEl.addEventListener(
@@ -110,16 +113,19 @@ AFRAME.registerComponent("putt", {
     });
 
     // Don't start listening to raycaster until VR is entered
-    this.el.addEventListener("enter-vr", function () {
-      document.querySelector(".floor").setAttribute("ground-listener", "");
-      gtag("event", "enteredVR");
-    });
+    this.el.addEventListener(
+      "enter-vr",
+      function () {
+        document.querySelector(".floor").setAttribute("ground-listener", "");
+        gtag("event", "enteredVR");
+      }.bind(this)
+    );
     this.el.addEventListener("exit-vr", function () {
       document.querySelector(".floor").removeAttribute("ground-listener");
       gtag("event", "exitedVR");
     });
 
-    // On trigger, teleport to ball - logic in handler below. WIP since rotation is still weird.
+    // On trigger, teleport to ball - logic in handler below
     this.touchControllerR.addEventListener(
       "triggerdown",
       this.teleportToBall.bind(this)
@@ -219,6 +225,7 @@ AFRAME.registerComponent("putt", {
   putt: function () {
     if (!this.puttDebounce) {
       console.log("PUTT");
+      this.lastHit.copy(this.ballEl.object3D.position);
       this.puttDebounce = true;
       this.activeHoleScore++;
       this.scores[this.activeHoleIndex] = this.activeHoleScore;
@@ -243,6 +250,8 @@ AFRAME.registerComponent("putt", {
   madePutt: async function () {
     if (!this.holeOver) {
       console.log("MADE PUTT");
+      this.ballShadowEl.object3D.visible = false;
+      this.clubShadowEl.object3D.visible = false;
       this.ballFinderEl.removeAttribute("ball-finder");
       this.courseColliders[this.activeHoleIndex].removeAttribute("physx-body"); // remove colliders so the ball "falls through the hole"
       this.courseColliders[this.activeHoleIndex]
@@ -289,8 +298,6 @@ AFRAME.registerComponent("putt", {
     // if there are more holes, apply colliders
     await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
     this.flagEl.components["particle-system"].stopParticles();
-    this.faderEl.emit("cuefadeout");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const lastHoleIndex =
       this.activeHoleIndex == 0
@@ -315,7 +322,7 @@ AFRAME.registerComponent("putt", {
     //add hidden collision attribute to hide the colliders.  make this false to see them.
     this.courseColliders[this.activeHoleIndex].setAttribute(
       "physx-hidden-collision",
-      "true"
+      ""
     );
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
     this.courseColliders[this.activeHoleIndex]
@@ -331,21 +338,22 @@ AFRAME.registerComponent("putt", {
     //set floor collider invisible but still colliding, false to make it visible
     this.courseColliders[this.activeHoleIndex]
       .querySelector(".floor")
-      .setAttribute("physx-hidden-collision", "true");
+      .setAttribute("physx-hidden-collision", "");
 
     this.updateWatch();
+    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
+    this.faderEl.emit("cuefadeout");
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     this.flagEl.setAttribute(
       "position",
       this.courseColliders[this.activeHoleIndex].dataset.flag
     );
-    this.cameraRig.setAttribute(
-      "position",
-      this.courseColliders[this.activeHoleIndex].dataset.startpos
-    );
-    this.cameraRig.setAttribute("rotation", "0 0 0");
+    await this.teleportToBall();
+    this.lastHit.copy(this.ballEl.object3D.position);
+    this.clubShadowEl.object3D.visible = true;
     this.faderEl.emit("cuefadein");
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
+    this.ballShadowEl.object3D.visible = true;
     this.holeOver = false;
   },
 
@@ -381,7 +389,7 @@ AFRAME.registerComponent("putt", {
           this.hmdTextEl.setAttribute("text", `value:;`);
         }, 2000);
       }, 2000);
-      this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
+      this.newBall(`${this.lastHit.x} ${this.lastHit.y} ${this.lastHit.z}`);
     }
   },
 

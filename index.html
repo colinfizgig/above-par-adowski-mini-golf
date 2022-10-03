@@ -150,7 +150,6 @@
     ></audio>
 
     <a-scene
-      vr-mode-ui=""
       physx="autoLoad: true; wrapBounds: true; delay: 1000; wasmUrl: https://stemkoski.github.io/A-Frame-Examples/js/physx.release.wasm; useDefaultScene: false;"
       webxr="optionalFeatures:dom-overlay;overlayElement:#dom-overlay;"
       background="color:skyblue;"
@@ -308,8 +307,8 @@
       <a-entity
         camera="active:true;"
         id="scene-preview"
-        position="5 2 0"
-        rotation="-15 65 0"
+        position="5 2 18"
+        rotation="15 90 0"
       ></a-entity>
 
       <a-entity
@@ -585,20 +584,18 @@
         data-hole="1"
         data-par="3"
         data-flag="-22.402 0.093 -7.169"
-        data-startpos="-15.424 0.105 2.797"
         data-balldrop="-17.151 0.505 2.797"
         physx-body="type:static;angularDamping:.5;linearDamping:.5"
         physx-material="restitution:.95;dynamicFriction:.15; staticFriction:.55;"
         visible="false"
-        physx-hidden-collision="true"
+        physx-hidden-collision=""
       >
         <a-gltf-model
           class="floor"
           src="#hole-one-floor-glb"
-          physx-body="type:static;angularDamping:.5;linearDamping:.5"
           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
           visible="false"
-          physx-hidden-collision="true"
+          physx-hidden-collision=""
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -610,7 +607,6 @@
         data-hole="2"
         data-par="3"
         data-flag="-63.305 5.791 -19.462"
-        data-startpos="-47.494 4.027 -10.606"
         data-balldrop="-50.242 4.527 -10.606"
       >
         <a-gltf-model
@@ -628,7 +624,6 @@
         data-hole="3"
         data-par="3"
         data-flag="-102.895 1.004 -29.330"
-        data-startpos="-86.087 6.644 -8.670"
         data-balldrop="-88.403 7.440 -11.074"
       >
         <a-gltf-model
@@ -646,7 +641,6 @@
         data-hole="4"
         data-par="4"
         data-flag="-136.479 2.852 -75.115"
-        data-startpos="-146.965 2.863 -51.959"
         data-balldrop="-149.971 3.863 -51.959"
       >
         <a-gltf-model
@@ -664,7 +658,6 @@
         data-hole="5"
         data-par="5"
         data-flag="-138.556 15.515 -31.594"
-        data-startpos="-120.309 22.158 -85.555"
         data-balldrop="-120.309 23.392 -82.303"
       >
         <a-gltf-model
@@ -682,7 +675,6 @@
         data-hole="6"
         data-par="5"
         data-flag="-117.906 9.510 30.601"
-        data-startpos="-136.453 15.066 -4.123"
         data-balldrop="-138.380 16.066 -0.837"
       >
         <a-gltf-model
@@ -700,7 +692,6 @@
         data-hole="7"
         data-par="3"
         data-flag="-68.278 0.389 59.715"
-        data-startpos="-104.809 9.213 51.100"
         data-balldrop="-100.550 10.364 51.100"
       >
         <a-gltf-model
@@ -718,7 +709,6 @@
         data-hole="8"
         data-par="4"
         data-flag="-46.052 0.171 62.821"
-        data-startpos="-59.442 0.201 61.319"
         data-balldrop="-56.962 1.201 61.319"
       >
         <a-gltf-model
@@ -736,7 +726,6 @@
         data-hole="9"
         data-par="6"
         data-flag="-11.943 0.079 34.132"
-        data-startpos="-41.355 0.087 45.176"
         data-balldrop="-41.355 1.087 42.750"
       >
         <a-gltf-model
