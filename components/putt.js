@@ -119,14 +119,14 @@ AFRAME.registerComponent("putt", {
     this.el.addEventListener(
       "enter-vr",
       function () {
-        document.querySelector(".floor").setAttribute("ground-listener", "");
+        this.activeFloor.setAttribute("ground-listener", "");
         gtag("event", "enteredVR");
       }.bind(this)
     );
     this.el.addEventListener("exit-vr", function () {
-      document.querySelector(".floor").removeAttribute("ground-listener");
+      this.activeFloor.removeAttribute("ground-listener");
       gtag("event", "exitedVR");
-    });
+    }.bind(this));
 
     // On trigger, teleport to ball - logic in handler below
     this.touchControllerR.addEventListener(
@@ -253,9 +253,7 @@ AFRAME.registerComponent("putt", {
       this.clubShadowEl.object3D.visible = false;
       this.ballFinderEl.removeAttribute("ball-finder");
       this.courseColliders[this.activeHoleIndex].removeAttribute("physx-body"); // remove colliders so the ball "falls through the hole"
-      this.courseColliders[this.activeHoleIndex]
-        .querySelector(".floor")
-        .removeAttribute("physx-body"); // remove colliders so the ball "falls through the hole"
+      this.activeFloor.removeAttribute("physx-body"); // remove colliders so the ball "falls through the hole"
       this.flagEl.components.sound.playSoundBound();
       if (this.el.sceneEl.systems["handedness"].data.hand === "right") {
         this.touchControllerR.components.haptics.pulse(1, 1000);
@@ -323,20 +321,20 @@ AFRAME.registerComponent("putt", {
       "physx-hidden-collision",
       ""
     );
+
+    this.activeFloor = this.courseColliders[this.activeHoleIndex].querySelector(".floor");
+
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
-    this.courseColliders[this.activeHoleIndex]
-      .querySelector(".floor")
+    this.activeFloor
       .setAttribute(
         "physx-material",
         "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
       );
 
-    this.courseColliders[this.activeHoleIndex]
-      .querySelector(".floor")
+    this.activeFloor
       .setAttribute("ground-listener", "");
     //set floor collider invisible but still colliding, false to make it visible
-    this.courseColliders[this.activeHoleIndex]
-      .querySelector(".floor")
+    this.activeFloor
       .setAttribute("physx-hidden-collision", "");
 
     this.updateWatch();
