@@ -1,3 +1,5 @@
+/** @format */
+
 AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
@@ -165,6 +167,10 @@ AFRAME.registerComponent("putt", {
     });
 
     gtag("event", "gameInit");
+
+    document.addEventListener("restart-game", (e) => {
+      this.restartGame();
+    });
   },
 
   /**
@@ -306,11 +312,11 @@ AFRAME.registerComponent("putt", {
       "physx-material",
       "restitution:.99; dynamicFriction:.25; staticFriction:.65;"
     );
-	//add hidden collision attribute to hide the colliders.  make this false to see them.
-	this.courseColliders[this.activeHoleIndex].setAttribute(
-		"physx-hidden-collision",
-		"true"
-	);
+    //add hidden collision attribute to hide the colliders.  make this false to see them.
+    this.courseColliders[this.activeHoleIndex].setAttribute(
+      "physx-hidden-collision",
+      "true"
+    );
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
     this.courseColliders[this.activeHoleIndex]
       .querySelector(".floor")
@@ -322,11 +328,11 @@ AFRAME.registerComponent("putt", {
     this.courseColliders[this.activeHoleIndex]
       .querySelector(".floor")
       .setAttribute("ground-listener", "");
-	//set floor collider invisible but still colliding, false to make it visible
-	this.courseColliders[this.activeHoleIndex]
-		.querySelector(".floor")
-		.setAttribute("physx-hidden-collision", "true");
-	
+    //set floor collider invisible but still colliding, false to make it visible
+    this.courseColliders[this.activeHoleIndex]
+      .querySelector(".floor")
+      .setAttribute("physx-hidden-collision", "true");
+
     this.updateWatch();
     this.flagEl.setAttribute(
       "position",
