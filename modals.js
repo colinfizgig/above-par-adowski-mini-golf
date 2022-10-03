@@ -16,8 +16,8 @@ const howToPlayButtonModal = document.querySelector("#howToPlayButtonModal");
 const closeBtn = document.querySelector(".closeBtn");
 const resumeBtn = document.querySelector("#resumeBtn");
 const startOverBtn = document.querySelector("#startOverBtn");
-const mainIntro = document.querySelector("#mainIntro");
-const mainInGame = document.querySelector("#mainInGame");
+const mainIntro = document.querySelector(".introBtn");
+const mainInGame = document.querySelector(".gameplayButtons");
 
 mainInGame.style = "display:none;";
 
