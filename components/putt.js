@@ -1,3 +1,5 @@
+/** @format */
+
 AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
@@ -171,6 +173,10 @@ AFRAME.registerComponent("putt", {
     });
 
     gtag("event", "gameInit");
+
+    document.addEventListener("restart-game", (e) => {
+      this.restartGame();
+    });
   },
 
   /**

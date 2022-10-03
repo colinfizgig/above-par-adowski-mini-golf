@@ -14,6 +14,27 @@ const howToContent = document.querySelector("#howToContent");
 const howToPlayButtonMain = document.querySelector("#howToPlayButtonMain");
 const howToPlayButtonModal = document.querySelector("#howToPlayButtonModal");
 const closeBtn = document.querySelector(".closeBtn");
+const resumeBtn = document.querySelector("#resumeBtn");
+const startOverBtn = document.querySelector("#startOverBtn");
+const mainIntro = document.querySelector(".introBtn");
+const mainInGame = document.querySelector(".gameplayButtons");
+
+mainInGame.style = "display:none;";
+
+document.addEventListener("exit-vr", function () {
+  showMainInGame();
+});
+
+resumeBtn.onclick = function () {
+  sceneEl.enterVR();
+  hideMainMenu();
+};
+
+startOverBtn.onclick = function () {
+  showMainIntro();
+  const restart = new Event("restart-game");
+  document.dispatchEvent(restart);
+};
 
 closeBtn.onclick = function () {
   closeModal();
@@ -79,4 +100,22 @@ function closeModal() {
   introModal.style = "display:none;";
   howToContent.style = "display:none;";
   aboutContent.style = "display:none;";
+}
+
+function showMainIntro() {
+  mainMenu.style = "display:block;";
+  mainIntro.style = "display:block;";
+  mainInGame.style = "display:none;";
+}
+
+function showMainInGame() {
+  mainMenu.style = "display:block;";
+  mainIntro.style = "display:none;";
+  mainInGame.style = "display:block;";
+}
+
+function hideMainMenu() {
+  mainMenu.style = "display:none;";
+  mainIntro.style = "display:none;";
+  mainInGame.style = "display:none;";
 }
