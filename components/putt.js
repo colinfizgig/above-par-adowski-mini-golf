@@ -302,10 +302,10 @@ AFRAME.registerComponent("putt", {
         : this.activeHoleIndex - 1;
 
     if (lastHoleIndex != this.activeHoleIndex) {
-      this.courseColliders[lastHoleIndex].setAttribute("visible", "false");
-      this.courseColliders[lastHoleIndex]
-        .querySelector(".floor")
-        .removeAttribute("ground-listener");
+      this.courseColliders[lastHoleIndex].removeAttribute("physx-body");
+      this.courseColliders[lastHoleIndex].removeAttribute("physx-material");
+      this.activeFloor.removeAttribute("physx-body")
+      this.activeFloor.removeAttribute("physx-material")
     }
     //this.courseColliders[this.activeHoleIndex].setAttribute("visible", "true");
     this.courseColliders[this.activeHoleIndex].setAttribute(
@@ -322,6 +322,7 @@ AFRAME.registerComponent("putt", {
       ""
     );
 
+    this.activeFloor.removeAttribute("ground-listener");
     this.activeFloor = this.courseColliders[this.activeHoleIndex].querySelector(".floor");
 
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
