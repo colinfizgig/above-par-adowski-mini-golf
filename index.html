@@ -20,6 +20,7 @@
     <script src="https://unpkg.com/@fern-solutions/aframe-highlight/dist/highlight.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AdaRoseCannon/aframe-blink-controls@573383a/dist/aframe-blink-controls.min.js"></script>
     <script src="https://ideaspacevr.github.io/aframe-particle-system-component/dist/aframe-particle-system-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-troika-text/dist/aframe-troika-text.min.js"></script>
 
     <!-- Our custom logic -->
     <script src="model-utils.js"></script>
@@ -216,7 +217,7 @@
           preload="auto"
           crossorigin="anonymous"
         ></audio>
-         <!-- convex physics collider asset imports, hole 1 -->
+        <!-- convex physics collider asset imports, hole 1 -->
         <a-asset-item
           id="hole-one-floor-glb"
           src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%201%20floor.glb?v=1664513857973"
@@ -363,14 +364,11 @@
               src="#club-handle-glb"
               position="0 0 .15"
             >
-              <!-- A wrist watch containing a text element with score info -->
+              <!-- A wrist watch containing score info -->
               <a-entity
-                class="watch-text"
-                position=".072 -.01 -.027"
-                rotation="22.748 112.868 162.974"
-                text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;width:.08;color:white;align:center;
-        font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
-        font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
+                watch-face
+                position=".072 -.012 -.027"
+                rotation="26.438 112.168 163.32"
               ></a-entity>
             </a-gltf-model>
             <!-- gets scaled by ground-listener -->
@@ -591,11 +589,11 @@
         physx-hidden-collision=""
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-one-floor-glb"
-           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
-           visible="false"
-           physx-hidden-collision=""
+          class="floor"
+          src="#hole-one-floor-glb"
+          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
+          visible="false"
+          physx-hidden-collision=""
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -610,9 +608,9 @@
         data-balldrop="-50.242 4.527 -10.606"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-two-floor-glb"
-           visible="false"         
+          class="floor"
+          src="#hole-two-floor-glb"
+          visible="false"
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -632,7 +630,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-four-walls-glb"
@@ -649,7 +647,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-five-walls-glb"
@@ -666,7 +664,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-six-walls-glb"
@@ -683,7 +681,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-seven-walls-glb"
@@ -700,7 +698,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-eight-walls-glb"
@@ -717,7 +715,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-nine-walls-glb"
@@ -876,23 +874,23 @@
         </section>
 
         <script>
-          const backingTracks = document.querySelectorAll('.backing-track')
-          let trackIndex = 0
-          let trackCount = backingTracks.length
-          let backingTrack = backingTracks[trackIndex]
-          
-          let playNextTrack = () => {            
-            trackIndex++
-            if(trackIndex == trackCount) trackIndex = 0
-            backingTrack = backingTracks[trackIndex]
-            backingTrack.play()
+          const backingTracks = document.querySelectorAll(".backing-track");
+          let trackIndex = 0;
+          let trackCount = backingTracks.length;
+          let backingTrack = backingTracks[trackIndex];
+
+          let playNextTrack = () => {
+            trackIndex++;
+            if (trackIndex == trackCount) trackIndex = 0;
+            backingTrack = backingTracks[trackIndex];
+            backingTrack.play();
+          };
+
+          for (var i = 0; i < trackCount; i++) {
+            let t = backingTracks[i];
+            t.volume = 0.25;
+            t.addEventListener("ended", playNextTrack);
           }
-          
-          for (var i=0; i<trackCount; i++){
-            let t = backingTracks[i]
-            t.volume = 0.25
-            t.addEventListener('ended', playNextTrack)
-          }          
 
           // const backingTrack = document.querySelector("#backing-track");
           // backingTrack.volume = 0.5;
