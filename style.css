@@ -87,15 +87,24 @@ body {
   color: #ffffd5;
   border: none;
   background-color: #f0693f;
-  padding: 8px 15px;
-  box-shadow: 5px 5px 0px#de4d1f;
+  padding: 10px 15px 5px 15px;
   font-family: new-reason, sans-serif;
   font-weight: bold;
+  position: relative;
+  box-shadow: 0.33px 0.33px #de4d1f, 0.66px 0.66px #de4d1f, 1px 1px #de4d1f,
+    1.33px 1.33px #de4d1f, 1.66px 1.66px #de4d1f, 2px 2px #de4d1f,
+    2.33px 2.33px #de4d1f, 2.66px 2.66px #de4d1f, 3px 3px #de4d1f,
+    3.33px 3.33px #de4d1f, 3.66px 3.66px #de4d1f, 4px 4px #de4d1f,
+    4.33px 4.33px #de4d1f, 4.66px 4.66px #de4d1f, 5px 5px #de4d1f;
 }
 
 .mainButton:hover {
   background-color: #de4d1f;
-  box-shadow: 5px 5px 0px#b13f1c;
+  box-shadow: 0.33px 0.33px #b13f1c, 0.66px 0.66px #b13f1c, 1px 1px #b13f1c,
+    1.33px 1.33px #b13f1c, 1.66px 1.66px #b13f1c, 2px 2px #b13f1c,
+    2.33px 2.33px #b13f1c, 2.66px 2.66px #b13f1c, 3px 3px #b13f1c,
+    3.33px 3.33px #b13f1c, 3.66px 3.66px #b13f1c, 4px 4px #b13f1c,
+    4.33px 4.33px #b13f1c, 4.66px 4.66px #b13f1c, 5px 5px #b13f1c;
 }
 
 .textButton {
@@ -103,7 +112,7 @@ body {
   color: #0e8d49;
   background-color: Transparent;
   border: none;
-  font-size: 3.5vh;
+  font-size: 3.8vh;
   font-family: "knockouthtf48-featherweight";
 }
 
@@ -149,15 +158,23 @@ body {
 }
 
 .closeBtn {
+  height: 85%;
+  width: 85%;
   border: none;
   background-color: #f0693f;
-  padding: 10px;
-  box-shadow: 5px 5px 0px#de4d1f;
+  padding: 8px;
+  box-shadow: 0.33px 0.33px #de4d1f, 0.66px 0.66px #de4d1f, 1px 1px #de4d1f,
+    1.33px 1.33px #de4d1f, 1.66px 1.66px #de4d1f, 2px 2px #de4d1f,
+    2.33px 2.33px #de4d1f, 2.66px 2.66px #de4d1f, 3px 3px #de4d1f,
+    3.33px 3.33px #de4d1f, 3.66px 3.66px #de4d1f, 4px 4px #de4d1f;
 }
 
 .closeBtn:hover {
   background-color: #de4d1f;
-  box-shadow: 5px 5px 0px#b13f1c;
+  box-shadow: 0.33px 0.33px #b13f1c, 0.66px 0.66px #b13f1c, 1px 1px #b13f1c,
+    1.33px 1.33px #b13f1c, 1.66px 1.66px #b13f1c, 2px 2px #b13f1c,
+    2.33px 2.33px #b13f1c, 2.66px 2.66px #b13f1c, 3px 3px #b13f1c,
+    3.33px 3.33px #b13f1c, 3.66px 3.66px #b13f1c, 4px 4px #b13f1c;
 }
 
 .modal-text {
