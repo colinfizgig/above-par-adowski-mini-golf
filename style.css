@@ -74,19 +74,19 @@ body {
   position: absolute;
   left: 48%;
   transform: translateX(-50%);
-  bottom: 17.5%;
+  bottom: 15%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 50%;
 }
 
 .mainButton {
   color: #ffffd5;
   border: none;
   background-color: #f0693f;
-  padding: 15px 20px;
+  padding: 8px 15px;
   box-shadow: 5px 5px 0px#de4d1f;
   font-family: new-reason, sans-serif;
   font-weight: bold;
@@ -98,15 +98,15 @@ body {
 }
 
 .main-content .mainButton {
-  font-size: 1.25em;
-  margin-bottom: 10%;
+  font-size: 3vh;
+  margin-bottom: 5%;
 }
 
 .textButton {
   color: #0e8d49;
   background-color: Transparent;
   border: none;
-  font-size: 2em;
+  font-size: 3.5vh;
   font-family: "knockouthtf48-featherweight";
 }
 
@@ -136,7 +136,7 @@ body {
 .closeBtn {
   border: none;
   background-color: #f0693f;
-  padding: 15px;
+  padding: 10px;
   box-shadow: 5px 5px 0px#de4d1f;
 }
 
@@ -147,15 +147,13 @@ body {
 
 .modal-text {
   position: absolute;
-  right: 5%;
+  right: 5.2%;
   top: 18%;
-  width: 30%;
+  width: 31%;
   text-align: center;
 }
 
 .modal-text button {
-  font-size: 1.2em;
-  padding: 15px 30px;
   letter-spacing: 0.06em;
   margin-top: 10%;
 }
@@ -165,7 +163,7 @@ body {
   left: 50%;
   transform: translate(-50%);
   padding-top: 10%;
-  width: 55%;
+  width: 75%;
   text-align: center;
 }
 
@@ -175,14 +173,10 @@ body {
   letter-spacing: 0.06em;
 }
 
-#playInVrAbout {
-  padding: 15px 45px;
-}
-
 #modalBackground {
   width: 75vw;
-  min-height: 600px;
-  min-width: 1110px;
+  max-width: 1000px;
+  min-width: 710px;
 }
 
 hr {
@@ -196,16 +190,17 @@ hr {
 
 h1 {
   color: #ecec43;
-  font-size: 1.98em;
+  font-size: 1.2em;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .bodyText {
   color: #fffed5;
-  font-size: 1em;
+  font-size: 0.6em;
   letter-spacing: 0.06em;
   margin: 0;
+  line-height: 1.3em;
 }
 
 #firstHowTo {
@@ -221,6 +216,48 @@ h1 {
 .instructionIcons {
   margin: 0;
   padding: 0;
-  height: 2em;
+  height: 1em;
   padding: 3%;
+}
+
+@media only screen and (min-height: 506px) and (min-width: 506px) {
+  .modal-text {
+    right: 4%;
+    width: 33%;
+  }
+
+  h1 {
+    font-size: 1.4em;
+  }
+
+  .bodyText {
+    font-size: 0.8em;
+  }
+
+  .instructionIcons {
+    height: 1.5em;
+  }
+}
+
+@media only screen and (max-width: 1100px) and (min-height: 506px) {
+  .modal-text {
+    right: 4%;
+    width: 33%;
+  }
+
+  h1 {
+    font-size: 1em;
+  }
+
+  .bodyText {
+    font-size: 0.6em;
+  }
+
+  .instructionIcons {
+    height: 1em;
+  }
+
+  .modalButtons button {
+    font-size: 0.5em;
+  }
 }
