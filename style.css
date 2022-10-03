@@ -74,12 +74,12 @@ body {
   position: absolute;
   left: 48%;
   transform: translateX(-50%);
-  bottom: 15%;
+  bottom: 16%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 40%;
   text-align: center;
 }
 
