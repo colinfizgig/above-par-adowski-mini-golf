@@ -44,6 +44,11 @@ AFRAME.registerComponent("putt", {
     this.puttDebounce = false;
     this.scores = new Array(this.courseColliders.length).fill("0"); // score array for as many holes as we have
     this.activeHoleScore = 0;
+
+    let params = new URLSearchParams(document.location.search);
+    let hole = parseInt(params.get("hole"), 10); // is the number 18
+    console.log(hole);
+
     this.activeHoleIndex = 0;
     this.scores[this.activeHoleIndex] = 0;
     this.tickCounter = 0;
@@ -342,9 +347,9 @@ AFRAME.registerComponent("putt", {
     await this.teleportToBall();
     this.lastHit.copy(this.ballEl.object3D.position);
     this.clubShadowEl.object3D.visible = true;
+    this.ballShadowEl.object3D.visible = true;
     this.faderEl.emit("cuefadein");
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    this.ballShadowEl.object3D.visible = true;
     this.holeOver = false;
   },
 
