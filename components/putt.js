@@ -20,7 +20,7 @@ AFRAME.registerComponent("putt", {
     this.ballShadowRaycaster = new THREE.Raycaster();
     this.clubShadowRaycaster = new THREE.Raycaster();
     // Course and scene els:
-    this.ballEl = document.querySelector("#ball");
+    this.ballEl;
     this.ballShadowEl = document.querySelector("#ball-shadow");
     this.ballHaloEl = document.querySelector("#ballHalo");
     this.flagEl = document.querySelector("#flag");
@@ -48,8 +48,8 @@ AFRAME.registerComponent("putt", {
     let params = new URLSearchParams(document.location.search);
     let hole = parseInt(params.get("hole"), 10); // is the number 18
     console.log(hole);
-
-    this.activeHoleIndex = 0;
+    if (hole) this.activeHoleIndex = hole;
+    else this.activeHoleIndex = 0;
     this.scores[this.activeHoleIndex] = 0;
     this.tickCounter = 0;
     this.parInfo = {
@@ -92,6 +92,7 @@ AFRAME.registerComponent("putt", {
     };
 
     // Set/update the values on the player's 3D watch in VR
+    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
     this.updateWatch();
     this.teleportToBall();
 
