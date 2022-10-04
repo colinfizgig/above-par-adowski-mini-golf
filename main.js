@@ -3,7 +3,7 @@
 
 import "./systems/handedness.js";
 import "./components/putt.js";
-import "./components/watch-face";
+import "./components/watch-face.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   document.querySelector("a-scene").setAttribute("webxr", {
