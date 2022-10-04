@@ -44,6 +44,7 @@ AFRAME.registerComponent("putt", {
     // Game logic and scoring stuff:
     this.holeOver = false;
     this.gameOver = false;
+    this.firstTimeEnteringVR = true;
     this.puttDebounce = false;
     this.scores = new Array(this.courseColliders.length).fill("0"); // score array for as many holes as we have
     this.activeHoleScore = 0;
@@ -96,7 +97,6 @@ AFRAME.registerComponent("putt", {
 
     // Set/update the values on the player's 3D watch in VR
     this.updateWatch();
-    this.teleportToBall();
 
     // Set up listener for first ball collisions
     this.ballEl.addEventListener(
@@ -122,6 +122,10 @@ AFRAME.registerComponent("putt", {
     this.el.addEventListener(
       "enter-vr",
       function () {
+        if (this.firstTimeEnteringVR) {
+          this.firstTimeEnteringVR = false;
+          this.restartGame(true);
+        }
         this.activeFloor.setAttribute("ground-listener", "");
         gtag("event", "enteredVR");
         this._isVR = true;
@@ -561,10 +565,7 @@ AFRAME.registerComponent("putt", {
 
         let clubHeadCenterPos = new THREE.Vector3();
         this.clubHeadCenterEl.object3D.getWorldPosition(clubHeadCenterPos);
-        this.clubShadowRaycaster.set(
-          clubHeadCenterPos,
-          this.downVector
-        ); // Cast down from the club head world pos
+        this.clubShadowRaycaster.set(clubHeadCenterPos, this.downVector); // Cast down from the club head world pos
         intersects = this.clubShadowRaycaster.intersectObject(
           this.activeFloor.object3D
         ); // Get intersection
