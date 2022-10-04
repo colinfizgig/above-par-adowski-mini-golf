@@ -545,10 +545,23 @@ AFRAME.registerComponent("putt", {
           this.activeFloor.object3D
         ); // Get intersection
         if (intersects.length > 0) {
+          const distanceToFloorIntersect = ballPos.distanceTo(
+            intersects[0].point
+          );
+          const scaleMax = 3;
+          let scaleAsRatioOfDistance = 1 + distanceToFloorIntersect * 0.75;
+
+          if (scaleAsRatioOfDistance > scaleMax)
+            scaleAsRatioOfDistance = scaleMax;
           this.ballShadowEl.object3D.position.set(
             intersects[0].point.x,
             intersects[0].point.y + 0.01,
             intersects[0].point.z
+          );
+          this.ballShadowEl.object3D.scale.set(
+            scaleAsRatioOfDistance,
+            scaleAsRatioOfDistance,
+            scaleAsRatioOfDistance
           );
           // Align the shadow plane to the normal of the floor intersection
           this.ballShadowEl.object3D.up.copy(intersects[0].face.normal);
@@ -570,10 +583,24 @@ AFRAME.registerComponent("putt", {
           this.activeFloor.object3D
         ); // Get intersection
         if (intersects.length > 0) {
+          const distanceToFloorIntersect = clubHeadCenterPos.distanceTo(
+            intersects[0].point
+          );
+          const scaleMax = 3;
+          let scaleAsRatioOfDistance = 1 + distanceToFloorIntersect * 0.75;
+
+          if (scaleAsRatioOfDistance > scaleMax)
+            scaleAsRatioOfDistance = scaleMax;
+
           this.clubShadowEl.object3D.position.set(
             intersects[0].point.x,
             intersects[0].point.y + 0.01,
             intersects[0].point.z
+          );
+          this.clubShadowEl.object3D.scale.set(
+            scaleAsRatioOfDistance,
+            scaleAsRatioOfDistance,
+            scaleAsRatioOfDistance
           );
           // Align the shadow plane to the normal of the floor intersection
           this.clubShadowEl.object3D.up.copy(intersects[0].face.normal);
