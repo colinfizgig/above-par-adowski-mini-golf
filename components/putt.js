@@ -184,7 +184,14 @@ AFRAME.registerComponent("putt", {
 
     document.addEventListener("restart-game", (e) => {
       this.el.sceneEl.enterVR();
-      this.restartGame(true);
+
+      document.addEventListener(
+        "enter-vr",
+        () => {
+          this.restartGame(true);
+        },
+        { once: true }
+      );
     });
   },
 
@@ -301,6 +308,7 @@ AFRAME.registerComponent("putt", {
   },
 
   async nextHole(instant = false) {
+    console.log(instant);
     // if there are more holes, apply colliders
     if (!instant) {
       await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
@@ -450,7 +458,7 @@ AFRAME.registerComponent("putt", {
       this.ballEl.object3D.matrixNeedsUpdate = true;
 
       // RAF To make sure ball position update takes place
-      globalRAF(() => {
+      this.globalRAF(() => {
         resolve();
       });
     });
@@ -485,6 +493,7 @@ AFRAME.registerComponent("putt", {
     // Reset overall game state
     this.gameOver = false;
     this.activeHoleIndex = 0;
+    this.activeHoleScore = 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
 
     // Hide the credits or endscreen content
