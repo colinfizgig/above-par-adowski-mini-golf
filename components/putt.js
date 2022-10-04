@@ -125,10 +125,13 @@ AFRAME.registerComponent("putt", {
         gtag("event", "enteredVR");
       }.bind(this)
     );
-    this.el.addEventListener("exit-vr", function () {
-      this.activeFloor.removeAttribute("ground-listener");
-      gtag("event", "exitedVR");
-    }.bind(this));
+    this.el.addEventListener(
+      "exit-vr",
+      function () {
+        this.activeFloor.removeAttribute("ground-listener");
+        gtag("event", "exitedVR");
+      }.bind(this)
+    );
 
     // On trigger, teleport to ball - logic in handler below
     this.touchControllerR.addEventListener(
@@ -180,14 +183,15 @@ AFRAME.registerComponent("putt", {
     gtag("event", "gameInit");
 
     document.addEventListener("restart-game", (e) => {
-      this.restartGame();
+      this.el.sceneEl.enterVR();
+      this.restartGame(true);
     });
   },
 
   /**
    * Move and rotate the player to the ball
    */
-  teleportToBall: async function () {
+  teleportToBall: function () {
     // Move player towards the ball
     const ballPos = this.ballEl.object3D.position; // {x: 0, y: 0.125, z: -1.25}
     const flagPos = this.flagEl.object3D.position; // {x: 0, y: 0.125, z: -8}
@@ -296,10 +300,11 @@ AFRAME.registerComponent("putt", {
     }
   },
 
-  async nextHole() {
-    console.log("NEXT HOLE CODE");
+  async nextHole(instant = false) {
     // if there are more holes, apply colliders
-    await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
+    if (!instant) {
+      await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
+    }
     this.flagEl.components["particle-system"].stopParticles();
 
     const lastHoleIndex =
@@ -310,8 +315,8 @@ AFRAME.registerComponent("putt", {
     if (lastHoleIndex != this.activeHoleIndex) {
       this.courseColliders[lastHoleIndex].removeAttribute("physx-body");
       this.courseColliders[lastHoleIndex].removeAttribute("physx-material");
-      this.activeFloor.removeAttribute("physx-body")
-      this.activeFloor.removeAttribute("physx-material")
+      this.activeFloor.removeAttribute("physx-body");
+      this.activeFloor.removeAttribute("physx-material");
     }
     //this.courseColliders[this.activeHoleIndex].setAttribute("visible", "true");
     this.courseColliders[this.activeHoleIndex].setAttribute(
@@ -329,35 +334,39 @@ AFRAME.registerComponent("putt", {
     );
 
     this.activeFloor.removeAttribute("ground-listener");
-    this.activeFloor = this.courseColliders[this.activeHoleIndex].querySelector(".floor");
+    this.activeFloor =
+      this.courseColliders[this.activeHoleIndex].querySelector(".floor");
 
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
-    this.activeFloor
-      .setAttribute(
-        "physx-material",
-        "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
-      );
+    this.activeFloor.setAttribute(
+      "physx-material",
+      "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
+    );
 
-    this.activeFloor
-      .setAttribute("ground-listener", "");
+    this.activeFloor.setAttribute("ground-listener", "");
     //set floor collider invisible but still colliding, false to make it visible
-    this.activeFloor
-      .setAttribute("physx-hidden-collision", "");
+    this.activeFloor.setAttribute("physx-hidden-collision", "");
 
     this.updateWatch();
-    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
-    this.faderEl.emit("cuefadeout");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await this.newBall(
+      this.courseColliders[this.activeHoleIndex].dataset.balldrop
+    );
+    if (!instant) {
+      this.faderEl.emit("cuefadeout");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
     this.flagEl.setAttribute(
       "position",
       this.courseColliders[this.activeHoleIndex].dataset.flag
     );
-    await this.teleportToBall();
+    this.teleportToBall();
     this.lastHit.copy(this.ballEl.object3D.position);
     this.clubShadowEl.object3D.visible = true;
     this.ballShadowEl.object3D.visible = true;
-    this.faderEl.emit("cuefadein");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (!instant) {
+      this.faderEl.emit("cuefadein");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
     this.holeOver = false;
   },
 
@@ -379,7 +388,7 @@ AFRAME.registerComponent("putt", {
     return parString;
   },
 
-  outOfBounds: function () {
+  outOfBounds: async function () {
     if (!this.holeOver) {
       this.ballFinderEl.removeAttribute("ball-finder");
       this.hmdTextEl.setAttribute(
@@ -393,13 +402,22 @@ AFRAME.registerComponent("putt", {
           this.hmdTextEl.setAttribute("text", `value:;`);
         }, 2000);
       }, 2000);
-      this.newBall(`${this.lastHit.x} ${this.lastHit.y} ${this.lastHit.z}`);
+      await this.newBall(
+        `${this.lastHit.x} ${this.lastHit.y} ${this.lastHit.z}`
+      );
     }
   },
 
+  globalRAF(callback) {
+    if (!this.el.sceneEl?.scene?.xrSession)
+      return window.requestAnimationFrame(callback);
+    const { xrSession } = this.el.sceneEl;
+    return xrSession.requestAnimationFrame(callback);
+  },
+
   newBall: function (newballposition) {
-    this.ballEl.remove();
-    setTimeout(() => {
+    return new Promise((resolve, reject) => {
+      this.ballEl.remove();
       const newBallEl = document.createElement("a-sphere");
       newBallEl.setAttribute("id", "ball");
       newBallEl.setAttribute("radius", ".0275");
@@ -429,7 +447,13 @@ AFRAME.registerComponent("putt", {
         this.collisionHandler.bind(this)
       );
       this.ballFinderEl.setAttribute("ball-finder", "");
-    }, 500);
+      this.ballEl.object3D.matrixNeedsUpdate = true;
+
+      // RAF To make sure ball position update takes place
+      globalRAF(() => {
+        resolve();
+      });
+    });
   },
 
   updateWatch: function () {
@@ -457,7 +481,7 @@ AFRAME.registerComponent("putt", {
     }
   },
 
-  restartGame() {
+  restartGame(instant = false) {
     // Reset overall game state
     this.gameOver = false;
     this.activeHoleIndex = 0;
@@ -468,7 +492,7 @@ AFRAME.registerComponent("putt", {
     this.credits.emit("pauseCredits", null, true);
 
     // Start Next Game
-    this.nextHole();
+    this.nextHole(instant);
 
     // Track analytics of user choice to restart
     gtag("event", "restartGame");

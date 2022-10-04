@@ -31,9 +31,7 @@ resumeBtn.onclick = function () {
 };
 
 startOverBtn.onclick = function () {
-  showMainIntro();
-  const restart = new Event("restart-game");
-  document.dispatchEvent(restart);
+  document.dispatchEvent(new Event("restart-game"));
 };
 
 closeBtn.onclick = function () {
