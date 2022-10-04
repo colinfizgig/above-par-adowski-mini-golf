@@ -126,6 +126,7 @@ body {
   display: flex;
   flex-direction: row;
   margin-bottom: 0.5em;
+  transform: translateX(-2.25%);
 }
 
 .gameplayButtons button {
