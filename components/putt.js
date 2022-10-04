@@ -22,7 +22,7 @@ AFRAME.registerComponent("putt", {
     this.ballShadowRaycaster = new THREE.Raycaster();
     this.clubShadowRaycaster = new THREE.Raycaster();
     // Course and scene els:
-    this.ballEl;
+    this.ballEl = document.querySelector("#ball");
     this.ballShadowEl = document.querySelector("#ball-shadow");
     this.ballHaloEl = document.querySelector("#ballHalo");
     this.flagEl = document.querySelector("#flag");
@@ -47,13 +47,8 @@ AFRAME.registerComponent("putt", {
     this.firstTimeEnteringVR = true;
     this.puttDebounce = false;
     this.scores = new Array(this.courseColliders.length).fill("0"); // score array for as many holes as we have
+    this.activeHoleIndex = 0;
     this.activeHoleScore = 0;
-
-    let params = new URLSearchParams(document.location.search);
-    let hole = parseInt(params.get("hole"), 10); // is the number 18
-    console.log(hole);
-    if (hole) this.activeHoleIndex = hole;
-    else this.activeHoleIndex = 0;
     this.scores[this.activeHoleIndex] = 0;
     this.tickCounter = 0;
     this.parInfo = {
@@ -514,7 +509,11 @@ AFRAME.registerComponent("putt", {
 
     // Reset overall game state
     this.gameOver = false;
-    this.activeHoleIndex = 0;
+
+    let params = new URLSearchParams(document.location.search);
+    let hole = parseInt(params.get("hole"), 10); // is the number 18
+    if (hole) this.activeHoleIndex = hole;
+    else this.activeHoleIndex = 0;
     this.activeHoleScore = 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
 
