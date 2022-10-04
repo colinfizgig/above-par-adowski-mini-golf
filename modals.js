@@ -1,82 +1,116 @@
 /** @format */
 
-const playInVrIntro = document.querySelector("#playInVr");
-const playInVrAbout = document.querySelector("#playInVrAbout");
-const playInVrHowTo = document.querySelector("#playInVrHowTo");
-const aboutButton = document.querySelector(".aboutBtn");
-const introModal = document.querySelector(".intro-modal");
-//const settingsIcon = document.querySelector("#settingsIcon");
-//const closeSettingsIcon = document.querySelector("#closeSettingsIcon");
-const myInterface = document.querySelector("#my-interface");
 const mainMenu = document.querySelector(".main-menu");
+const playInVrIntro = document.querySelector("#playInVr");
+const mainIntro = document.querySelector(".introBtn");
+const howToPlayButtonMain = document.querySelector("#howToPlayButtonMain");
+const mainInGame = document.querySelector(".gameplayButtons");
+const resumeBtn = document.querySelector("#resumeBtn");
+const startOverBtn = document.querySelector("#startOverBtn");
+const aboutButton = document.querySelector(".aboutBtn");
+
+const introModal = document.querySelector(".intro-modal");
+const myInterface = document.querySelector("#my-interface");
 const aboutContent = document.querySelector("#aboutContent");
 const howToContent = document.querySelector("#howToContent");
-const howToPlayButtonMain = document.querySelector("#howToPlayButtonMain");
 const howToPlayButtonModal = document.querySelector("#howToPlayButtonModal");
 const closeBtn = document.querySelector(".closeBtn");
+const playInVrAbout = document.querySelector("#playInVrAbout");
+const playInVrHowTo = document.querySelector("#playInVrHowTo");
 
-closeBtn.onclick = function () {
-  closeModal();
-  mainMenu.style = "display:block;";
-};
+hideMe(mainInGame);
 
-howToPlayButtonMain.onclick = function () {
-  showHowTo();
-};
-
-howToPlayButtonModal.onclick = function () {
-  showHowTo();
-};
-aboutButton.onclick = function () {
-  showAbout();
-};
+document.addEventListener("exit-vr", function () {
+  showMainInGame();
+});
 
 playInVrIntro.onclick = function () {
   startGame();
+};
+
+aboutButton.onclick = function () {
+  hideMainMenu();
+  showAbout();
+};
+
+howToPlayButtonMain.onclick = function () {
+  hideMainMenu();
+  showHowTo();
+};
+
+resumeBtn.onclick = function () {
+  sceneEl.enterVR();
+  hideMainMenu();
+};
+
+startOverBtn.onclick = function () {
+  document.dispatchEvent(new Event("restart-game"));
+};
+
+closeBtn.onclick = function () {
+  closeModal();
+  showMainIntro();
 };
 
 playInVrAbout.onclick = function () {
   startGame();
 };
 
+howToPlayButtonModal.onclick = function () {
+  showHowTo();
+};
+
 playInVrHowTo.onclick = function () {
   startGame();
 };
 
-// settingsIcon.onclick = function () {
-//   myInterface.style = "display:block;";
-//   settingsIcon.style = "display:none;";
-// };
-
-// closeSettingsIcon.onclick = function () {
-//   myInterface.style = "display:none;";
-//   settingsIcon.style = "display:block;";
-// };
-
 function startGame() {
-  mainMenu.style = "display:none;";
+  hideMainMenu();
   closeModal();
   backingTrack.play();
   sceneEl.enterVR();
-  document.querySelector(".a-enter-vr-button").style.display = "block";
 }
 
 function showAbout() {
-  introModal.style = "display:block;";
-  aboutContent.style = "display:block;";
-  howToContent.style = "display:none;";
-  mainMenu.style = "display:none;";
+  showMe(introModal);
+  showMe(aboutContent);
+  hideMe(howToContent);
 }
 
 function showHowTo() {
-  introModal.style = "display:block;";
-  howToContent.style = "display:block;";
-  aboutContent.style = "display:none;";
-  mainMenu.style = "display:none;";
+  showMe(introModal);
+  showMe(howToContent);
+  hideMe(aboutContent);
 }
 
 function closeModal() {
-  introModal.style = "display:none;";
-  howToContent.style = "display:none;";
-  aboutContent.style = "display:none;";
+  hideMe(introModal);
+}
+
+function showMainIntro() {
+  showMe(mainMenu);
+  showMe(mainIntro);
+  hideMe(mainInGame);
+}
+
+function showMainInGame() {
+  showMe(mainMenu);
+  showMe(mainInGame);
+  hideMe(mainIntro);
+}
+
+function hideMainMenu() {
+  hideMe(mainMenu);
+  hideMe(mainIntro);
+  hideMe(mainInGame);
+}
+
+function showMe(el) {
+  el.classList.add("show");
+  el.classList.remove("hide");
+}
+
+function hideMe(el) {
+  el.classList.add("hide");
+  el.classList.remove("show");
 }

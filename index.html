@@ -20,6 +20,7 @@
     <script src="https://unpkg.com/@fern-solutions/aframe-highlight/dist/highlight.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AdaRoseCannon/aframe-blink-controls@573383a/dist/aframe-blink-controls.min.js"></script>
     <script src="https://ideaspacevr.github.io/aframe-particle-system-component/dist/aframe-particle-system-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-troika-text/dist/aframe-troika-text.min.js"></script>
 
     <!-- Our custom logic -->
     <script src="model-utils.js"></script>
@@ -30,22 +31,28 @@
     <title>Above Par-adowski Mini-Golf, Par-t 2</title>
 
     <meta charset="UTF-8" />
-    <meta property="og:title" content="Above Par-adowski Mini-Golf: Par-t 2" />
+    <meta property="og:title" content="Above Par-adowski WebXR Mini-Golf" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@jamesckane" />
+    <meta name="twitter:site" content="@paracreative" />
     <meta name="twitter:creator" content="@jamesckane" />
     <meta
       property="og:url"
-      content="https://above-par-adowski-mini-golf-par-t-2.glitch.me"
+      content="https://aboveparadowski.com"
     />
     <meta
       name="description"
-      content="A WebXR putt putt game made for the Quest 2 Browser."
+      content="WebXR mini-golf for Meta Quest."
     />
     <meta
       property="og:description"
-      content="A WebXR putt putt game made for the Quest 2 Browser."
+      content="WebXR mini-golf for Meta Quest."
     />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AP_FAV_512.ico?v=1664909969907"
+    />
+
     <!-- <meta property="og:image" content="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/snapshot.png?v=1645201177438" /> -->
     <link rel="stylesheet" href="style.css" />
 
@@ -158,6 +165,7 @@
       renderer="highRefreshRate:true;depth:true;"
       gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
       putt=""
+      loading-screen="enabled: false;"
     >
       <a-assets>
         <!-- env art asset imports -->
@@ -216,7 +224,7 @@
           preload="auto"
           crossorigin="anonymous"
         ></audio>
-         <!-- convex physics collider asset imports, hole 1 -->
+        <!-- convex physics collider asset imports, hole 1 -->
         <a-asset-item
           id="hole-one-floor-glb"
           src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%201%20floor.glb?v=1664513857973"
@@ -363,14 +371,11 @@
               src="#club-handle-glb"
               position="0 0 .15"
             >
-              <!-- A wrist watch containing a text element with score info -->
+              <!-- A wrist watch containing score info -->
               <a-entity
-                class="watch-text"
-                position=".072 -.01 -.027"
-                rotation="22.748 112.868 162.974"
-                text="value:Above\nPar-adowski\nHole: 1\nPar: 2\nScore: 0\nOverall: -3;width:.08;color:white;align:center;
-        font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
-        font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
+                watch-face
+                position=".072 -.012 -.027"
+                rotation="26.438 112.168 163.32"
               ></a-entity>
             </a-gltf-model>
             <!-- gets scaled by ground-listener -->
@@ -382,8 +387,8 @@
             <a-entity
               class="club-head-container"
               position="0 0 -1"
-              physx-body="type:kinematic;highPrecision:true;"
-              physx-material="restitution: .6;"
+              physx-body="type:kinematic;"
+              physx-material="restitution: .6; contactOffset: 0.0025;"
             >
               <a-gltf-model
                 class="club-head"
@@ -403,7 +408,7 @@
               <a-gltf-model
                 class="club-collider"
                 src="#club-collider-glb"
-                visible="false"
+                visible="true"
                 physx-hidden-collision=""
               ></a-gltf-model>
             </a-entity>
@@ -444,19 +449,18 @@
       ></a-light>
 
       <!-- The ball -->
-<!--      <a-sphere-->
-<!--        material="color:white;src:#ball-texture;"-->
-<!--        position="-17.151 0.505 2.797"-->
-<!--        rotation="0 0 90"-->
-<!--        scale="1 1 1"-->
-<!--        physx-body="type:dynamic;mass:0.5;emitCollisionEvents:true;angularDamping:0.5;linearDamping:.5;highPrecision: true;"-->
-<!--        physx-material="restitution:.5; dynamicFriction: .05; staticFriction: .65;"-->
-<!--        radius="0.0275"-->
-<!--        id="ball"-->
-<!--        sound="src:#BallSoundSrc;poolSize:4;autoplay:false;"-->
-<!--        trail="width:.075;length:100;resolution:10;color:blue;"-->
-<!--      >-->
-<!--      </a-sphere>-->
+      <a-sphere
+        material="color:white;src:#ball-texture;"
+        position="-17.151 0.505 2.797"
+        rotation="0 0 90"
+        scale="1 1 1"
+        physx-body="type:dynamic;mass:0.5;emitCollisionEvents:true;angularDamping:0.5;linearDamping:.5;highPrecision: true;"
+        physx-material="restitution:.5; dynamicFriction: .05; staticFriction: .65; contactOffset: 0.0025; "
+        radius="0.0275"
+        id="ball"
+        sound="src:#BallSoundSrc;poolSize:4;autoplay:false;"
+      >
+      </a-sphere>
 
       <a-plane
         id="ball-shadow"
@@ -591,11 +595,11 @@
         physx-hidden-collision=""
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-one-floor-glb"
-           physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
-           visible="false"
-           physx-hidden-collision=""
+          class="floor"
+          src="#hole-one-floor-glb"
+          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
+          visible="false"
+          physx-hidden-collision=""
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -610,9 +614,9 @@
         data-balldrop="-50.242 4.527 -10.606"
       >
         <a-gltf-model
-           class="floor"
-           src="#hole-two-floor-glb"
-           visible="false"         
+          class="floor"
+          src="#hole-two-floor-glb"
+          visible="false"
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -632,7 +636,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-four-walls-glb"
@@ -649,7 +653,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-five-walls-glb"
@@ -666,7 +670,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-six-walls-glb"
@@ -683,7 +687,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-seven-walls-glb"
@@ -700,7 +704,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-eight-walls-glb"
@@ -717,7 +721,7 @@
           visible="false"
         ></a-gltf-model>
       </a-gltf-model>
-      
+
       <a-gltf-model
         class="colliders"
         src="#hole-nine-walls-glb"
@@ -741,7 +745,13 @@
         <div class="main-menu">
           <div class="main-menu-container">
             <div class="main-content">
-              <button class="mainButton" id="playInVr">PLAY IN VR</button>
+              <button class="mainButton introBtn" id="playInVr">
+                PLAY IN VR
+              </button>
+              <div class="gameplayButtons">
+                <button class="mainButton" id="resumeBtn">RESUME</button>
+                <button class="mainButton" id="startOverBtn">START OVER</button>
+              </div>
               <button class="textButton aboutBtn">ABOUT</button>
               <button class="textButton" id="howToPlayButtonMain">
                 HOW TO PLAY
@@ -749,7 +759,7 @@
             </div>
 
             <img
-              src="./assets/sign.png"
+              src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/sign.png?v=1664901662305"
               alt="image of a stylized road sign that says above par-a-dowski, mini golf, webXR"
               id="sign"
             />
@@ -760,7 +770,11 @@
           <div class="intro-modal-container">
             <div class="modal-content">
               <div class="closeBtnConatiner">
-                <img src="./assets/close.png" alt="x icon" class="closeBtn" />
+                <img
+                  src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/close.png?v=1664901648952"
+                  alt="x icon"
+                  class="closeBtn"
+                />
               </div>
               <div class="modal-text" id="aboutContent">
                 <h1>
@@ -800,13 +814,13 @@
 
                 <div class="iconContainer">
                   <img
-                    src="./assets/xy.png"
+                    src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/xy.png?v=1664901664937"
                     alt="x and y buttons"
                     class="instructionIcons"
                   />
                   <p class="bodyText">or</p>
                   <img
-                    src="./assets/ab.png"
+                    src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/ab.png?v=1664901638556"
                     alt="a and b buttons"
                     class="instructionIcons"
                   />
@@ -833,7 +847,7 @@
               </div>
 
               <img
-                src="./assets/popup_bg.png"
+                src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/popup_bg.png?v=1664901657610"
                 alt=""
                 class="modal"
                 id="modalBackground"
@@ -842,57 +856,24 @@
           </div>
         </div>
 
-        <section
-          style="
-            display: inline-block;
-            background: lavenderblush;
-            color: #333333;
-            border-radius: 1em;
-            padding: 1em;
-            margin: 0;
-            accent-color: hotpink;
-          "
-          id="my-interface"
-        >
-          <h2>Settings</h2>
-          <fieldset style="border: none; margin-top: 0.5em">
-            <legend>Left- or Right-Handed Putter</legend>
-            <input
-              onclick="document.querySelector('a-scene').sceneEl.systems['handedness'].setHand('left')"
-              type="radio"
-              id="handedness-left"
-              name="thumbstick"
-              value="left"
-            /><label for="handedness-left"> Left</label>
-            <input
-              onclick="document.querySelector('a-scene').sceneEl.systems['handedness'].setHand('right')"
-              type="radio"
-              id="handedness-right"
-              name="thumbstick"
-              value="right"
-              checked
-            /><label for="handedness-right"> Right</label>
-          </fieldset>
-        </section>
-
         <script>
-          const backingTracks = document.querySelectorAll('.backing-track')
-          let trackIndex = 0
-          let trackCount = backingTracks.length
-          let backingTrack = backingTracks[trackIndex]
-          
-          let playNextTrack = () => {            
-            trackIndex++
-            if(trackIndex == trackCount) trackIndex = 0
-            backingTrack = backingTracks[trackIndex]
-            backingTrack.play()
+          const backingTracks = document.querySelectorAll(".backing-track");
+          let trackIndex = 0;
+          let trackCount = backingTracks.length;
+          let backingTrack = backingTracks[trackIndex];
+
+          let playNextTrack = () => {
+            trackIndex++;
+            if (trackIndex == trackCount) trackIndex = 0;
+            backingTrack = backingTracks[trackIndex];
+            backingTrack.play();
+          };
+
+          for (var i = 0; i < trackCount; i++) {
+            let t = backingTracks[i];
+            t.volume = 0.25;
+            t.addEventListener("ended", playNextTrack);
           }
-          
-          for (var i=0; i<trackCount; i++){
-            let t = backingTracks[i]
-            t.volume = 0.25
-            t.addEventListener('ended', playNextTrack)
-          }          
 
           // const backingTrack = document.querySelector("#backing-track");
           // backingTrack.volume = 0.5;
@@ -914,12 +895,10 @@
           });
           sceneEl.addEventListener("exit-vr", function () {
             cameraRig.setAttribute("movement-controls", "enabled", true);
+            mainMenu.style = "display:block;";
+            mainIntro.style = "display:block;";
+            mainInGame.style = "display:none;";
           });
-
-          function closeModal() {
-            document.querySelector(".intro-modal").style = "display:none;";
-            backingTrack.play();
-          }
         </script>
       </div>
     </div>

@@ -46,16 +46,12 @@ A generic A-Frame system used for a nice particle effect when ball contact is ma
 Another generic A-Frame utilized for SFX and backing track cues.
 
 
-
-
 ## Credits:
 
 - James C. Kane - creator and lead dev
 - Kevin Olson - senior dev
 - Ethan Michalicek - senior dev
 - Irina Fawcett - dev
-
-
 - Andy Wise - creative director
 - Dan Rayfield - UX director
 - Colin Freeman - senior technical artist
@@ -63,13 +59,13 @@ Another generic A-Frame utilized for SFX and backing track cues.
 - Noah Ilbery - technical artist
 
 
-## Special thanks:
+## Special Thanks:
 
 - Ada Rose Cannon
 - Noeri Huisman
-- Diarmid McKenzie
+- Diarmid Mackenzie
 - Diego Marcos
-- Dave Hill
+- Zach Capalbo
 - Ashford Stamper
 - Chris Prestemon
 - Caroline May
