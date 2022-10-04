@@ -91,7 +91,6 @@ AFRAME.registerComponent("putt", {
     };
 
     // Set/update the values on the player's 3D watch in VR
-    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
     this.updateWatch();
 
     // Set up listener for first ball collisions
@@ -511,8 +510,9 @@ AFRAME.registerComponent("putt", {
     this.gameOver = false;
 
     let params = new URLSearchParams(document.location.search);
-    let hole = parseInt(params.get("hole"), 10); // is the number 18
-    if (hole) this.activeHoleIndex = hole;
+    let hole = parseInt(params.get("hole"), 10);
+    console.log(hole);
+    if (hole) this.activeHoleIndex = hole - 1;  // activeHoleIndex is indexed from 0, so minus 1
     else this.activeHoleIndex = 0;
     this.activeHoleScore = 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
