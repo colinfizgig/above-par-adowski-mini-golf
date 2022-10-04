@@ -47,7 +47,11 @@
       property="og:description"
       content="A WebXR putt putt game made for the Quest 2 Browser."
     />
-    <link rel="icon" type="image/x-icon" href="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AP_FAV_512.ico?v=1664909969907">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AP_FAV_512.ico?v=1664909969907"
+    />
 
     <!-- <meta property="og:image" content="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/snapshot.png?v=1645201177438" /> -->
     <link rel="stylesheet" href="style.css" />
@@ -382,8 +386,8 @@
             <a-entity
               class="club-head-container"
               position="0 0 -1"
-              physx-body="type:kinematic;highPrecision:true;"
-              physx-material="restitution: .6;"
+              physx-body="type:kinematic;"
+              physx-material="restitution: .6; contactOffset: 0.0025;"
             >
               <a-gltf-model
                 class="club-head"
@@ -450,7 +454,7 @@
         rotation="0 0 90"
         scale="1 1 1"
         physx-body="type:dynamic;mass:0.5;emitCollisionEvents:true;angularDamping:0.5;linearDamping:.5;highPrecision: true;"
-        physx-material="restitution:.5; dynamicFriction: .05; staticFriction: .65;"
+        physx-material="restitution:.5; dynamicFriction: .05; staticFriction: .65; contactOffset: 0.0025; "
         radius="0.0275"
         id="ball"
         sound="src:#BallSoundSrc;poolSize:4;autoplay:false;"
