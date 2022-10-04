@@ -753,7 +753,7 @@
             </div>
 
             <img
-              src="./assets/sign.png"
+              src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/sign.png?v=1664901662305"
               alt="image of a stylized road sign that says above par-a-dowski, mini golf, webXR"
               id="sign"
             />
@@ -764,7 +764,11 @@
           <div class="intro-modal-container">
             <div class="modal-content">
               <div class="closeBtnConatiner">
-                <img src="./assets/close.png" alt="x icon" class="closeBtn" />
+                <img
+                  src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/close.png?v=1664901648952"
+                  alt="x icon"
+                  class="closeBtn"
+                />
               </div>
               <div class="modal-text" id="aboutContent">
                 <h1>
@@ -804,13 +808,13 @@
 
                 <div class="iconContainer">
                   <img
-                    src="./assets/xy.png"
+                    src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/xy.png?v=1664901664937"
                     alt="x and y buttons"
                     class="instructionIcons"
                   />
                   <p class="bodyText">or</p>
                   <img
-                    src="./assets/ab.png"
+                    src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/ab.png?v=1664901638556"
                     alt="a and b buttons"
                     class="instructionIcons"
                   />
@@ -837,7 +841,7 @@
               </div>
 
               <img
-                src="./assets/popup_bg.png"
+                src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/popup_bg.png?v=1664901657610"
                 alt=""
                 class="modal"
                 id="modalBackground"
@@ -845,39 +849,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <section
-          style="
-            display: inline-block;
-            background: lavenderblush;
-            color: #333333;
-            border-radius: 1em;
-            padding: 1em;
-            margin: 0;
-            accent-color: hotpink;
-          "
-          id="my-interface"
-        >
-          <h2>Settings</h2>
-          <fieldset style="border: none; margin-top: 0.5em">
-            <legend>Left- or Right-Handed Putter</legend>
-            <input
-              onclick="document.querySelector('a-scene').sceneEl.systems['handedness'].setHand('left')"
-              type="radio"
-              id="handedness-left"
-              name="thumbstick"
-              value="left"
-            /><label for="handedness-left"> Left</label>
-            <input
-              onclick="document.querySelector('a-scene').sceneEl.systems['handedness'].setHand('right')"
-              type="radio"
-              id="handedness-right"
-              name="thumbstick"
-              value="right"
-              checked
-            /><label for="handedness-right"> Right</label>
-          </fieldset>
-        </section> -->
 
         <script>
           const backingTracks = document.querySelectorAll(".backing-track");
@@ -922,11 +893,6 @@
             mainIntro.style = "display:block;";
             mainInGame.style = "display:none;";
           });
-
-          function closeModal() {
-            document.querySelector(".intro-modal").style = "display:none;";
-            backingTrack.play();
-          }
         </script>
       </div>
     </div>

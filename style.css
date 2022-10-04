@@ -296,3 +296,13 @@ h1 {
     font-size: 0.5em;
   }
 }
+
+/* ------- show/hide classes ------------------------------------------*/
+
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
