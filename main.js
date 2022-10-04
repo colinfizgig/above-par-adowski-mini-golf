@@ -147,26 +147,25 @@ AFRAME.registerComponent("haptics", {
   init: function () {
     var data = this.data;
     var i;
-    var self = this;
 
-    this.callPulse = function () {
-      self.pulse();
+    this.callPulse = () => {
+      this.pulse();
     };
 
-    var doInit = function () {
-      self.gamepad = self.el.components["tracked-controls"].controller;
-      if (self.gamepad.gamepad) {
+    var doInit = () => {
+      this.gamepad = this.el.components["tracked-controls"].controller;
+      if (this.gamepad.gamepad) {
         // WebXR.
-        self.gamepad = self.gamepad.gamepad;
+        this.gamepad = this.gamepad.gamepad;
       }
       if (
-        !self.gamepad ||
-        !self.gamepad.hapticActuators ||
-        !self.gamepad.hapticActuators.length
+        !this.gamepad ||
+        !this.gamepad.hapticActuators ||
+        !this.gamepad.hapticActuators.length
       ) {
         return;
       }
-      self.addEventListeners();
+      this.addEventListeners();
     };
 
     // There may exist a tracked-controls when this component is initialized
@@ -176,10 +175,23 @@ AFRAME.registerComponent("haptics", {
     ) {
       doInit();
     } else {
-      this.el.addEventListener("controllerconnected", function init() {
-        doInit();
+      this.el.addEventListener("controllerconnected", async () => {
+        await this.WaitForController().then(() => {
+          doInit();
+        });
       });
     }
+  },
+
+  async WaitForController() {
+    return new Promise((resolve, reject) => {
+      const interval = setInterval(() => {
+        if (this.el.components["tracked-controls"].controller) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 50);
+    });
   },
 
   remove: function () {
