@@ -40,6 +40,11 @@ AFRAME.registerComponent("watch-face", {
     });
     details.setAttribute("position", `0 0 0.0001`);
     this.el.appendChild(details);
+
+    document.addEventListener("handedness-changed", (e) => {
+      const direction = e.detail.hand == "right" ? 1 : -1;
+      this.el.setAttribute("scale", `${direction} 1 1`);
+    });
   },
 
   getDetailText() {
