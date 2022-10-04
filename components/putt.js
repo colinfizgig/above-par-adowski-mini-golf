@@ -32,6 +32,7 @@ AFRAME.registerComponent("putt", {
     this.ballParticles = document.querySelector("#ballParticles");
     this.floors = document.querySelectorAll(".floor");
     this.activeFloor = document.querySelector(".floor");
+    this.downVector = new THREE.Vector3(0, -1, 0);
     // SFX els:
     this.eagleSoundEl = document.querySelector("#eagle-sound");
     this.birdieSoundEl = document.querySelector("#birdie-sound");
@@ -202,8 +203,8 @@ AFRAME.registerComponent("putt", {
    */
   teleportToBall: function () {
     // Move player towards the ball
-    const ballPos = this.ballEl.object3D.position; // {x: 0, y: 0.125, z: -1.25}
-    const flagPos = this.flagEl.object3D.position; // {x: 0, y: 0.125, z: -8}
+    const ballPos = this.ballEl.object3D.position;
+    const flagPos = this.flagEl.object3D.position;
     const dir = new THREE.Vector3().subVectors(flagPos, ballPos).normalize();
     dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(1); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
     if (this.el.sceneEl.systems["handedness"].data.hand === "right")
@@ -535,7 +536,7 @@ AFRAME.registerComponent("putt", {
         }
 
         // Next, position and rotate the blob shadows for the ball and club
-        this.ballShadowRaycaster.set(ballPos, new THREE.Vector3(0, -1, 0)); // TODO: don't instantiate a new V3, figure out Vector3.down syntax
+        this.ballShadowRaycaster.set(ballPos, this.downVector);
         let intersects = this.ballShadowRaycaster.intersectObject(
           this.activeFloor.object3D
         ); // Get intersection
@@ -562,7 +563,7 @@ AFRAME.registerComponent("putt", {
         this.clubHeadCenterEl.object3D.getWorldPosition(clubHeadCenterPos);
         this.clubShadowRaycaster.set(
           clubHeadCenterPos,
-          new THREE.Vector3(0, -1, 0)
+          this.downVector
         ); // Cast down from the club head world pos
         intersects = this.clubShadowRaycaster.intersectObject(
           this.activeFloor.object3D
