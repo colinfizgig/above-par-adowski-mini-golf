@@ -185,14 +185,22 @@ AFRAME.registerComponent("putt", {
     gtag("event", "gameInit");
 
     document.addEventListener("restart-game", (e) => {
-      this.restartGame();
+      this.el.sceneEl.enterVR();
+
+      document.addEventListener(
+        "enter-vr",
+        () => {
+          this.restartGame(true);
+        },
+        { once: true }
+      );
     });
   },
 
   /**
    * Move and rotate the player to the ball
    */
-  teleportToBall: async function () {
+  teleportToBall: function () {
     // Move player towards the ball
     const ballPos = this.ballEl.object3D.position; // {x: 0, y: 0.125, z: -1.25}
     const flagPos = this.flagEl.object3D.position; // {x: 0, y: 0.125, z: -8}
@@ -301,10 +309,15 @@ AFRAME.registerComponent("putt", {
     }
   },
 
-  async nextHole() {
-    console.log("NEXT HOLE CODE");
+  async nextHole(instant = false) {
     // if there are more holes, apply colliders
-    await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
+    if (!instant) {
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve();
+        }, 4000)
+      ); // wait for the helper text notification to fade
+    }
     this.flagEl.components["particle-system"].stopParticles();
 
     const lastHoleIndex =
@@ -348,19 +361,33 @@ AFRAME.registerComponent("putt", {
     this.activeFloor.setAttribute("physx-hidden-collision", "");
 
     this.updateWatch();
-    this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
-    this.faderEl.emit("cuefadeout");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await this.newBall(
+      this.courseColliders[this.activeHoleIndex].dataset.balldrop
+    );
+    if (!instant) {
+      this.faderEl.emit("cuefadeout");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve();
+        }, 2000)
+      );
+    }
     this.flagEl.setAttribute(
       "position",
       this.courseColliders[this.activeHoleIndex].dataset.flag
     );
-    await this.teleportToBall();
+    this.teleportToBall();
     this.lastHit.copy(this.ballEl.object3D.position);
     this.clubShadowEl.object3D.visible = true;
     this.ballShadowEl.object3D.visible = true;
-    this.faderEl.emit("cuefadein");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (!instant) {
+      this.faderEl.emit("cuefadein");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve();
+        }, 2000)
+      );
+    }
     this.holeOver = false;
   },
 
@@ -382,7 +409,7 @@ AFRAME.registerComponent("putt", {
     return parString;
   },
 
-  outOfBounds: function () {
+  outOfBounds: async function () {
     if (!this.holeOver) {
       this.ballFinderEl.removeAttribute("ball-finder");
       this.hmdTextEl.setAttribute(
@@ -396,13 +423,21 @@ AFRAME.registerComponent("putt", {
           this.hmdTextEl.setAttribute("text", `value:;`);
         }, 2000);
       }, 2000);
-      this.newBall(`${this.lastHit.x} ${this.lastHit.y} ${this.lastHit.z}`);
+      await this.newBall(
+        `${this.lastHit.x} ${this.lastHit.y} ${this.lastHit.z}`
+      );
     }
   },
 
+  globalRAF(callback) {
+    const xrSession = this.el.sceneEl.renderer.xr.getSession();
+    if (!xrSession) return window.requestAnimationFrame(callback);
+    return xrSession.requestAnimationFrame(callback);
+  },
+
   newBall: function (newballposition) {
-    this.ballEl.remove();
-    setTimeout(() => {
+    return new Promise((resolve, reject) => {
+      this.ballEl.remove();
       const newBallEl = document.createElement("a-sphere");
       newBallEl.setAttribute("id", "ball");
       newBallEl.setAttribute("radius", ".0275");
@@ -432,7 +467,13 @@ AFRAME.registerComponent("putt", {
         this.collisionHandler.bind(this)
       );
       this.ballFinderEl.setAttribute("ball-finder", "");
-    }, 500);
+      this.ballEl.object3D.matrixNeedsUpdate = true;
+
+      // RAF To make sure ball position update takes place
+      this.globalRAF(() => {
+        resolve();
+      });
+    });
   },
 
   updateWatch: function () {
@@ -460,7 +501,7 @@ AFRAME.registerComponent("putt", {
     }
   },
 
-  restartGame() {
+  restartGame(instant = false) {
     if (!this._isVR) {
       sceneEl.enterVR();
     }
@@ -468,6 +509,7 @@ AFRAME.registerComponent("putt", {
     // Reset overall game state
     this.gameOver = false;
     this.activeHoleIndex = 0;
+    this.activeHoleScore = 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
 
     // Hide the credits or endscreen content
@@ -475,7 +517,7 @@ AFRAME.registerComponent("putt", {
     this.credits.emit("pauseCredits", null, true);
 
     // Start Next Game
-    this.nextHole();
+    this.nextHole(instant);
 
     // Track analytics of user choice to restart
     gtag("event", "restartGame");
