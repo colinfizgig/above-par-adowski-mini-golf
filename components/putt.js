@@ -123,12 +123,17 @@ AFRAME.registerComponent("putt", {
       function () {
         this.activeFloor.setAttribute("ground-listener", "");
         gtag("event", "enteredVR");
+        this._isVR = true;
       }.bind(this)
     );
-    this.el.addEventListener("exit-vr", function () {
-      this.activeFloor.removeAttribute("ground-listener");
-      gtag("event", "exitedVR");
-    }.bind(this));
+    this.el.addEventListener(
+      "exit-vr",
+      function () {
+        this.activeFloor.removeAttribute("ground-listener");
+        gtag("event", "exitedVR");
+        this._isVR = false;
+      }.bind(this)
+    );
 
     // On trigger, teleport to ball - logic in handler below
     this.touchControllerR.addEventListener(
@@ -310,8 +315,8 @@ AFRAME.registerComponent("putt", {
     if (lastHoleIndex != this.activeHoleIndex) {
       this.courseColliders[lastHoleIndex].removeAttribute("physx-body");
       this.courseColliders[lastHoleIndex].removeAttribute("physx-material");
-      this.activeFloor.removeAttribute("physx-body")
-      this.activeFloor.removeAttribute("physx-material")
+      this.activeFloor.removeAttribute("physx-body");
+      this.activeFloor.removeAttribute("physx-material");
     }
     //this.courseColliders[this.activeHoleIndex].setAttribute("visible", "true");
     this.courseColliders[this.activeHoleIndex].setAttribute(
@@ -329,20 +334,18 @@ AFRAME.registerComponent("putt", {
     );
 
     this.activeFloor.removeAttribute("ground-listener");
-    this.activeFloor = this.courseColliders[this.activeHoleIndex].querySelector(".floor");
+    this.activeFloor =
+      this.courseColliders[this.activeHoleIndex].querySelector(".floor");
 
     //add different physics for floor since it should be a different material anyway basically turn off the bounce -- colin
-    this.activeFloor
-      .setAttribute(
-        "physx-material",
-        "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
-      );
+    this.activeFloor.setAttribute(
+      "physx-material",
+      "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
+    );
 
-    this.activeFloor
-      .setAttribute("ground-listener", "");
+    this.activeFloor.setAttribute("ground-listener", "");
     //set floor collider invisible but still colliding, false to make it visible
-    this.activeFloor
-      .setAttribute("physx-hidden-collision", "");
+    this.activeFloor.setAttribute("physx-hidden-collision", "");
 
     this.updateWatch();
     this.newBall(this.courseColliders[this.activeHoleIndex].dataset.balldrop);
@@ -458,6 +461,10 @@ AFRAME.registerComponent("putt", {
   },
 
   restartGame() {
+    if (!this._isVR) {
+      sceneEl.enterVR();
+    }
+
     // Reset overall game state
     this.gameOver = false;
     this.activeHoleIndex = 0;
