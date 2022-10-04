@@ -308,10 +308,13 @@ AFRAME.registerComponent("putt", {
   },
 
   async nextHole(instant = false) {
-    console.log(instant);
     // if there are more holes, apply colliders
     if (!instant) {
-      await new Promise((resolve) => setTimeout(resolve, 4000)); // wait for the helper text notification to fade
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve();
+        }, 4000)
+      ); // wait for the helper text notification to fade
     }
     this.flagEl.components["particle-system"].stopParticles();
 
@@ -361,7 +364,11 @@ AFRAME.registerComponent("putt", {
     );
     if (!instant) {
       this.faderEl.emit("cuefadeout");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve();
+        }, 2000)
+      );
     }
     this.flagEl.setAttribute(
       "position",
@@ -373,7 +380,11 @@ AFRAME.registerComponent("putt", {
     this.ballShadowEl.object3D.visible = true;
     if (!instant) {
       this.faderEl.emit("cuefadein");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve();
+        }, 2000)
+      );
     }
     this.holeOver = false;
   },
@@ -417,9 +428,8 @@ AFRAME.registerComponent("putt", {
   },
 
   globalRAF(callback) {
-    if (!this.el.sceneEl?.scene?.xrSession)
-      return window.requestAnimationFrame(callback);
-    const { xrSession } = this.el.sceneEl;
+    const xrSession = this.el.sceneEl.renderer.xr.getSession();
+    if (!xrSession) return window.requestAnimationFrame(callback);
     return xrSession.requestAnimationFrame(callback);
   },
 
