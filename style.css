@@ -74,7 +74,7 @@ body {
   position: absolute;
   left: 48%;
   transform: translateX(-50%);
-  bottom: 16%;
+  bottom: 15.5%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -87,7 +87,7 @@ body {
   color: #ffffd5;
   border: none;
   background-color: #f0693f;
-  padding: 10px 15px 5px 15px;
+  padding: 10px 20px 5px 20px;
   font-family: new-reason, sans-serif;
   font-weight: bold;
   position: relative;
@@ -117,8 +117,8 @@ body {
 }
 
 .introBtn {
-  font-size: 2.5vh;
-  margin-bottom: 5%;
+  font-size: 2vh;
+  margin-bottom: 8%;
 }
 
 .gameplayButtons {
@@ -130,7 +130,7 @@ body {
 
 .gameplayButtons button {
   font-size: 1.8vh;
-  padding: 8px 10px;
+  padding: 10px 10px 5px 10px;
   margin: 4px;
 }
 
@@ -200,6 +200,8 @@ body {
 }
 
 .modalButtons button {
+  padding: 10px 20px 7px 20px;
+  font-size: 2vh;
   margin: auto;
   margin-bottom: 10%;
   letter-spacing: 0.06em;
