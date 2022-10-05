@@ -1,8 +1,16 @@
-/* jshint esversion: 9 */
+/**
+ * /* jshint esversion: 9
+ *
+ * @format
+ */
+
 /* global THREE, AFRAME, gtag, Stats */
+import * as THREE from "three";
 
 import "./systems/handedness.js";
+import "./systems/avatar-targets.js";
 import "./components/putt.js";
+import "./components/tutorial.js";
 import "./components/watch-face.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -30,6 +38,9 @@ AFRAME.registerComponent("ground-listener", {
     this.el.addEventListener("raycaster-intersected-cleared", (evt) => {
       this.raycasterEl = null;
     });
+
+    this.head = document.querySelector("#head");
+    this.head.setAttribute("tutorial", "");
   },
 
   tick: function () {

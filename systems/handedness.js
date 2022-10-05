@@ -1,3 +1,5 @@
+/** @format */
+
 AFRAME.registerSystem("handedness", {
   schema: {
     hand: { default: "none", type: "string" },

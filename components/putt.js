@@ -9,6 +9,7 @@ AFRAME.registerComponent("putt", {
     this.hmdTextEl = document.querySelector("#hmdText");
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
+
     this.touchControllerR = document.querySelector(
       `[oculus-touch-controls="hand:right;model:false;"]`
     );
