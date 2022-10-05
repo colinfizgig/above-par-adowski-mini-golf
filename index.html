@@ -35,18 +35,9 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@paracreative" />
     <meta name="twitter:creator" content="@jamesckane" />
-    <meta
-      property="og:url"
-      content="https://aboveparadowski.com"
-    />
-    <meta
-      name="description"
-      content="WebXR mini-golf for Meta Quest."
-    />
-    <meta
-      property="og:description"
-      content="WebXR mini-golf for Meta Quest."
-    />
+    <meta property="og:url" content="https://aboveparadowski.com" />
+    <meta name="description" content="WebXR mini-golf for Meta Quest." />
+    <meta property="og:description" content="WebXR mini-golf for Meta Quest." />
     <link
       rel="icon"
       type="image/x-icon"
@@ -449,20 +440,6 @@
         position="-2 10 -18"
       ></a-light>
 
-      <!-- The ball -->
-      <a-sphere
-        material="color:white;src:#ball-texture;"
-        position="-17.151 0.505 2.797"
-        rotation="0 0 90"
-        scale="1 1 1"
-        physx-body="type:dynamic;mass:0.5;emitCollisionEvents:true;angularDamping:0.5;linearDamping:.5;highPrecision: true;"
-        physx-material="restitution:.5; dynamicFriction: .05; staticFriction: .65; contactOffset: 0.0025; "
-        radius="0.0275"
-        id="ball"
-        sound="src:#BallSoundSrc;poolSize:4;autoplay:false;"
-      >
-      </a-sphere>
-
       <a-plane
         id="ball-shadow"
         rotation="-90 0 0"
@@ -590,17 +567,12 @@
         data-par="3"
         data-flag="-22.402 0.093 -7.169"
         data-balldrop="-17.151 0.505 2.797"
-        physx-body="type:static;angularDamping:.5;linearDamping:.5"
-        physx-material="restitution:.95;dynamicFriction:.15; staticFriction:.55;"
         visible="false"
-        physx-hidden-collision=""
       >
         <a-gltf-model
           class="floor"
           src="#hole-one-floor-glb"
-          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
           visible="false"
-          physx-hidden-collision=""
         ></a-gltf-model>
       </a-gltf-model>
 
