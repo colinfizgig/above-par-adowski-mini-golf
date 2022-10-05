@@ -93,12 +93,6 @@ AFRAME.registerComponent("putt", {
     // Set/update the values on the player's 3D watch in VR
     this.updateWatch();
 
-    // Set up listener for first ball collisions
-    this.ballEl.addEventListener(
-      "contactbegin",
-      this.collisionHandler.bind(this)
-    );
-
     // Start the animated blocker, which can't autoplay due to setting the startEvents prop
     //this.blocker.emit("startanimup", null, true);
 
@@ -121,7 +115,6 @@ AFRAME.registerComponent("putt", {
           this.firstTimeEnteringVR = false;
           this.restartGame(true);
         }
-        this.activeFloor.setAttribute("ground-listener", "");
         gtag("event", "enteredVR");
         this._isVR = true;
       }.bind(this)
@@ -203,12 +196,21 @@ AFRAME.registerComponent("putt", {
   teleportToBall: function () {
     // Move player towards the ball
     const ballPos = this.ballEl.object3D.position;
+    let intersects;
+    this.ballShadowRaycaster.set(ballPos, this.downVector);
+    intersects = this.ballShadowRaycaster.intersectObject(
+      document.querySelector(".navmesh").object3D
+    );
+
+    const ballIntersectPos = intersects[0].point;
     const flagPos = this.flagEl.object3D.position;
-    const dir = new THREE.Vector3().subVectors(flagPos, ballPos).normalize();
+    const dir = new THREE.Vector3()
+      .subVectors(flagPos, ballIntersectPos)
+      .normalize();
     dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(1); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
     if (this.el.sceneEl.systems["handedness"].data.hand === "right")
-      dir.subVectors(ballPos, dir); // if right-handed, subVectors
-    else dir.addVectors(ballPos, dir); // if left-handed, addVectors
+      dir.subVectors(ballIntersectPos, dir); // if right-handed, subVectors
+    else dir.addVectors(ballIntersectPos, dir); // if left-handed, addVectors
     this.cameraRig.object3D.position.copy(dir); // location is correct!
 
     // Rotate player towards the ball
@@ -217,7 +219,7 @@ AFRAME.registerComponent("putt", {
     cameraDirection.y = 0;
 
     const directionOfPlayerToBall = new THREE.Vector3()
-      .subVectors(ballPos, this.cameraRig.object3D.position)
+      .subVectors(ballIntersectPos, this.cameraRig.object3D.position)
       .normalize();
     directionOfPlayerToBall.y = 0;
 
@@ -437,7 +439,7 @@ AFRAME.registerComponent("putt", {
 
   newBall: function (newballposition) {
     return new Promise((resolve, reject) => {
-      this.ballEl.remove();
+      if (this.ballEl) this.ballEl.remove();
       const newBallEl = document.createElement("a-sphere");
       newBallEl.setAttribute("id", "ball");
       newBallEl.setAttribute("radius", ".0275");
@@ -450,7 +452,7 @@ AFRAME.registerComponent("putt", {
       //turn down the bounce to smooth out the floor effect, crank it up on the walls so the bounce at angles works --colin
       newBallEl.setAttribute(
         "physx-material",
-        "restitution:0.2; dynamicFriction: .1; staticFriction: .85;"
+        "restitution:0.2; dynamicFriction: .1; staticFriction: .85; contactOffset: 0.0025;"
       );
       newBallEl.setAttribute(
         "trail",
@@ -502,19 +504,12 @@ AFRAME.registerComponent("putt", {
   },
 
   restartGame(instant = false) {
-    if (!this._isVR) {
-      sceneEl.enterVR();
-    }
-
     // Reset overall game state
     this.gameOver = false;
 
     let params = new URLSearchParams(document.location.search);
-    let hole = parseInt(params.get("hole"), 10);
-    console.log(hole);
-    if (hole) this.activeHoleIndex = hole - 1;  // activeHoleIndex is indexed from 0, so minus 1
-    else this.activeHoleIndex = 0;
-    this.activeHoleScore = 0;
+    let hole = parseInt(params.get("hole"));
+    this.activeHoleIndex = hole ? hole - 1 : 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
 
     // Hide the credits or endscreen content
@@ -532,37 +527,38 @@ AFRAME.registerComponent("putt", {
     if (!this.holeOver) {
       if (!this.holeOver) {
         /* THIS IS THE WIN CONDITION CHECK! */
-        let ballPos = this.ballEl.object3D.position;
-        const distToFlag = ballPos.distanceTo(this.flagEl.object3D.position);
-        if (distToFlag < 0.135) {
-          console.log("within .15 distance!");
-          this.madePutt();
+        let intersects;
+        if (this.ballEl) {
+          let ballPos = this.ballEl.object3D.position;
+          const distToFlag = ballPos.distanceTo(this.flagEl.object3D.position);
+          if (distToFlag < 0.135) {
+            console.log("within .15 distance!");
+            this.madePutt();
+          }
+          // Next, position and rotate the blob shadows for the ball and club
+          this.ballShadowRaycaster.set(ballPos, this.downVector);
+          intersects = this.ballShadowRaycaster.intersectObject(
+            this.activeFloor.object3D
+          ); // Get intersection
+          if (intersects.length > 0) {
+            this.ballShadowEl.object3D.position.set(
+              intersects[0].point.x,
+              intersects[0].point.y + 0.01,
+              intersects[0].point.z
+            );
+            // Align the shadow plane to the normal of the floor intersection
+            this.ballShadowEl.object3D.up.copy(intersects[0].face.normal);
+            var ballShadowLookVector = this.ballShadowEl.object3D
+              .localToWorld(new THREE.Vector3())
+              .add(intersects[0].face.normal);
+            this.ballShadowEl.object3D.lookAt(ballShadowLookVector);
+          } else
+            this.ballShadowEl.object3D.position.set(
+              ballPos.x,
+              ballPos.y - 0.0255,
+              ballPos.z
+            );
         }
-
-        // Next, position and rotate the blob shadows for the ball and club
-        this.ballShadowRaycaster.set(ballPos, this.downVector);
-        let intersects = this.ballShadowRaycaster.intersectObject(
-          this.activeFloor.object3D
-        ); // Get intersection
-        if (intersects.length > 0) {
-          this.ballShadowEl.object3D.position.set(
-            intersects[0].point.x,
-            intersects[0].point.y + 0.01,
-            intersects[0].point.z
-          );
-          // Align the shadow plane to the normal of the floor intersection
-          this.ballShadowEl.object3D.up.copy(intersects[0].face.normal);
-          var ballShadowLookVector = this.ballShadowEl.object3D
-            .localToWorld(new THREE.Vector3())
-            .add(intersects[0].face.normal);
-          this.ballShadowEl.object3D.lookAt(ballShadowLookVector);
-        } else
-          this.ballShadowEl.object3D.position.set(
-            ballPos.x,
-            ballPos.y - 0.0255,
-            ballPos.z
-          );
-
         let clubHeadCenterPos = new THREE.Vector3();
         this.clubHeadCenterEl.object3D.getWorldPosition(clubHeadCenterPos);
         this.clubShadowRaycaster.set(clubHeadCenterPos, this.downVector); // Cast down from the club head world pos
@@ -592,7 +588,7 @@ AFRAME.registerComponent("putt", {
            highlight ball w/ halo animation if so. Align positions rather than attaching as a
            child element of the ball b/c we don't want to inherit the ball's rotation */
         this.tickCounter++;
-        if (this.tickCounter === 200) {
+        if (this.tickCounter === 200 && this.ballEl) {
           const distToPlayer = this.ballEl.object3D.position.distanceTo(
             this.cameraRig.object3D.position
           );
