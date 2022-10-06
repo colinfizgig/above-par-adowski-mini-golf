@@ -245,7 +245,7 @@ AFRAME.registerComponent("haptics", {
  */
 AFRAME.registerComponent("uv-scroll", {
   schema: {
-    speed: { type: "vec2", default: { x: 0, y: -0.0001 } },
+    speed: { type: "vec2", default: { x: 0, y: 0.0001 } },
     increment: { type: "vec2", default: { x: 0, y: 0 } },
   },
 

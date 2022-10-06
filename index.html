@@ -175,6 +175,10 @@
           src="https://cdn.glitch.me/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v15_BAKE.glb?v=1665059739830"
         ></a-asset-item>
         <a-asset-item
+          id="water-glb"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/water.glb?v=1665060840227"
+        ></a-asset-item>
+        <a-asset-item
           id="walkmesh"
           src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/walkmesh-v2.glb?v=1665059814449"
         ></a-asset-item>
@@ -491,7 +495,12 @@
       <a-gltf-model
         id="environment-art"
         src="#environment-glb"
-        visible="true"
+      ></a-gltf-model>
+
+      <a-gltf-model
+          id="environment-art"
+          src="#water-glb"
+          uv-scroll=""
       ></a-gltf-model>
 
       <a-entity
