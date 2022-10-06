@@ -16,6 +16,10 @@ body {
   font-weight: bold;
 }
 
+body.aframe-inspector-opened .a-dom-overlay {
+  display: none;
+}
+
 .overlay-footer {
   position: absolute;
 }

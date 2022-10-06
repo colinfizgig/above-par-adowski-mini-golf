@@ -408,7 +408,7 @@
               <a-gltf-model
                 class="club-collider"
                 src="#club-collider-glb"
-                visible="true"
+                visible="false"
                 physx-hidden-collision=""
               ></a-gltf-model>
             </a-entity>
@@ -451,17 +451,17 @@
       <a-plane
         id="ball-shadow"
         rotation="-90 0 0"
-        material="src:#shadow-texture;transparent:true;"
-        width="0.09"
-        height="0.09"
+        shadow-shader="opacity: 0.85;"
+        width="0.075"
+        height="0.075"
       ></a-plane>
 
       <a-plane
         id="club-shadow"
         rotation="-90 0 0"
-        material="src:#shadow-texture;transparent:true;opacity:.55;"
-        width="0.15"
-        height="0.15"
+        shadow-shader="opacity: 0.55;"
+        width="0.13"
+        height="0.13"
       ></a-plane>
 
       <!-- Gets moved in tick() if angularSpeed > 0 && distanceToPlayer > 2, don't want to parent it to avoid inheriting ball rotation -->

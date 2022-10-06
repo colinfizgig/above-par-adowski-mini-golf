@@ -4,6 +4,7 @@
 import "./systems/handedness.js";
 import "./components/putt.js";
 import "./components/watch-face.js";
+import "./components/shadow-shader.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   document.querySelector("a-scene").setAttribute("webxr", {

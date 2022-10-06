@@ -146,24 +146,27 @@ AFRAME.registerComponent("putt", {
         this.ballEl.removeAttribute("physx-material");
         this.ballEl.removeAttribute("physx-body");
       }
-      const pos = this.ballEl.object3D.position;
+      let pos;
+      if (this.ballEl) {
+        pos = this.ballEl.object3D.position;
+      }
       // WASD ball controls but with IJKL
-      if (event.code == "KeyJ") {
+      if (event.code == "KeyJ" && pos) {
         this.ballEl.setAttribute(
           "position",
           `${pos.x - 0.25}, ${pos.y}, ${pos.z}`
         );
-      } else if (event.code == "KeyL") {
+      } else if (event.code == "KeyL" && pos) {
         this.ballEl.setAttribute(
           "position",
           `${pos.x + 0.25}, ${pos.y}, ${pos.z}`
         );
-      } else if (event.code == "KeyI") {
+      } else if (event.code == "KeyI" && pos) {
         this.ballEl.setAttribute(
           "position",
           `${pos.x}, ${pos.y}, ${pos.z - 0.25}`
         );
-      } else if (event.code == "KeyK") {
+      } else if (event.code == "KeyK" && pos) {
         this.ballEl.setAttribute(
           "position",
           `${pos.x}, ${pos.y}, ${pos.z + 0.25}`
@@ -462,6 +465,7 @@ AFRAME.registerComponent("putt", {
         "sound",
         "src:#BallSoundSrc;autoplay:false;poolSize:4;"
       );
+
       this.ballEl = newBallEl;
       this.el.sceneEl.appendChild(this.ballEl);
       this.ballEl.addEventListener(
@@ -541,11 +545,26 @@ AFRAME.registerComponent("putt", {
             this.activeFloor.object3D
           ); // Get intersection
           if (intersects.length > 0) {
+            const distanceToFloorIntersect = ballPos.distanceTo(
+              intersects[0].point
+            );
+
+            const fadeMax = 1.0;
+            const fadeMin = 0.75;
+            let fadeAsRatioOfDistance =
+              fadeMin + distanceToFloorIntersect * 0.5;
+            if (fadeAsRatioOfDistance > fadeMax)
+              fadeAsRatioOfDistance = fadeMax;
+
             this.ballShadowEl.object3D.position.set(
               intersects[0].point.x,
               intersects[0].point.y + 0.01,
               intersects[0].point.z
             );
+            const shader =
+              this.ballShadowEl.components["shadow-shader"].material;
+            shader.uniforms.fade.value = fadeAsRatioOfDistance;
+
             // Align the shadow plane to the normal of the floor intersection
             this.ballShadowEl.object3D.up.copy(intersects[0].face.normal);
             var ballShadowLookVector = this.ballShadowEl.object3D
@@ -566,11 +585,23 @@ AFRAME.registerComponent("putt", {
           this.activeFloor.object3D
         ); // Get intersection
         if (intersects.length > 0) {
+          const distanceToFloorIntersect = clubHeadCenterPos.distanceTo(
+            intersects[0].point
+          );
+          const fadeMax = 0.9;
+          const fadeMin = 0.4;
+          let fadeAsRatioOfDistance = fadeMin + distanceToFloorIntersect * 0.5;
+          if (fadeAsRatioOfDistance > fadeMax) fadeAsRatioOfDistance = fadeMax;
+
           this.clubShadowEl.object3D.position.set(
             intersects[0].point.x,
-            intersects[0].point.y + 0.01,
+            intersects[0].point.y + 0.011,
             intersects[0].point.z
           );
+
+          const shader = this.clubShadowEl.components["shadow-shader"].material;
+          shader.uniforms.fade.value = fadeAsRatioOfDistance;
+
           // Align the shadow plane to the normal of the floor intersection
           this.clubShadowEl.object3D.up.copy(intersects[0].face.normal);
           var clubShadowLookVector = this.clubShadowEl.object3D
