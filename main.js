@@ -4,6 +4,7 @@
 import "./systems/handedness.js";
 import "./components/putt.js";
 import "./components/watch-face.js";
+import "./components/shadow-shader.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   document.querySelector("a-scene").setAttribute("webxr", {
@@ -74,19 +75,22 @@ AFRAME.registerComponent("ball-finder", {
       this.el.sceneEl.camera.matrixWorldInverse
     );
     this.frustum.setFromProjectionMatrix(matrix);
-    const ballPos = document.querySelector("#ball").object3D.position;
-    this.el.object3D.lookAt(ballPos);
-    if (this.frustum.containsPoint(ballPos)) {
-      // console.log("in view")
-      if (this.helperAvailable && this.helperScaledUp) {
-        this.helperAvailable = false;
-        this.el.emit("turnoff");
-      }
-    } else {
-      // console.log("out of view")
-      if (this.helperAvailable && !this.helperScaledUp) {
-        this.helperAvailable = false;
-        this.el.emit("turnon");
+    const ball = document.querySelector("#ball");
+    if (ball) {
+      const ballPos = ball.object3D.position;
+      this.el.object3D.lookAt(ballPos);
+      if (this.frustum.containsPoint(ballPos)) {
+        // console.log("in view")
+        if (this.helperAvailable && this.helperScaledUp) {
+          this.helperAvailable = false;
+          this.el.emit("turnoff");
+        }
+      } else {
+        // console.log("out of view")
+        if (this.helperAvailable && !this.helperScaledUp) {
+          this.helperAvailable = false;
+          this.el.emit("turnon");
+        }
       }
     }
   },
