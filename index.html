@@ -172,11 +172,11 @@
         />
         <a-asset-item
           id="environment-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20Environment.glb?v=1664513853023"
+          src="https://cdn.glitch.me/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v15_BAKE.glb?v=1665059739830"
         ></a-asset-item>
         <a-asset-item
           id="walkmesh"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20walkmesh.glb?v=1664513853298"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/walkmesh-v2.glb?v=1665059814449"
         ></a-asset-item>
         <a-asset-item
           id="club-collider-glb"
@@ -204,6 +204,11 @@
         ></a-asset-item>
         <!-- positional audio assets -->
         <audio
+          id="ballRoll"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/ball-roll.mp3?v=1664992215944"
+          preload="auto"
+        ></audio>
+        <audio
           id="BallSoundSrc"
           src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/ballHit.mp3?v=1659204297563"
           preload="auto"
@@ -218,20 +223,20 @@
         <!-- convex physics collider asset imports, hole 1 -->
         <a-asset-item
           id="hole-one-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%201%20floor.glb?v=1664513857973"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-one-floor-v2.glb?v=1665059563968"
         ></a-asset-item>
         <a-asset-item
           id="hole-one-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%201%20walls.glb?v=1664513864438"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-one-walls-v2.glb?v=1665059566577"
         ></a-asset-item>
         <!-- convex physics collider asset imports, hole 2 -->
         <a-asset-item
           id="hole-two-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%202%20floor.glb?v=1664513868791"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-floor-v2.glb?v=1665059912718"
         ></a-asset-item>
         <a-asset-item
           id="hole-two-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%202%20walls.glb?v=1664513873172"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-walls-v2.glb?v=1665059914904"
         ></a-asset-item>
         <!-- hole3 -->
         <a-asset-item
@@ -249,7 +254,7 @@
         ></a-asset-item>
         <a-asset-item
           id="hole-four-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%204%20walls.glb?v=1664513894841"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-4-bone-collision-v2.glb?v=1665060117421"
         ></a-asset-item>
         <!-- hole5 -->
         <a-asset-item
@@ -267,7 +272,7 @@
         ></a-asset-item>
         <a-asset-item
           id="hole-six-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%206%20walls.glb?v=1664513925704"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-6-mine-collision-v2.glb?v=1665060203955"
         ></a-asset-item>
         <!-- hole7 -->
         <a-asset-item
@@ -379,7 +384,7 @@
             <a-entity
               class="club-head-container"
               position="0 0 -1"
-              physx-body="type:kinematic;"
+              physx-body="type:kinematic;highPrecision: true;"
               physx-material="restitution: .6; contactOffset: 0.0025;"
             >
               <a-gltf-model
@@ -565,8 +570,8 @@
         position="0 0.01 0"
         data-hole="1"
         data-par="3"
-        data-flag="-22.402 0.093 -7.169"
-        data-balldrop="-17.151 0.505 2.797"
+        data-flag="-17.4 0.1 -4.79"
+        data-balldrop="-17.4 0.5 2.797"
         visible="false"
       >
         <a-gltf-model
@@ -584,7 +589,7 @@
         data-hole="2"
         data-par="3"
         data-flag="-63.305 5.791 -19.462"
-        data-balldrop="-50.242 4.527 -10.606"
+        data-balldrop="-47.1 4.95 -22.99"
       >
         <a-gltf-model
           class="floor"
@@ -702,7 +707,7 @@
         visible="false"
         data-hole="9"
         data-par="6"
-        data-flag="-11.943 0.079 34.132"
+        data-flag="-9.89 0.093 29.066"
         data-balldrop="-41.355 1.087 42.750"
       >
         <a-gltf-model
