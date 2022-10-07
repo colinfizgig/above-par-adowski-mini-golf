@@ -31,22 +31,19 @@
     <title>Above Par-adowski Mini-Golf, Par-t 2</title>
 
     <meta charset="UTF-8" />
-    <meta property="og:title" content="Above Par-adowski Mini-Golf: Par-t 2" />
+    <meta property="og:title" content="Above Par-adowski WebXR Mini-Golf" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@jamesckane" />
+    <meta name="twitter:site" content="@paracreative" />
     <meta name="twitter:creator" content="@jamesckane" />
-    <meta
-      property="og:url"
-      content="https://above-par-adowski-mini-golf-par-t-2.glitch.me"
+    <meta property="og:url" content="https://aboveparadowski.com" />
+    <meta name="description" content="WebXR mini-golf for Meta Quest." />
+    <meta property="og:description" content="WebXR mini-golf for Meta Quest." />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AP_FAV_512.ico?v=1664909969907"
     />
-    <meta
-      name="description"
-      content="A WebXR putt putt game made for the Quest 2 Browser."
-    />
-    <meta
-      property="og:description"
-      content="A WebXR putt putt game made for the Quest 2 Browser."
-    />
+
     <!-- <meta property="og:image" content="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/snapshot.png?v=1645201177438" /> -->
     <link rel="stylesheet" href="style.css" />
 
@@ -159,6 +156,7 @@
       renderer="highRefreshRate:true;depth:true;"
       gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
       putt=""
+      loading-screen="enabled: false;"
     >
       <a-assets>
         <!-- env art asset imports -->
@@ -173,12 +171,20 @@
           crossorigin="anonymous"
         />
         <a-asset-item
+          id="plates-glb"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Plates-v1.glb?v=1665061302423"
+        ></a-asset-item>
+        <a-asset-item
           id="environment-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20Environment.glb?v=1664513853023"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v16_BAKE.glb?v=1665148479171"
+        ></a-asset-item>
+        <a-asset-item
+          id="water-glb"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/water.glb?v=1665060840227"
         ></a-asset-item>
         <a-asset-item
           id="walkmesh"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20walkmesh.glb?v=1664513853298"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/walkmesh-v3.glb?v=1665148466087"
         ></a-asset-item>
         <a-asset-item
           id="club-collider-glb"
@@ -220,25 +226,25 @@
         <!-- convex physics collider asset imports, hole 1 -->
         <a-asset-item
           id="hole-one-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%201%20floor.glb?v=1664513857973"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-one-floor-v2.glb?v=1665059563968"
         ></a-asset-item>
         <a-asset-item
           id="hole-one-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%201%20walls.glb?v=1664513864438"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-one-walls-v2.glb?v=1665059566577"
         ></a-asset-item>
         <!-- convex physics collider asset imports, hole 2 -->
         <a-asset-item
           id="hole-two-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%202%20floor.glb?v=1664513868791"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-floor-v2.glb?v=1665059912718"
         ></a-asset-item>
         <a-asset-item
           id="hole-two-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%202%20walls.glb?v=1664513873172"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-walls-v2.glb?v=1665059914904"
         ></a-asset-item>
         <!-- hole3 -->
         <a-asset-item
           id="hole-three-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%203%20floors.glb?v=1664513878737"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-three-floor-v2%20(1).glb?v=1665148372941"
         ></a-asset-item>
         <a-asset-item
           id="hole-three-walls-glb"
@@ -251,12 +257,12 @@
         ></a-asset-item>
         <a-asset-item
           id="hole-four-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%204%20walls.glb?v=1664513894841"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-4-bone-collision-v2.glb?v=1665060117421"
         ></a-asset-item>
         <!-- hole5 -->
         <a-asset-item
           id="hole-five-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%205%20floors.glb?v=1664513901122"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-five-floor-v2%20(1).glb?v=1665148407726"
         ></a-asset-item>
         <a-asset-item
           id="hole-five-walls-glb"
@@ -269,7 +275,7 @@
         ></a-asset-item>
         <a-asset-item
           id="hole-six-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%206%20walls.glb?v=1664513925704"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-6-mine-collision-v2.glb?v=1665060203955"
         ></a-asset-item>
         <!-- hole7 -->
         <a-asset-item
@@ -292,11 +298,11 @@
         <!-- hole9 -->
         <a-asset-item
           id="hole-nine-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%209%20floors.glb?v=1664513961346"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-nine-floor-v2%20(1).glb?v=1665148440280"
         ></a-asset-item>
         <a-asset-item
           id="hole-nine-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%209%20walls.glb?v=1664513968058"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-nine-walls-v2%20(1).glb?v=1665148423745"
         ></a-asset-item>
 
         <a-mixin
@@ -308,8 +314,9 @@
       <a-entity
         camera="active:true;"
         id="scene-preview"
-        position="5 2 18"
+        position="5 2 14"
         rotation="15 90 0"
+        animation="property:object3D.position.z;from:14;to:24;dur:30000;loop:true;easing:linear;"
       ></a-entity>
 
       <a-entity
@@ -380,8 +387,8 @@
             <a-entity
               class="club-head-container"
               position="0 0 -1"
-              physx-body="type:kinematic;highPrecision:true;"
-              physx-material="restitution: .6;"
+              physx-body="type:kinematic;highPrecision: true;"
+              physx-material="restitution: .6; contactOffset: 0.0025;"
             >
               <a-gltf-model
                 class="club-head"
@@ -446,35 +453,20 @@
         position="-2 10 -18"
       ></a-light>
 
-      <!-- The ball -->
-      <a-sphere
-        material="color:white;src:#ball-texture;"
-        position="-17.151 0.505 2.797"
-        rotation="0 0 90"
-        scale="1 1 1"
-        physx-body="type:dynamic;mass:0.5;emitCollisionEvents:true;angularDamping:0.5;linearDamping:.5;highPrecision: true;"
-        physx-material="restitution:.5; dynamicFriction: .05; staticFriction: .65;"
-        radius="0.0275"
-        id="ball"
-        sound="src:#BallSoundSrc;poolSize:4;autoplay:false;"
-        trail="width:.075;length:100;resolution:10;color:blue;"
-      >
-      </a-sphere>
-
       <a-plane
         id="ball-shadow"
         rotation="-90 0 0"
-        material="src:#shadow-texture;transparent:true;"
-        width="0.09"
-        height="0.09"
+        shadow-shader="opacity: 0.85;"
+        width="0.075"
+        height="0.075"
       ></a-plane>
 
       <a-plane
         id="club-shadow"
         rotation="-90 0 0"
-        material="src:#shadow-texture;transparent:true;opacity:.55;"
-        width="0.15"
-        height="0.15"
+        shadow-shader="opacity: 0.55;"
+        width="0.13"
+        height="0.13"
       ></a-plane>
 
       <!-- Gets moved in tick() if angularSpeed > 0 && distanceToPlayer > 2, don't want to parent it to avoid inheriting ball rotation -->
@@ -512,7 +504,15 @@
       <a-gltf-model
         id="environment-art"
         src="#environment-glb"
-        visible="true"
+      ></a-gltf-model>
+
+      <a-gltf-model
+        src="#plates-glb"
+      ></a-gltf-model>
+
+      <a-gltf-model
+        src="#water-glb"
+        uv-scroll=""
       ></a-gltf-model>
 
       <a-entity
@@ -586,19 +586,14 @@
         position="0 0.01 0"
         data-hole="1"
         data-par="3"
-        data-flag="-22.402 0.093 -7.169"
-        data-balldrop="-17.151 0.505 2.797"
-        physx-body="type:static;angularDamping:.5;linearDamping:.5"
-        physx-material="restitution:.95;dynamicFriction:.15; staticFriction:.55;"
+        data-flag="-17.4 0.1 -4.79"
+        data-balldrop="-17.4 0.5 2.797"
         visible="false"
-        physx-hidden-collision=""
       >
         <a-gltf-model
           class="floor"
           src="#hole-one-floor-glb"
-          physx-material="restitution:0.05;dynamicFriction:.1; staticFriction:.55;"
           visible="false"
-          physx-hidden-collision=""
         ></a-gltf-model>
       </a-gltf-model>
 
@@ -610,7 +605,7 @@
         data-hole="2"
         data-par="3"
         data-flag="-63.305 5.791 -19.462"
-        data-balldrop="-50.242 4.527 -10.606"
+        data-balldrop="-49.1 4.95 -21"
       >
         <a-gltf-model
           class="floor"
@@ -728,7 +723,7 @@
         visible="false"
         data-hole="9"
         data-par="6"
-        data-flag="-11.943 0.079 34.132"
+        data-flag="-9.89 0.093 29.066"
         data-balldrop="-41.355 1.087 42.750"
       >
         <a-gltf-model
