@@ -32,6 +32,7 @@ AFRAME.registerComponent("putt", {
     this.ballParticles = document.querySelector("#ballParticles");
     this.floors = document.querySelectorAll(".floor");
     this.activeFloor = document.querySelector(".floor");
+    this.movies = document.querySelector("#movies")
     this.downVector = new THREE.Vector3(0, -1, 0);
     // SFX els:
     this.eagleSoundEl = document.querySelector("#eagle-sound");
@@ -117,6 +118,7 @@ AFRAME.registerComponent("putt", {
         }
         gtag("event", "enteredVR");
         this._isVR = true;
+        this.movies.play();
       }.bind(this)
     );
     this.el.addEventListener(
@@ -125,6 +127,7 @@ AFRAME.registerComponent("putt", {
         this.activeFloor.removeAttribute("ground-listener");
         gtag("event", "exitedVR");
         this._isVR = false;
+        this.movies.play();
       }.bind(this)
     );
 
@@ -177,6 +180,8 @@ AFRAME.registerComponent("putt", {
         this.teleportToBall(); // iterate put count
       }
     });
+
+    this.hmdTextEl.setAttribute("text", `value:;`);
 
     gtag("event", "gameInit");
 
