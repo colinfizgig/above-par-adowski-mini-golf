@@ -121,6 +121,7 @@ AFRAME.registerComponent("putt", {
         }
         gtag("event", "enteredVR");
         this._isVR = true;
+        this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
       }.bind(this)
     );
@@ -182,8 +183,6 @@ AFRAME.registerComponent("putt", {
         this.teleportToBall(); // iterate put count
       }
     });
-
-    this.hmdTextEl.setAttribute("text", `value:;`);
 
     gtag("event", "gameInit");
 
