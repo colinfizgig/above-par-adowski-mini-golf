@@ -44,7 +44,7 @@
       href="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AP_FAV_512.ico?v=1664909969907"
     />
 
-    <meta property="og:image" content="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/preview.jpg?v=1665168546946" />
+    <meta property="og:image" content="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/abovepar-thumbnail2.jpg?v=1665171041536" />
     <link rel="stylesheet" href="style.css" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -339,7 +339,7 @@
         <a-entity
           id="head"
           camera="near:0.15;far:4000;active:false;"
-          look-controls="pointerLockEnabled: false"
+          look-controls="pointerLockEnabled: true"
           position="0 1.65 0"
         >
           <!-- Some text that should track to the user's HMD for important popup warnings -->
@@ -906,7 +906,7 @@
               .setAttribute("camera", "active:false;");
             head.setAttribute("camera", "active:true;");
             if (movementType === "teleport") {
-              cameraRig.setAttribute("movement-controls", "enabled", false);
+              //cameraRig.setAttribute("movement-controls", "enabled", false);
             }
           });
           sceneEl.addEventListener("exit-vr", function () {
