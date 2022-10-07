@@ -10,8 +10,9 @@ import * as THREE from "three";
 import "./systems/handedness.js";
 import "./systems/avatar-targets.js";
 import "./components/putt.js";
-import "./components/tutorial.js";
+// import "./components/tutorial.js";
 import "./components/watch-face.js";
+import "./components/endgame.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   document.querySelector("a-scene").setAttribute("webxr", {
@@ -40,7 +41,8 @@ AFRAME.registerComponent("ground-listener", {
     });
 
     this.head = document.querySelector("#head");
-    this.head.setAttribute("tutorial", "");
+    // this.head.setAttribute("tutorial", "");
+    // this.head.setAttribute("endgame", "");
   },
 
   tick: function () {

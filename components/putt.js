@@ -298,6 +298,9 @@ AFRAME.registerComponent("putt", {
       // game over
       this.gameOver = true;
 
+      this.head = document.querySelector("#head");
+      this.head.setAttribute("endgame", "");
+
       this.credits.setAttribute("visible", true);
       this.credits.emit("rollCredits", null, true);
 
@@ -502,6 +505,11 @@ AFRAME.registerComponent("putt", {
     }
   },
 
+  getScore: function () {
+    this.finalScore = this.scores.reduce((a, b) => parseInt(a) + parseInt(b));
+    return this.finalScore;
+  },
+
   restartGame(instant = false) {
     if (!this._isVR) {
       sceneEl.enterVR();
@@ -512,6 +520,8 @@ AFRAME.registerComponent("putt", {
     this.activeHoleIndex = 0;
     this.activeHoleScore = 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
+    this.head.components["endgame"].removeContent();
+    this.head.removeAttribute("endgame", "");
 
     // Hide the credits or endscreen content
     this.credits.setAttribute("visible", false);
