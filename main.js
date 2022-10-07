@@ -40,8 +40,11 @@ AFRAME.registerComponent("ground-listener", {
       this.raycasterEl = null;
     });
 
-    this.head = document.querySelector("#head");
-    this.head.setAttribute("tutorial", "");
+    const head = document.querySelector("#head");
+    head.setAttribute("tutorial", "");
+    document.addEventListener("remove-tutorial", () => {
+      head.removeAttribute("tutorial");
+    });
   },
 
   tick: function () {
