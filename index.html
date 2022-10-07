@@ -905,7 +905,7 @@
               .querySelector("#scene-preview")
               .setAttribute("camera", "active:false;");
             head.setAttribute("camera", "active:true;");
-            if (movementType === "teleport") {
+            if (movementType === "teleport" && AFRAME.utils.device.checkHeadsetConnected()) {
               cameraRig.setAttribute("movement-controls", "enabled", false);
             }
           });
