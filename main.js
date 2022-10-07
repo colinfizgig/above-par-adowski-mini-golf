@@ -5,7 +5,7 @@
  */
 
 /* global THREE, AFRAME, gtag, Stats */
-import * as THREE from "three";
+// import * as THREE from "three";
 
 import "./systems/handedness.js";
 import "./systems/avatar-targets.js";
@@ -249,7 +249,6 @@ AFRAME.registerComponent("haptics", {
     }
   },
 });
-
 
 /**
  * Animate the UV offset of a mesh's material

@@ -127,12 +127,15 @@ AFRAME.registerComponent("tutorial", {
     this.tutBase.setAttribute("depth", this.boxDepth);
     this.tutBase.setAttribute("position", "0 1 -1");
     this.tutBase.setAttribute("visible", true);
+    this.tutBase.setAttribute("color", "white");
     this.tutBase.setAttribute("material", {
       src: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tutorial_bg.png?v=1665001918390",
       transparent: true,
+      flatshading: true,
     });
     this.tutBase.object3D.updateMatrix();
     this.el.sceneEl.appendChild(this.tutBase);
+    this.tutBase.setAttribute("no-tonemapping", "");
     this.tutBase.classList.add("tutBase");
     this.tutBase.addEventListener("loaded", () => {
       this.tutorialTarget.target.add(this.tutBase.object3D);
@@ -181,6 +184,7 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
     });
     tutIcon1.setAttribute("position", `0 -0.15 0.01`);
+    tutIcon1.setAttribute("no-tonemapping", "");
     tutIcon1.classList.add("tutIcon1");
 
     this.tutBase.appendChild(tutIcon1);
