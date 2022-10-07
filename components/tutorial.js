@@ -1,12 +1,11 @@
 /** @format */
-import { Text } from "troika-three-text";
 
 AFRAME.registerComponent("tutorial", {
   schema: {},
   init: function () {
     console.log("INIT TUTORIAL");
 
-    const fontKnockout =
+    this.fontKnockout =
       "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
 
     //   new THREE.MeshBasicMaterial({
@@ -16,6 +15,18 @@ AFRAME.registerComponent("tutorial", {
     //     transparent: true,
     //     depthWrite: false,
     //   })
+    // this.buttonWidth = this.boxWidth / 3;
+    // this.buttonHeight = this.boxHeight / 5;
+    // this.buttonPosX = this.boxWidth / 2 - this.buttonWidth / 2;
+    // this.buttonPosY = -this.boxHeight / 2 - -this.buttonHeight / 2;
+
+    //general values
+    this.boxWidth = 3;
+    this.boxHeight = 1.75;
+    this.boxDepth = 0.1;
+    this.offWhite = "#FFFFD5";
+    this.yellow = "#ECEC43";
+    this.green = "#1CB134";
 
     //target
     this.tutorialTarget =
@@ -23,44 +34,14 @@ AFRAME.registerComponent("tutorial", {
         "avatar-targets"
       ].createStaticWorldLookDirectionGroundTarget();
 
-    //general values
-    const boxWidth = 2;
-    const boxHeight = 1;
-    const boxDepth = 0.1;
-    const buttonWidth = boxWidth / 3;
-    const buttonHeight = boxHeight / 5;
-    const buttonPosX = boxWidth / 2 - buttonWidth / 2;
-    const buttonPosY = -boxHeight / 2 - -buttonHeight / 2;
-    const btnTextSize = 0.3;
-    const bodyTextSize = 0.1;
-    const offWhite = "#FFFFD5";
-    const yellow = "#ECEC43";
-    const green = "#1CB134";
-
     this.tutorialPosition = this.tutorialTarget.target.position;
 
-    //tutorial base plane
-    const tutBase = document.createElement("a-box");
-    tutBase.setAttribute("width", boxWidth);
-    tutBase.setAttribute("height", boxHeight);
-    tutBase.setAttribute("depth", boxDepth);
-    tutBase.setAttribute("position", "0 1 -1");
-    tutBase.setAttribute("color", green);
-    // tutBase.setAttribute("material", materials);
-    // tutBase.object3D.material.set(materials);
-    tutBase.object3D.updateMatrix();
-    this.el.sceneEl.appendChild(tutBase);
-    tutBase.addEventListener("loaded", () => {
-      this.tutorialTarget.target.add(tutBase.object3D);
-      tutBase.object3D.updateMatrix();
-    });
-
-    const tutorialContent = [
+    this.tutorialContent = [
       {
         header: "A few tips before you tee off. ",
         icon1:
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut1.png?v=1665089713416",
-        iconWidth: 0.5,
+        iconWidth: 0.13,
         iconHeight: 0.13,
         body: "Take a look at your watch any time to track your strokes and see your score.",
         id: "tut1",
@@ -85,43 +66,154 @@ AFRAME.registerComponent("tutorial", {
       },
     ];
 
-    let index = 2;
+    this.tutIndex = 0;
+    this.useButtons = true;
+
+    this.createContent();
 
     //tutorial header text
+    document.addEventListener("advanced-tutorial", () => {
+      this.removeContent();
+      this.createContent();
+    });
+
+    this.touchControllerR = document.querySelector(
+      `[oculus-touch-controls="hand:right;model:false;"]`
+    );
+    this.touchControllerL = document.querySelector(
+      `[oculus-touch-controls="hand:left;model:false;"]`
+    );
+
+    this.touchControllerR.addEventListener("abuttondown", () => {
+      if (this.useButtons) {
+        this.advanceTutorial();
+      }
+    });
+    this.touchControllerR.addEventListener("bbuttondown", () => {
+      if (this.useButtons) {
+        this.advanceTutorial();
+      }
+    });
+    this.touchControllerL.addEventListener("xbuttondown", () => {
+      if (this.useButtons) {
+        this.advanceTutorial();
+      }
+    });
+    this.touchControllerL.addEventListener("ybuttondown", () => {
+      if (this.useButtons) {
+        this.advanceTutorial();
+      }
+    });
+  },
+
+  advanceTutorial() {
+    console.log(this.tutIndex);
+    if (this.tutIndex == 2) {
+      this.useButtons = false;
+      document.removeEventListener("advanced-tutorial", () => {});
+      this.removeContent();
+      this.removeBase();
+    } else {
+      this.tutIndex += 1;
+      document.dispatchEvent(new Event("advanced-tutorial"));
+    }
+  },
+
+  createContent() {
+    //TUTORIAL BASE
+    this.tutBase = document.createElement("a-plane");
+    this.tutBase.setAttribute("width", this.boxWidth);
+    this.tutBase.setAttribute("height", this.boxHeight);
+    this.tutBase.setAttribute("depth", this.boxDepth);
+    this.tutBase.setAttribute("position", "0 1 -1");
+    this.tutBase.setAttribute("visible", true);
+    this.tutBase.setAttribute("material", {
+      src: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tutorial_bg.png?v=1665001918390",
+      transparent: true,
+    });
+    this.tutBase.object3D.updateMatrix();
+    this.el.sceneEl.appendChild(this.tutBase);
+    this.tutBase.classList.add("tutBase");
+    this.tutBase.addEventListener("loaded", () => {
+      this.tutorialTarget.target.add(this.tutBase.object3D);
+      this.tutBase.object3D.updateMatrix();
+    });
+
+    //TEXT: HEADER
     const headerText = document.createElement("a-entity");
     headerText.setAttribute("troika-text", {
-      value: tutorialContent[index].header,
+      value: this.tutorialContent[this.tutIndex]?.header,
       fontSize: 0.1,
-      color: yellow,
-      font: fontKnockout,
+      color: this.yellow,
+      font: this.fontKnockout,
       align: "center",
     });
-    headerText.setAttribute("position", `0 0.2 ${boxDepth / 2 + 0.01}`);
-    tutBase.appendChild(headerText);
+    headerText.setAttribute("position", `0 0.05 0.01`);
+    headerText.classList.add("headerText");
+    this.tutBase.appendChild(headerText);
 
-    //bodyText
+    //TEXT: BODY
     const bodyText = document.createElement("a-entity");
     bodyText.setAttribute("troika-text", {
-      value: tutorialContent[index].body,
+      value: this.tutorialContent[this.tutIndex]?.body,
       fontSize: 0.08,
-      color: offWhite,
-      font: fontKnockout,
+      color: this.offWhite,
+      font: this.fontKnockout,
       align: "center",
       maxWidth: 1,
     });
-    bodyText.setAttribute("position", `0 -0.2 ${boxDepth / 2 + 0.01}`);
-    tutBase.appendChild(bodyText);
+    bodyText.setAttribute("position", `0 -0.35 0.01`);
+    bodyText.classList.add("bodyText");
+    this.tutBase.appendChild(bodyText);
 
-    //icon
+    //ICON
     const tutIcon1 = document.createElement("a-plane");
-    tutIcon1.setAttribute("width", tutorialContent[index].iconWidth);
-    tutIcon1.setAttribute("height", tutorialContent[index].iconHeight);
+    tutIcon1.setAttribute(
+      "width",
+      this.tutorialContent[this.tutIndex]?.iconWidth
+    );
+    tutIcon1.setAttribute(
+      "height",
+      this.tutorialContent[this.tutIndex]?.iconHeight
+    );
     tutIcon1.setAttribute("material", {
-      src: tutorialContent[index].icon1,
+      src: this.tutorialContent[this.tutIndex]?.icon1,
       transparent: true,
     });
-    tutIcon1.setAttribute("position", `0 0 ${boxDepth / 2 + 0.01}`);
-    tutBase.appendChild(tutIcon1);
+    tutIcon1.setAttribute("position", `0 -0.15 0.01`);
+    tutIcon1.classList.add("tutIcon1");
+
+    this.tutBase.appendChild(tutIcon1);
+  },
+
+  removeContent() {
+    const bodyText = document.querySelector(".bodyText");
+    const headerText = document.querySelector(".headerText");
+    const tutIcon = document.querySelector(".tutIcon1");
+
+    if (bodyText) {
+      bodyText.parentNode.removeChild(bodyText);
+    }
+
+    if (headerText) {
+      headerText.parentNode.removeChild(headerText);
+    }
+
+    if (tutIcon) {
+      tutIcon.parentNode.removeChild(tutIcon);
+    }
+  },
+
+  removeBase() {
+    const tutBase = document.querySelector(".tutBase");
+    this.tutBase.setAttribute("visible", false);
+    // console.log(this.tutBase.object3D.visible);
+    // console.log(this.tutBase.parentNode);
+    // tutBase.object3D?.parent.remove(tutBase.object3D);
+    // tutBase?.parentNode.removeChild(tutBase.object3D);
+    console.log("parent before", this.tutBase.object3D.parent);
+    this.tutBase.object3D.parent.remove(this.tutBase.object3D);
+    console.log("parent after", this.tutBase.object3D.parent);
   },
 
   tick() {
@@ -141,7 +233,6 @@ AFRAME.registerComponent("tutorial", {
     );
 
     if (this.distanceFromCameraToModal > 4) {
-      console.log("out of bounds");
       this.tutorialTarget.update();
     }
   },
