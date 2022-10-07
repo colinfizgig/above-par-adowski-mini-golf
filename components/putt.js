@@ -28,11 +28,14 @@ AFRAME.registerComponent("putt", {
     this.flagEl = document.querySelector("#flag");
     this.courseColliders = document.querySelectorAll(".colliders");
     //this.blocker = document.querySelector("#blocker");
-    this.credits = document.querySelector("#credits");
+    //this.credits = document.querySelector("#credits");
+    this.driveInScreen = document.querySelector("#drive-in-screen");
+    this.creditsScreen = document.querySelector("#credits-screen");
+    this.moviesEl = document.querySelector("#movies");
+    this.creditsEl = document.querySelector("#credits");
     this.ballParticles = document.querySelector("#ballParticles");
     this.floors = document.querySelectorAll(".floor");
     this.activeFloor = document.querySelector(".floor");
-    this.movies = document.querySelector("#movies")
     this.downVector = new THREE.Vector3(0, -1, 0);
     // SFX els:
     this.eagleSoundEl = document.querySelector("#eagle-sound");
@@ -118,7 +121,7 @@ AFRAME.registerComponent("putt", {
         }
         gtag("event", "enteredVR");
         this._isVR = true;
-        this.movies.play();
+        this.moviesEl.play();
       }.bind(this)
     );
     this.el.addEventListener(
@@ -127,7 +130,6 @@ AFRAME.registerComponent("putt", {
         this.activeFloor.removeAttribute("ground-listener");
         gtag("event", "exitedVR");
         this._isVR = false;
-        this.movies.play();
       }.bind(this)
     );
 
@@ -307,8 +309,12 @@ AFRAME.registerComponent("putt", {
       // game over
       this.gameOver = true;
 
-      this.credits.setAttribute("visible", true);
-      this.credits.emit("rollCredits", null, true);
+      // this.credits.setAttribute("visible", true);
+      // this.credits.emit("rollCredits", null, true);
+      this.driveInScreen.setAttribute("visible", "false");
+      this.creditsScreen.setAttribute("visible", "true");
+      this.moviesEl.pause();
+      this.creditsEl.play();
 
       gtag("event", "finishedGame");
 
@@ -522,8 +528,13 @@ AFRAME.registerComponent("putt", {
     this.scores = new Array(this.courseColliders.length).fill("0");
 
     // Hide the credits or endscreen content
-    this.credits.setAttribute("visible", false);
-    this.credits.emit("pauseCredits", null, true);
+    // this.credits.setAttribute("visible", false);
+    // this.credits.emit("pauseCredits", null, true);
+    this.driveInScreen.setAttribute("visible", "true");
+    this.creditsScreen.setAttribute("visible", "false");
+    this.moviesEl.play();
+    this.creditsEl.pause();
+
 
     // Start Next Game
     this.nextHole(instant);
