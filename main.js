@@ -12,6 +12,7 @@ import "./systems/avatar-targets.js";
 import "./components/putt.js";
 // import "./components/tutorial.js";
 import "./components/watch-face.js";
+import "./components/shadow-shader.js";
 import "./components/endgame.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -87,19 +88,22 @@ AFRAME.registerComponent("ball-finder", {
       this.el.sceneEl.camera.matrixWorldInverse
     );
     this.frustum.setFromProjectionMatrix(matrix);
-    const ballPos = document.querySelector("#ball").object3D.position;
-    this.el.object3D.lookAt(ballPos);
-    if (this.frustum.containsPoint(ballPos)) {
-      // console.log("in view")
-      if (this.helperAvailable && this.helperScaledUp) {
-        this.helperAvailable = false;
-        this.el.emit("turnoff");
-      }
-    } else {
-      // console.log("out of view")
-      if (this.helperAvailable && !this.helperScaledUp) {
-        this.helperAvailable = false;
-        this.el.emit("turnon");
+    const ball = document.querySelector("#ball");
+    if (ball) {
+      const ballPos = ball.object3D.position;
+      this.el.object3D.lookAt(ballPos);
+      if (this.frustum.containsPoint(ballPos)) {
+        // console.log("in view")
+        if (this.helperAvailable && this.helperScaledUp) {
+          this.helperAvailable = false;
+          this.el.emit("turnoff");
+        }
+      } else {
+        // console.log("out of view")
+        if (this.helperAvailable && !this.helperScaledUp) {
+          this.helperAvailable = false;
+          this.el.emit("turnon");
+        }
       }
     }
   },
@@ -248,107 +252,106 @@ AFRAME.registerComponent("haptics", {
   },
 });
 
-// Not actually using this at the moment
-// /**
-//  * Animate the UV offset of a mesh's material
-//  * @component uv-scroll
-//  */
-// AFRAME.registerComponent("uv-scroll", {
-//   schema: {
-//     speed: { type: "vec2", default: { x: 0, y: -0.0001 } },
-//     increment: { type: "vec2", default: { x: 0, y: 0 } },
-//   },
+/**
+ * Animate the UV offset of a mesh's material
+ * @component uv-scroll
+ */
+AFRAME.registerComponent("uv-scroll", {
+  schema: {
+    speed: { type: "vec2", default: { x: 0, y: 0.0003 } },
+    increment: { type: "vec2", default: { x: 0, y: 0 } },
+  },
 
-//   init: async function () {
-//     this.uvScrollSystem = new UVScrollSystem();
-//     this.createScrollHandler = this.playScroll.bind(this);
-//     this.removeScrollHandler = this.removeScroll.bind(this);
+  init: async function () {
+    this.uvScrollSystem = new UVScrollSystem();
+    this.createScrollHandler = this.playScroll.bind(this);
+    this.removeScrollHandler = this.removeScroll.bind(this);
 
-//     setTimeout(() => {
-//       this.createScrollHandler();
-//     }, 2000);
-//   },
+    setTimeout(() => {
+      this.createScrollHandler();
+    }, 2000);
+  },
 
-//   tick(t, dt) {
-//     this.uvScrollSystem.tick(dt * 1000);
-//   },
+  tick(t, dt) {
+    this.uvScrollSystem.tick(dt * 1000);
+  },
 
-//   removeScroll: function () {
-//     if (this.map) {
-//       const itemToRemove = registeredTextures.indexOf(this.map);
-//       registeredTextures.splice(itemToRemove, 1);
-//     }
-//   },
+  removeScroll: function () {
+    if (this.map) {
+      const itemToRemove = registeredTextures.indexOf(this.map);
+      registeredTextures.splice(itemToRemove, 1);
+    }
+  },
 
-//   playScroll() {
-//     let mesh =
-//       this.el.getObject3D("mesh") ||
-//       this.el.getObject3D("skinnedmesh") ||
-//       this.el.object3D.getObjectByProperty("isMesh", true);
-//     mesh = mesh.children[0]; // asset setup as a group, so the actual mesh w/ mesh.material is the first child
-//     const material = mesh && mesh.material;
-//     if (material) {
-//       // We store mesh here instead of the material directly because we end up swapping out the material in injectCustomShaderChunks.
-//       // We need material in the first place because of MobileStandardMaterial
-//       const instance = { component: this, mesh };
+  playScroll() {
+    let mesh =
+      this.el.getObject3D("mesh") ||
+      this.el.getObject3D("skinnedmesh") ||
+      this.el.object3D.getObjectByProperty("isMesh", true);
+    mesh = mesh.children[0]; // asset setup as a group, so the actual mesh w/ mesh.material is the first child
+    const material = mesh && mesh.material;
+    if (material) {
+      // We store mesh here instead of the material directly because we end up swapping out the material in injectCustomShaderChunks.
+      // We need material in the first place because of MobileStandardMaterial
+      const instance = { component: this, mesh };
 
-//       this.instance = instance;
-//       this.map = material.map || material.emissiveMap;
+      this.instance = instance;
+      this.map = material.map || material.emissiveMap;
 
-//       if (this.map && !textureToData.has(this.map)) {
-//         textureToData.set(this.map, {
-//           offset: new THREE.Vector2(),
-//           instances: [instance],
-//         });
-//         registeredTextures.push(this.map);
-//       } else if (!this.map) {
-//         console.warn(
-//           "Ignoring uv-scroll added to mesh with no scrollable texture."
-//         );
-//       } else {
-//         console.warn(
-//           "Multiple uv-scroll instances added to objects sharing a texture, only the speed/increment from the first one will have any effect"
-//         );
-//         textureToData.get(this.map).instances.push(instance);
-//       }
-//     }
-//   },
+      if (this.map && !textureToData.has(this.map)) {
+        textureToData.set(this.map, {
+          offset: new THREE.Vector2(),
+          instances: [instance],
+        });
+        registeredTextures.push(this.map);
+      } else if (!this.map) {
+        console.warn(
+          "Ignoring uv-scroll added to mesh with no scrollable texture."
+        );
+      } else {
+        console.warn(
+          "Multiple uv-scroll instances added to objects sharing a texture, only the speed/increment from the first one will have any effect"
+        );
+        textureToData.get(this.map).instances.push(instance);
+      }
+    }
+  },
 
-//   pause() {
-//     if (this.map) {
-//       const instances = textureToData.get(this.map).instances;
-//       instances.splice(instances.indexOf(this.instance), 1);
-//       // If this was the last uv-scroll component for a given texture
-//       if (!instances.length) {
-//         textureToData.delete(this.map);
-//         registeredTextures.splice(registeredTextures.indexOf(this.map), 1);
-//       }
-//     }
-//   },
-// });
+  pause() {
+    if (this.map) {
+      const instances = textureToData.get(this.map).instances;
+      instances.splice(instances.indexOf(this.instance), 1);
+      // If this was the last uv-scroll component for a given texture
+      if (!instances.length) {
+        textureToData.delete(this.map);
+        registeredTextures.splice(registeredTextures.indexOf(this.map), 1);
+      }
+    }
+  },
+});
 
-// const textureToData = new Map();
-// const registeredTextures = [];
+const textureToData = new Map();
+const registeredTextures = [];
 
-// class UVScrollSystem {
-//   tick(dt) {
-//     for (let i = 0; i < registeredTextures.length; i++) {
-//       const map = registeredTextures[i];
-//       const { offset, instances } = textureToData.get(map);
-//       const { component } = instances[0];
+class UVScrollSystem {
+  tick(dt) {
+    for (let i = 0; i < registeredTextures.length; i++) {
+      const map = registeredTextures[i];
+      const { offset, instances } = textureToData.get(map);
+      const { component } = instances[0];
 
-//       offset.addScaledVector(component.data.speed, dt / 1000);
+      offset.addScaledVector(component.data.speed, dt / 1000);
 
-//       offset.x = offset.x % 1.0;
-//       offset.y = offset.y % 1.0;
+      offset.x = offset.x % 1.0;
+      offset.y = offset.y % 1.0;
 
-//       const increment = component.data.increment;
-//       map.offset.x = increment.x
-//         ? offset.x - (offset.x % increment.x)
-//         : offset.x;
-//       map.offset.y = increment.y
-//         ? offset.y - (offset.y % increment.y)
-//         : offset.y;
-//     }
-//   }
-// }
+      const increment = component.data.increment;
+      map.offset.x = increment.x
+        ? offset.x - (offset.x % increment.x)
+        : offset.x;
+      map.offset.y = increment.y
+        ? offset.y - (offset.y % increment.y)
+        : offset.y;
+    }
+  }
+}

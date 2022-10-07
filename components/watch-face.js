@@ -1,3 +1,5 @@
+/** @format */
+
 AFRAME.registerComponent("watch-face", {
   schema: {
     holeNumber: { type: "number", default: 1 },
@@ -8,7 +10,8 @@ AFRAME.registerComponent("watch-face", {
   init: function () {
     const width = 0.03;
     const height = 0.04;
-    const font = "../assets/fonts/NewReasonBold.ttf";
+    const font =
+      "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/NewReasonBold.ttf?v=1664908851162";
     const red = "#E60000";
     const offWhite = "#FFFB1A";
 

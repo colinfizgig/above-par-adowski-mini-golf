@@ -3,9 +3,9 @@
 
 @font-face {
   font-family: "knockouthtf48-featherweight";
-  src: url("./assets/fonts/knockout-htf48-featherweight-webfont.woff")
+  src: url("https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370")
       format("woff"),
-    url("./assets//fonts/knockout-htf48-featherweight-webfont.woff2")
+    url("https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff2?v=1664908847391")
       format("woff2");
   font-weight: normal;
   font-style: normal;
@@ -14,6 +14,10 @@
 body {
   font-family: new-reason, sans-serif;
   font-weight: bold;
+}
+
+body.aframe-inspector-opened .a-dom-overlay {
+  display: none;
 }
 
 .overlay-footer {
