@@ -302,9 +302,11 @@ AFRAME.registerComponent("putt", {
     } else {
       // game over
       this.gameOver = true;
+      console.log("gameOver");
 
-      this.head = document.querySelector("#head");
-      this.head.setAttribute("endgame", "");
+      // this.head = document.querySelector("#head");
+      // this.head.setAttribute("endgame", "");
+      this.head?.components["endgame"]?.createContent();
 
       this.credits.setAttribute("visible", true);
       this.credits.emit("rollCredits", null, true);
@@ -524,7 +526,7 @@ AFRAME.registerComponent("putt", {
     let hole = parseInt(params.get("hole"));
     this.activeHoleIndex = hole ? hole - 1 : 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
-    this.head.components["endgame"].removeContent();
+    this.head?.components["endgame"]?.removeContent();
     this.head.removeAttribute("endgame", "");
 
     // Hide the credits or endscreen content

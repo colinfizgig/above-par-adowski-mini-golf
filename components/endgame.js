@@ -4,15 +4,10 @@ import "aframe-rounded";
 AFRAME.registerComponent("endgame", {
   schema: {},
   init: function () {
-    console.log("INIT");
-
     this.fontKnockout =
       "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
 
     //general values
-    this.boxWidth = 3;
-    this.boxHeight = 1.75;
-    this.boxDepth = 0.1;
     this.offWhite = "#FFFFD5";
     this.yellow = "#ECEC43";
     this.green = "#1CB134";
@@ -25,13 +20,7 @@ AFRAME.registerComponent("endgame", {
 
     this.tutorialPosition = this.endGameTarget.target.position;
 
-    this.createContent();
-
-    //tutorial header text
-    document.addEventListener("advanced-tutorial", () => {
-      this.removeContent();
-      this.createContent();
-    });
+    // this.createContent();
 
     this.touchControllerR = document.querySelector(
       `[oculus-touch-controls="hand:right;model:false;"]`
@@ -66,9 +55,10 @@ AFRAME.registerComponent("endgame", {
     this.endBase.setAttribute("visible", true);
     this.endBase.setAttribute(
       "material",
-      "color:#1CB134; roughness: 0; opacity: 0.75;"
+      "color:#1CB134; roughness: 0; opacity: 1; flatShading: true;"
     );
     this.endBase.setAttribute("radius", "0.1");
+    this.endBase.setAttribute("no-tonemapping", "");
     this.endBase.object3D.updateMatrix();
     this.el.sceneEl.appendChild(this.endBase);
     this.endBase.classList.add("endBase");
@@ -95,7 +85,6 @@ AFRAME.registerComponent("endgame", {
 
     //TEXT: BODY
     this.finalScore = this.el.sceneEl.components["putt"].getScore().toString();
-    console.log(this.finalScore);
     const scoreText = document.createElement("a-entity");
     scoreText.setAttribute("troika-text", {
       value: this.finalScore,

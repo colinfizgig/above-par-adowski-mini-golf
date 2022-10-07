@@ -1,110 +1,119 @@
-/* global AFRAME, THREE */
+/**
+ * /* global AFRAME, THREE
+ *
+ * @format
+ */
 
-AFRAME.registerComponent('lightmap', {
+AFRAME.registerComponent("lightmap", {
   schema: {
     src: {
-      type: "map"
+      type: "map",
     },
     intensity: {
-      default: 1
+      default: 1,
     },
     filter: {
-      default: ''
+      default: "",
     },
     basis: {
-      default: false
-    }
+      default: false,
+    },
   },
   init() {
-    
-    const src = typeof this.data.src === 'string' ? this.data.src : this.data.src.src;
+    const src =
+      typeof this.data.src === "string" ? this.data.src : this.data.src.src;
     const texture = new THREE.TextureLoader().load(src);
     texture.flipY = false;
     this.texture = texture;
 
-    this.el.addEventListener('object3dset', this.update.bind(this));
+    this.el.addEventListener("object3dset", this.update.bind(this));
     this.materials = new Map();
   },
   update() {
-    const filters = this.data.filter.trim().split(',');
-    this.el.object3D.traverse(function (o) {
-      if (o.material) {
-        if (filters.some(filter => o.material.name.includes(filter))) {
-          const sceneEl = this.el.sceneEl;
-          const m = o.material;
-          m.lightMap = this.texture;
-          m.lightMapIntensity = this.data.intensity;
-          
-          // DON'T OVERWRITE THIS STUFF:
-          // o.material = this.materials.has(m) ? this.materials.get(m) : new THREE.MeshPhongMaterial({
-          //   name: 'phong_' + m.name,
-          //   lightMap: this.texture,
-          //   lightMapIntensity: this.data.intensity,
-          //   color: m.color,
-          //   map: m.map,
-          //   transparent: m.transparent,
-          //   side: m.side,
-          //   depthWrite: m.depthWrite,
-          //   reflectivity: m.metalness,
-          //   toneMapped: m.toneMapped,
-          //   get envMap() {return sceneEl.object3D.environment}
-          // });
-          // this.materials.set(m, o.material);
+    const filters = this.data.filter.trim().split(",");
+    this.el.object3D.traverse(
+      function (o) {
+        if (o.material) {
+          if (filters.some((filter) => o.material.name.includes(filter))) {
+            const sceneEl = this.el.sceneEl;
+            const m = o.material;
+            m.lightMap = this.texture;
+            m.lightMapIntensity = this.data.intensity;
+
+            // DON'T OVERWRITE THIS STUFF:
+            // o.material = this.materials.has(m) ? this.materials.get(m) : new THREE.MeshPhongMaterial({
+            //   name: 'phong_' + m.name,
+            //   lightMap: this.texture,
+            //   lightMapIntensity: this.data.intensity,
+            //   color: m.color,
+            //   map: m.map,
+            //   transparent: m.transparent,
+            //   side: m.side,
+            //   depthWrite: m.depthWrite,
+            //   reflectivity: m.metalness,
+            //   toneMapped: m.toneMapped,
+            //   get envMap() {return sceneEl.object3D.environment}
+            // });
+            // this.materials.set(m, o.material);
+          }
         }
-      }
-    }.bind(this));
-  }
+      }.bind(this)
+    );
+  },
 });
 
-AFRAME.registerComponent('depthwrite', {
+AFRAME.registerComponent("depthwrite", {
   schema: {
-    default: true
+    default: true,
   },
   init() {
-    this.el.addEventListener('object3dset', this.update.bind(this));
+    this.el.addEventListener("object3dset", this.update.bind(this));
   },
   update() {
-    this.el.object3D.traverse(function (o) {
-      if (o.material) {
-        o.material.depthWrite = this.data;
-      }
-    }.bind(this));
-  }
+    this.el.object3D.traverse(
+      function (o) {
+        if (o.material) {
+          o.material.depthWrite = this.data;
+        }
+      }.bind(this)
+    );
+  },
 });
 
-
-AFRAME.registerComponent('no-tonemapping', {
+AFRAME.registerComponent("no-tonemapping", {
   schema: {
-    default: ''
+    default: "",
   },
   init() {
-    this.el.addEventListener('object3dset', this.update.bind(this));
+    this.el.addEventListener("object3dset", this.update.bind(this));
   },
   update() {
-    const filters = this.data.trim().split(',');
-    this.el.object3D.traverse(function (o) {
-      if (o.material) {
-        if (filters.some(filter => o.material.name.includes(filter))) {
-          o.material.toneMapped = false;
+    const filters = this.data.trim().split(",");
+    this.el.object3D.traverse(
+      function (o) {
+        if (o.material) {
+          if (filters.some((filter) => o.material.name.includes(filter))) {
+            o.material.toneMapped = false;
+          }
         }
-      }
-    }.bind(this));
-  }
+      }.bind(this)
+    );
+  },
 });
 
-AFRAME.registerSystem('exposure', {
+AFRAME.registerSystem("exposure", {
   schema: {
-    default: 0.5
+    default: 0.5,
   },
-  init () {
+  init() {
     const renderer = this.el.renderer;
     renderer.physicallyCorrectLights = true;
     renderer.logarithmicDepthBuffer = true;
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
   },
-  update () {
+  update() {
     const renderer = this.el.renderer;
     renderer.toneMappingExposure = this.data;
-  }
+  },
 });

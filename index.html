@@ -425,8 +425,6 @@
           oculus-touch-controls="hand:right;model:false;"
           vive-controls="hand:right;model:false;"
           position="0 1 0"
-          laser-controls="hand: right;"
-          raycaster="objects: .interactable; far: 5;"
         >
         </a-entity>
 
@@ -439,9 +437,6 @@
           hp-mixed-reality-controls="hand:left;model:false;"
           oculus-touch-controls="hand:left;model:false;"
           vive-controls="hand:left;model:false;"
-          laser-controls="hand:left"
-          laser-controls="hand: left;"
-          raycaster="objects: .interactable; far: 5;"
         >
         </a-entity>
       </a-entity>
@@ -501,19 +496,11 @@
           accelerationSpread:.05 0 .05;"
       ></a-entity>
 
-      <a-gltf-model
-        id="environment-art"
-        src="#environment-glb"
-      ></a-gltf-model>
+      <a-gltf-model id="environment-art" src="#environment-glb"></a-gltf-model>
 
-      <a-gltf-model
-        src="#plates-glb"
-      ></a-gltf-model>
+      <a-gltf-model src="#plates-glb"></a-gltf-model>
 
-      <a-gltf-model
-        src="#water-glb"
-        uv-scroll=""
-      ></a-gltf-model>
+      <a-gltf-model src="#water-glb" uv-scroll=""></a-gltf-model>
 
       <a-entity
         id="credits"

@@ -43,7 +43,7 @@ AFRAME.registerComponent("ground-listener", {
 
     this.head = document.querySelector("#head");
     // this.head.setAttribute("tutorial", "");
-    // this.head.setAttribute("endgame", "");
+    this.head.setAttribute("endgame", "");
   },
 
   tick: function () {
