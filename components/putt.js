@@ -317,11 +317,6 @@ AFRAME.registerComponent("putt", {
       this.creditsEl.play();
 
       gtag("event", "finishedGame");
-
-      // Till we have an end screen & ui
-      setTimeout(() => {
-        this.restartGame();
-      }, 5000);
     }
   },
 
