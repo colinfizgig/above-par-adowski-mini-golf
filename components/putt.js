@@ -111,6 +111,8 @@ AFRAME.registerComponent("putt", {
       // }
     });
 
+    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile())
+
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
       "enter-vr",
