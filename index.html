@@ -906,7 +906,7 @@
               .setAttribute("camera", "active:false;");
             head.setAttribute("camera", "active:true;");
             if (movementType === "teleport") {
-              //cameraRig.setAttribute("movement-controls", "enabled", false);
+              cameraRig.setAttribute("movement-controls", "enabled", false);
             }
           });
           sceneEl.addEventListener("exit-vr", function () {
