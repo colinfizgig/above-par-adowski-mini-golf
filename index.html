@@ -576,8 +576,7 @@
           velocityValue:.1 .1 .1;
           accelerationValue:0 0 0;
           accelerationSpread:1 0 1;"
-      >
-      </a-gltf-model>
+      ></a-gltf-model>
 
       <!-- animated blocker in the main path to add a timing challenge 
 
@@ -798,23 +797,19 @@
                   Par-adowski
                 </h1>
                 <p class="bodyText">
-                  A WebXR putt putt game <br />
-                  built for the Meta Quest 2 browser.
+                  A WebXR mini-golf game<br />made for virtual reality.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
-                  This game started out as a 40-hour <br />
-                  WebXR prototype, but now aspires to compete in quality with
-                  native VR apps.
+                  This game began as
+                    <a href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
+                      target="_blank">a 40-hour prototype</a> made for
+                    <a href="https://paradowski.com" target="_blank" style="color:white;">Paradowski Creative</a>'s
+                      putt putt tourney, but quickly took on a life of its own. Our aim is native-quality
+                      VR gameplay & design on the 3D open web.
+                    <br /><br />
+                    Read <a href="#" target="_blank">our case study</a> for more.
                 </p>
-                <hr class="yellowHr" id="hr2" />
-                <a
-                  class="bodyText"
-                  href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
-                  target="_blank"
-                  >Read more about our process here.
-                </a>
-
                 <div class="modalButtons">
                   <button class="mainButton" id="playInVrAbout">
                     PLAY IN VR
@@ -827,7 +822,9 @@
 
               <div class="modal-text" id="howToContent">
                 <h1>How to play</h1>
-
+                <p class="bodyText">
+                  This is a WebXR game  <br />meant to be played in virtual reality. <br />
+                </p>
                 <div class="iconContainer">
                   <img
                     src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/xy.png?v=1664901664937"
@@ -843,14 +840,14 @@
                 </div>
 
                 <p class="bodyText">
-                  Once the game begins, <br />press the X/Y or A/B buttons on
+                  Once the game begins, <br />press a circle button on
                   either <br />controller to change your club hand.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
-                  Use the joystick to navigate manually, <br />
-                  or use the trigger to teleport directly to the ball. The club
-                  will adjust to your height.
+                  Use the joystick to navigate manually<br />
+                  or trigger to teleport right to the ball.<br />
+                  The club will adjust to your height.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
@@ -907,6 +904,8 @@
             head.setAttribute("camera", "active:true;");
             if (movementType === "teleport" && AFRAME.utils.device.checkHeadsetConnected()) {
               cameraRig.setAttribute("movement-controls", "enabled", false);
+            } else {
+
             }
           });
           sceneEl.addEventListener("exit-vr", function () {
