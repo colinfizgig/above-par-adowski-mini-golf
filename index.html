@@ -152,7 +152,7 @@
       webxr="optionalFeatures:dom-overlay;overlayElement:#dom-overlay;"
       background="color:skyblue;"
       reflection="directionalLight:#dirlight;"
-      exposure="1.5"
+      exposure="1"
       renderer="highRefreshRate:true;depth:true;"
       gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
       putt=""
@@ -446,12 +446,7 @@
         </a-entity>
       </a-entity>
 
-      <a-light
-        id="dirlight"
-        intensity="1"
-        light="castShadow:false;type:directional;"
-        position="-2 10 -18"
-      ></a-light>
+      <!-- <a-light id="dirlight" intensity="1" position="-2 10 -18"></a-light> -->
 
       <a-plane
         id="ball-shadow"
@@ -501,19 +496,11 @@
           accelerationSpread:.05 0 .05;"
       ></a-entity>
 
-      <a-gltf-model
-        id="environment-art"
-        src="#environment-glb"
-      ></a-gltf-model>
+      <a-gltf-model id="environment-art" src="#environment-glb"></a-gltf-model>
 
-      <a-gltf-model
-        src="#plates-glb"
-      ></a-gltf-model>
+      <a-gltf-model src="#plates-glb"></a-gltf-model>
 
-      <a-gltf-model
-        src="#water-glb"
-        uv-scroll=""
-      ></a-gltf-model>
+      <a-gltf-model src="#water-glb" uv-scroll=""></a-gltf-model>
 
       <a-entity
         id="credits"

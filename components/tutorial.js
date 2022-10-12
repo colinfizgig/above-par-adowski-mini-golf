@@ -1,5 +1,7 @@
 /** @format */
 
+import { SubtractiveBlending } from "three";
+
 AFRAME.registerComponent("tutorial", {
   schema: {},
   init: function () {
@@ -20,6 +22,9 @@ AFRAME.registerComponent("tutorial", {
       ].createStaticWorldLookDirectionGroundTarget();
 
     this.tutorialPosition = this.tutorialTarget.target.position;
+
+    this.el.sceneEl.renderer.toneMappingExposure = 1;
+    this.el.sceneEl.renderer.gammaFactor = 2.2;
 
     this.tutorialContent = [
       {
@@ -120,7 +125,7 @@ AFRAME.registerComponent("tutorial", {
     });
     this.tutBase.object3D.updateMatrix();
     this.el.sceneEl.appendChild(this.tutBase);
-    this.tutBase.setAttribute("no-tonemapping", "");
+    // this.tutBase.setAttribute("no-tonemapping", "");
     this.tutBase.classList.add("tutBase");
     this.tutBase.addEventListener("loaded", () => {
       this.tutorialTarget.target.add(this.tutBase.object3D);
@@ -169,7 +174,7 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
     });
     tutIcon1.setAttribute("position", `0 -0.15 0.01`);
-    tutIcon1.setAttribute("no-tonemapping", "");
+    // tutIcon1.setAttribute("no-tonemapping", "");
     tutIcon1.classList.add("tutIcon1");
 
     this.tutBase.appendChild(tutIcon1);
