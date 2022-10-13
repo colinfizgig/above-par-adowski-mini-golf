@@ -123,11 +123,29 @@ AFRAME.registerComponent("tutorial", {
     });
     this.tutBase.object3D.updateMatrix();
     this.el.sceneEl.appendChild(this.tutBase);
-    // this.tutBase.setAttribute("no-tonemapping", "");
     this.tutBase.classList.add("tutBase");
     this.tutBase.addEventListener("loaded", () => {
       this.tutorialTarget.target.add(this.tutBase.object3D);
       this.tutBase.object3D.updateMatrix();
+    });
+
+    //TUTORIAL BASE
+    this.container = document.createElement("a-plane");
+    this.container.setAttribute("width", this.boxWidth);
+    this.container.setAttribute("height", this.boxHeight);
+    this.container.setAttribute("position", "0 2 -1.5");
+    this.container.setAttribute("visible", true);
+    this.container.setAttribute("color", "white");
+    this.container.setAttribute("material", {
+      transparent: true,
+      opacity: 0.0,
+    });
+    this.container.object3D.updateMatrix();
+    this.el.sceneEl.appendChild(this.container);
+    this.container.classList.add("container");
+    this.container.addEventListener("loaded", () => {
+      this.tutorialTarget.target.add(this.container.object3D);
+      this.container.object3D.updateMatrix();
     });
 
     //TEXT: HEADER
@@ -141,7 +159,7 @@ AFRAME.registerComponent("tutorial", {
     });
     headerText.setAttribute("position", `0 0.05 0.01`);
     headerText.classList.add("headerText");
-    this.tutBase.appendChild(headerText);
+    this.container.appendChild(headerText);
 
     //TEXT: BODY
     const bodyText = document.createElement("a-entity");
@@ -155,7 +173,7 @@ AFRAME.registerComponent("tutorial", {
     });
     bodyText.setAttribute("position", `0 -0.35 0.01`);
     bodyText.classList.add("bodyText");
-    this.tutBase.appendChild(bodyText);
+    this.container.appendChild(bodyText);
 
     //ICON
     const tutIcon1 = document.createElement("a-plane");
@@ -172,10 +190,9 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
     });
     tutIcon1.setAttribute("position", `0 -0.15 0.01`);
-    // tutIcon1.setAttribute("no-tonemapping", "");
     tutIcon1.classList.add("tutIcon1");
 
-    this.tutBase.appendChild(tutIcon1);
+    this.container.appendChild(tutIcon1);
   },
 
   removeContent() {
