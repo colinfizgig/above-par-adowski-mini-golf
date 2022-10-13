@@ -1,7 +1,5 @@
 /** @format */
 
-import { SubtractiveBlending } from "three";
-
 AFRAME.registerComponent("tutorial", {
   schema: {},
   init: function () {
@@ -202,7 +200,7 @@ AFRAME.registerComponent("tutorial", {
     const tutBase = document.querySelector(".tutBase");
     this.tutBase.setAttribute("visible", false);
     this.tutBase.object3D.parent.remove(this.tutBase.object3D);
-    // this.tutBase.object3D.parent.remove(this.tutBase.object3D);
+    this.tutorialTarget.target.parent.remove(this.tutorialTarget.target);
   },
 
   tick() {
