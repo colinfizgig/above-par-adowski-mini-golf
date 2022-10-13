@@ -28,7 +28,7 @@
     <script src="trail.js"></script>
     <script src="simple-navmesh-constraint.js"></script>
 
-    <title>Above Par-adowski Mini-Golf, Par-t 2</title>
+    <title>Above Par-adowski WebXR Mini-Golf</title>
 
     <meta charset="UTF-8" />
     <meta property="og:title" content="Above Par-adowski WebXR Mini-Golf" />
@@ -36,15 +36,21 @@
     <meta name="twitter:site" content="@paracreative" />
     <meta name="twitter:creator" content="@jamesckane" />
     <meta property="og:url" content="https://aboveparadowski.com" />
-    <meta name="description" content="WebXR mini-golf for Meta Quest." />
-    <meta property="og:description" content="WebXR mini-golf for Meta Quest." />
+    <meta name="description" content="WebXR mini-golf for Meta Quest 2." />
+    <meta
+      property="og:description"
+      content="WebXR mini-golf for Meta Quest 2."
+    />
     <link
       rel="icon"
       type="image/x-icon"
       href="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AP_FAV_512.ico?v=1664909969907"
     />
 
-    <!-- <meta property="og:image" content="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/snapshot.png?v=1645201177438" /> -->
+    <meta
+      property="og:image"
+      content="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/abovepar-thumbnail2.jpg?v=1665171041536"
+    />
     <link rel="stylesheet" href="style.css" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -160,6 +166,18 @@
     >
       <a-assets>
         <!-- env art asset imports -->
+        <video
+          id="movies"
+          loop="true"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/movies1%20(2).mp4?v=1665160042384"
+          crossorigin="anonymous"
+        ></video>
+        <video
+          id="credits"
+          loop="true"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AboveParCredits_v2_3.mp4?v=1665160044645"
+          crossorigin="anonymous"
+        ></video>
         <img
           id="ball-texture"
           src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/golfball.png?v=1659211388493"
@@ -176,7 +194,7 @@
         ></a-asset-item>
         <a-asset-item
           id="environment-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v16_BAKE.glb?v=1665148479171"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v16_BAKE_clouds-v011.glb?v=1665690395794"
         ></a-asset-item>
         <a-asset-item
           id="water-glb"
@@ -184,7 +202,7 @@
         ></a-asset-item>
         <a-asset-item
           id="walkmesh"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/walkmesh-v3.glb?v=1665148466087"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/walkmesh-v7.glb?v=1665678928862"
         ></a-asset-item>
         <a-asset-item
           id="club-collider-glb"
@@ -200,7 +218,7 @@
         ></a-asset-item>
         <a-asset-item
           id="club-handle-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Handle_Glove_v0045.glb?v=1662127210659"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Handle_Glove_v0047.glb?v=1665439856800"
         ></a-asset-item>
         <a-asset-item
           id="ball-finder-glb"
@@ -235,7 +253,7 @@
         <!-- convex physics collider asset imports, hole 2 -->
         <a-asset-item
           id="hole-two-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-floor-v2.glb?v=1665059912718"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-floor-v3%20(2).glb?v=1665162712736"
         ></a-asset-item>
         <a-asset-item
           id="hole-two-walls-glb"
@@ -262,11 +280,11 @@
         <!-- hole5 -->
         <a-asset-item
           id="hole-five-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-five-floor-v2%20(1).glb?v=1665148407726"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-five-floor-v4.glb?v=1665676063247"
         ></a-asset-item>
         <a-asset-item
           id="hole-five-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%205%20walls.glb?v=1664513908021"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-five-walls-v4.glb?v=1665676068820"
         ></a-asset-item>
         <!-- hole6 -->
         <a-asset-item
@@ -302,7 +320,7 @@
         ></a-asset-item>
         <a-asset-item
           id="hole-nine-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-nine-walls-v2%20(1).glb?v=1665148423745"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-nine-walls-v3.glb?v=1665690518879"
         ></a-asset-item>
 
         <a-mixin
@@ -327,14 +345,14 @@
         <a-entity
           id="head"
           camera="near:0.15;far:4000;active:false;"
-          look-controls="pointerLockEnabled: false"
+          look-controls="pointerLockEnabled:false;"
           position="0 1.65 0"
         >
           <!-- Some text that should track to the user's HMD for important popup warnings -->
           <a-entity
             id="hmdText"
             position="0 .25 -1"
-            text="value:Placeholder;align:center;width:2;opacity:0;
+            text="value:_;align:center;width:2;opacity:0;
             font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
             font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
             animation__hmdtextin="startEvents:cuehmdtextin;property:text.opacity;to:1;dur:2000;easing:easeOutBack;"
@@ -502,16 +520,37 @@
 
       <a-gltf-model src="#water-glb" uv-scroll=""></a-gltf-model>
 
-      <a-entity
-        id="credits"
-        position="8.4 -10 -22"
-        rotation="0 -27 0"
+      <a-video
+        id="drive-in-screen"
+        src="#movies"
+        width="14.760"
+        height="6.79"
+        rotation="0 -113.060 0"
+        position="-11.522 5.427 42.947"
+        material="side:front;"
+      ></a-video>
+
+      <a-video
+        id="credits-screen"
+        src="#credits"
+        width="14.760"
+        height="6.79"
+        rotation="0 -113.060 0"
+        position="-11.522 5.427 42.947"
+        material="side:front;"
         visible="false"
-        text="width:20; color:black; align:center;
-        font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;
-        value:Created By:\n\n\nJames C. Kane\nDev & Design Lead\n\nAJ Johri\nColin Freeman\n3D Art\n\nEthan Michalicek\nSr. Dev\n\nSpecial thanks to:\nParadowski Creative\nAshford Stamper\nChris Prestemon\nCaroline May\nAda Rose Cannon\nNoeri Huisman\nWebXR Discord\n;"
-        animation__credits="property:object3D.position.y;to:20; dur: 30000; easing: linear; loop: true; startEvents: rollCredits; pauseEvents: pauseCredits;"
-      ></a-entity>
+      ></a-video>
+
+      <!--      <a-entity-->
+      <!--        id="credits"-->
+      <!--        position="8.4 -10 -22"-->
+      <!--        rotation="0 -27 0"-->
+      <!--        visible="false"-->
+      <!--        text="width:20; color:black; align:center;-->
+      <!--        font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;-->
+      <!--        value:Created By:\n\n\nJames C. Kane\nDev & Design Lead\n\nAJ Johri\nColin Freeman\n3D Art\n\nEthan Michalicek\nSr. Dev\n\nSpecial thanks to:\nParadowski Creative\nAshford Stamper\nChris Prestemon\nCaroline May\nAda Rose Cannon\nNoeri Huisman\nWebXR Discord\n;"-->
+      <!--        animation__credits="property:object3D.position.y;to:20; dur: 30000; easing: linear; loop: true; startEvents: rollCredits; pauseEvents: pauseCredits;"-->
+      <!--      ></a-entity>-->
 
       <!-- 50m^2 box  positioned 5m below the playable area to detect when the ball goes out of bounds -->
       <a-box
@@ -541,8 +580,7 @@
           velocityValue:.1 .1 .1;
           accelerationValue:0 0 0;
           accelerationSpread:1 0 1;"
-      >
-      </a-gltf-model>
+      ></a-gltf-model>
 
       <!-- animated blocker in the main path to add a timing challenge 
 
@@ -763,23 +801,27 @@
                   Par-adowski
                 </h1>
                 <p class="bodyText">
-                  A WebXR putt putt game <br />
-                  built for the Meta Quest 2 browser.
+                  A WebXR mini-golf game<br />made for virtual reality.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
-                  This game started out as a 40-hour <br />
-                  WebXR prototype, but now aspires to compete in quality with
-                  native VR apps.
+                  This game began as
+                  <a
+                    href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
+                    target="_blank"
+                    >a 40-hour prototype</a
+                  >
+                  made for
+                  <a
+                    href="https://paradowski.com"
+                    target="_blank"
+                    style="color: white"
+                    >Paradowski Creative</a
+                  >'s putt putt tourney, but quickly took on a life of its own.
+                  Our aim is native-quality VR gameplay & design on the 3D open
+                  web. <br /><br />
+                  Read <a href="#" target="_blank">our case study</a> for more.
                 </p>
-                <hr class="yellowHr" id="hr2" />
-                <a
-                  class="bodyText"
-                  href="https://medium.com/@jameskanestl/above-par-adowski-webxr-mini-golf-in-40-hours-or-less-a799dbb968e"
-                  target="_blank"
-                  >Read more about our process here.
-                </a>
-
                 <div class="modalButtons">
                   <button class="mainButton" id="playInVrAbout">
                     PLAY IN VR
@@ -792,7 +834,10 @@
 
               <div class="modal-text" id="howToContent">
                 <h1>How to play</h1>
-
+                <p class="bodyText">
+                  This is a WebXR game <br />meant to be played in virtual
+                  reality. <br />
+                </p>
                 <div class="iconContainer">
                   <img
                     src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/xy.png?v=1664901664937"
@@ -808,14 +853,14 @@
                 </div>
 
                 <p class="bodyText">
-                  Once the game begins, <br />press the X/Y or A/B buttons on
-                  either <br />controller to change your club hand.
+                  Once the game begins, <br />press any circle button on either
+                  <br />controller to change your club hand.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
-                  Use the joystick to navigate manually, <br />
-                  or use the trigger to teleport directly to the ball. The club
-                  will adjust to your height.
+                  Use the joystick to navigate manually<br />
+                  or trigger to teleport right to the ball.<br />
+                  The club will adjust to your height.
                 </p>
                 <hr class="yellowHr" />
                 <p class="bodyText">
@@ -870,8 +915,12 @@
               .querySelector("#scene-preview")
               .setAttribute("camera", "active:false;");
             head.setAttribute("camera", "active:true;");
-            if (movementType === "teleport") {
+            if (
+              movementType === "teleport" &&
+              AFRAME.utils.device.checkHeadsetConnected()
+            ) {
               cameraRig.setAttribute("movement-controls", "enabled", false);
+            } else {
             }
           });
           sceneEl.addEventListener("exit-vr", function () {

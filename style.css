@@ -120,6 +120,10 @@ body.aframe-inspector-opened .a-dom-overlay {
   font-family: "knockouthtf48-featherweight";
 }
 
+.textButton:hover {
+  color: #13e76e;
+}
+
 .introBtn {
   font-size: 2vh;
   margin-bottom: 8%;
@@ -185,7 +189,7 @@ body.aframe-inspector-opened .a-dom-overlay {
 .modal-text {
   position: absolute;
   right: 5.2%;
-  top: 18%;
+  top: 17%;
   width: 31%;
   text-align: center;
 }
@@ -240,6 +244,10 @@ h1 {
   letter-spacing: 0.06em;
   margin: 0;
   line-height: 1.3em;
+}
+
+.bodyText a {
+  color: #fffed5;
 }
 
 #firstHowTo {
