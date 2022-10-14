@@ -47,7 +47,6 @@ AFRAME.registerComponent("endgame", {
     //ENDGAME BASE
     const baseWidth = 1;
     const baseHeight = 1;
-
     this.endBase = document.createElement("a-rounded");
     this.endBase.setAttribute("width", baseWidth);
     this.endBase.setAttribute("height", baseHeight);
@@ -67,6 +66,24 @@ AFRAME.registerComponent("endgame", {
       this.endBase.object3D.updateMatrix();
     });
 
+    //ENDGAME CONTENT PARENT
+    this.container = document.createElement("a-plane");
+    this.container.setAttribute("width", baseWidth);
+    this.container.setAttribute("height", baseHeight);
+    this.container.setAttribute("position", `0 1.5 -1.5`);
+    this.container.setAttribute("visible", true);
+    this.container.setAttribute(
+      "material",
+      "color:#1CB134; transparent:true; opacity: 0;"
+    );
+    this.container.object3D.updateMatrix();
+    this.el.sceneEl.appendChild(this.container);
+    this.container.classList.add("container");
+    this.container.addEventListener("loaded", () => {
+      this.endGameTarget.target.add(this.container.object3D);
+      this.container.object3D.updateMatrix();
+    });
+
     //TEXT: HEADER
     const headerText = document.createElement("a-entity");
     headerText.setAttribute("troika-text", {
@@ -76,12 +93,9 @@ AFRAME.registerComponent("endgame", {
       font: this.fontKnockout,
       align: "center",
     });
-    headerText.setAttribute(
-      "position",
-      `${baseWidth / 2} ${baseHeight / 2 + 0.35} 0.015`
-    );
+    headerText.setAttribute("position", `0 0.35 0.015`);
     headerText.classList.add("headerText");
-    this.endBase.appendChild(headerText);
+    this.container.appendChild(headerText);
 
     //TEXT: BODY
     this.finalScore = this.el.sceneEl.components["putt"].getScore().toString();
@@ -94,14 +108,11 @@ AFRAME.registerComponent("endgame", {
       align: "center",
       maxWidth: 1,
     });
-    scoreText.setAttribute(
-      "position",
-      `${baseWidth / 2} ${baseHeight / 2 + 0} 0.015`
-    );
+    scoreText.setAttribute("position", `0 0 0.015`);
     scoreText.classList.add("scoreText");
-    this.endBase.appendChild(scoreText);
+    this.container.appendChild(scoreText);
 
-    //TEXT: HEADER
+    //TEXT: BOTTOM TEXT
     const playAgainText = document.createElement("a-entity");
     playAgainText.setAttribute("troika-text", {
       value: "press A, B, X, or Y to play again",
@@ -110,9 +121,9 @@ AFRAME.registerComponent("endgame", {
       font: this.fontKnockout,
       align: "center",
     });
-    playAgainText.setAttribute("position", `${baseWidth / 2} 0.15 0.015`);
+    playAgainText.setAttribute("position", `0 -0.35 0.015`);
     playAgainText.classList.add("playAgainText");
-    this.endBase.appendChild(playAgainText);
+    this.container.appendChild(playAgainText);
   },
 
   removeContent() {
