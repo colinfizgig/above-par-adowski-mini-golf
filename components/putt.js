@@ -29,7 +29,11 @@ AFRAME.registerComponent("putt", {
     this.flagEl = document.querySelector("#flag");
     this.courseColliders = document.querySelectorAll(".colliders");
     //this.blocker = document.querySelector("#blocker");
-    this.credits = document.querySelector("#credits");
+    //this.credits = document.querySelector("#credits");
+    this.driveInScreen = document.querySelector("#drive-in-screen");
+    this.creditsScreen = document.querySelector("#credits-screen");
+    this.moviesEl = document.querySelector("#movies");
+    this.creditsEl = document.querySelector("#credits");
     this.ballParticles = document.querySelector("#ballParticles");
     this.floors = document.querySelectorAll(".floor");
     this.activeFloor = document.querySelector(".floor");
@@ -108,6 +112,8 @@ AFRAME.registerComponent("putt", {
       // }
     });
 
+    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile())
+
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
       "enter-vr",
@@ -118,6 +124,8 @@ AFRAME.registerComponent("putt", {
         }
         gtag("event", "enteredVR");
         this._isVR = true;
+        this.hmdTextEl.setAttribute("text", `value:;`);
+        this.moviesEl.play();
       }.bind(this)
     );
     this.el.addEventListener(
@@ -308,15 +316,14 @@ AFRAME.registerComponent("putt", {
       // this.head.setAttribute("endgame", "");
       this.head?.components["endgame"]?.createContent();
 
-      this.credits.setAttribute("visible", true);
-      this.credits.emit("rollCredits", null, true);
+      // this.credits.setAttribute("visible", true);
+      // this.credits.emit("rollCredits", null, true);
+      this.driveInScreen.setAttribute("visible", "false");
+      this.creditsScreen.setAttribute("visible", "true");
+      this.moviesEl.pause();
+      this.creditsEl.play();
 
       gtag("event", "finishedGame");
-
-      // Till we have an end screen & ui
-      setTimeout(() => {
-        this.restartGame();
-      }, 5000);
     }
   },
 
@@ -530,8 +537,13 @@ AFRAME.registerComponent("putt", {
     this.head.removeAttribute("endgame", "");
 
     // Hide the credits or endscreen content
-    this.credits.setAttribute("visible", false);
-    this.credits.emit("pauseCredits", null, true);
+    // this.credits.setAttribute("visible", false);
+    // this.credits.emit("pauseCredits", null, true);
+    this.driveInScreen.setAttribute("visible", "true");
+    this.creditsScreen.setAttribute("visible", "false");
+    this.moviesEl.play();
+    this.creditsEl.pause();
+
 
     // Start Next Game
     this.nextHole(instant);
