@@ -1,7 +1,5 @@
 /** @format */
 
-import { SubtractiveBlending } from "three";
-
 AFRAME.registerComponent("tutorial", {
   schema: {},
   init: function () {

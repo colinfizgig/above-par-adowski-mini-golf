@@ -5,8 +5,6 @@
  */
 
 /* global THREE, AFRAME, gtag, Stats */
-// import * as THREE from "three";
-
 import "./systems/handedness.js";
 import "./systems/avatar-targets.js";
 import "./components/putt.js";
