@@ -41,10 +41,10 @@ AFRAME.registerComponent("ground-listener", {
     });
 
     const head = document.querySelector("#head");
-    head.setAttribute("tutorial", "");
-    document.addEventListener("remove-tutorial", () => {
-      head.removeAttribute("tutorial");
-    });
+    // head.setAttribute("tutorial", "");
+    // document.addEventListener("remove-tutorial", () => {
+    //   head.removeAttribute("tutorial");
+    // });
   },
 
   tick: function () {
