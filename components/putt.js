@@ -112,7 +112,14 @@ AFRAME.registerComponent("putt", {
       // }
     });
 
-    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile())
+    // console.log("IS MOBILE???????", AFRAME.utils.device.isMobile());
+
+    this.head.setAttribute("tutorial", {
+      activeHoleIndex: this.activeHoleIndex,
+    });
+    document.addEventListener("remove-tutorial", () => {
+      this.head.removeAttribute("tutorial");
+    });
 
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
@@ -323,6 +330,10 @@ AFRAME.registerComponent("putt", {
   },
 
   async nextHole(instant = false) {
+    if (this.activeHoleIndex !== 0) {
+      document.dispatchEvent(new Event("remove-tutorial"));
+    }
+
     // if there are more holes, apply colliders
     if (!instant) {
       await new Promise((resolve) =>
@@ -531,7 +542,6 @@ AFRAME.registerComponent("putt", {
     this.creditsScreen.setAttribute("visible", "false");
     this.moviesEl.play();
     this.creditsEl.pause();
-
 
     // Start Next Game
     this.nextHole(instant);

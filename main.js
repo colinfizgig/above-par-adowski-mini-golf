@@ -37,12 +37,6 @@ AFRAME.registerComponent("ground-listener", {
     this.el.addEventListener("raycaster-intersected-cleared", (evt) => {
       this.raycasterEl = null;
     });
-
-    const head = document.querySelector("#head");
-    head.setAttribute("tutorial", "");
-    document.addEventListener("remove-tutorial", () => {
-      head.removeAttribute("tutorial");
-    });
   },
 
   tick: function () {

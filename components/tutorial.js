@@ -1,7 +1,9 @@
 /** @format */
 
 AFRAME.registerComponent("tutorial", {
-  schema: {},
+  schema: {
+    activeHoleIndex: { type: "number", default: 0 },
+  },
   init: function () {
     //general values
     this.fontKnockout =
@@ -57,7 +59,10 @@ AFRAME.registerComponent("tutorial", {
     this.tutIndex = 0;
     this.useButtons = true;
 
-    this.createContent();
+    console.log("active hole", this.data.activeHoleIndex);
+    if (this.data.activeHoleIndex == 0) {
+      this.createContent();
+    }
 
     //tutorial header text
     document.addEventListener("advanced-tutorial", () => {
