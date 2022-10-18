@@ -112,6 +112,8 @@ AFRAME.registerComponent("putt", {
       // }
     });
 
+    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile())
+
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
       "enter-vr",
@@ -122,6 +124,7 @@ AFRAME.registerComponent("putt", {
         }
         gtag("event", "enteredVR");
         this._isVR = true;
+        this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
       }.bind(this)
     );
@@ -183,8 +186,6 @@ AFRAME.registerComponent("putt", {
         this.teleportToBall(); // iterate put count
       }
     });
-
-    this.hmdTextEl.setAttribute("text", `value:;`);
 
     gtag("event", "gameInit");
 
