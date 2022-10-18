@@ -5,8 +5,6 @@
  */
 
 /* global THREE, AFRAME, gtag, Stats */
-// import * as THREE from "three";
-
 import "./systems/handedness.js";
 import "./systems/avatar-targets.js";
 import "./components/putt.js";
@@ -41,10 +39,10 @@ AFRAME.registerComponent("ground-listener", {
     });
 
     const head = document.querySelector("#head");
-    head.setAttribute("tutorial", "");
-    document.addEventListener("remove-tutorial", () => {
-      head.removeAttribute("tutorial");
-    });
+    // head.setAttribute("tutorial", "");
+    // document.addEventListener("remove-tutorial", () => {
+    //   head.removeAttribute("tutorial");
+    // });
   },
 
   tick: function () {
