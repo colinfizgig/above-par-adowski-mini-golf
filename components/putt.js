@@ -443,7 +443,7 @@ AFRAME.registerComponent("putt", {
   },
 
   globalRAF(callback) {
-    const xrSession = this.el.sceneEl.renderer.xr.getSession();
+    const xrSession = this.el.sceneEl.renderer.xr?.getSession();
     if (!xrSession) return window.requestAnimationFrame(callback);
     return xrSession.requestAnimationFrame(callback);
   },
