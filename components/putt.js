@@ -112,7 +112,7 @@ AFRAME.registerComponent("putt", {
       // }
     });
 
-    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile())
+    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile());
 
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
@@ -443,7 +443,7 @@ AFRAME.registerComponent("putt", {
   },
 
   globalRAF(callback) {
-    const xrSession = this.el.sceneEl.renderer.xr?.getSession;
+    const xrSession = this.el.sceneEl.renderer.xr?.getSession();
     if (!xrSession) return window.requestAnimationFrame(callback);
     return xrSession.requestAnimationFrame(callback);
   },
@@ -531,7 +531,6 @@ AFRAME.registerComponent("putt", {
     this.creditsScreen.setAttribute("visible", "false");
     this.moviesEl.play();
     this.creditsEl.pause();
-
 
     // Start Next Game
     this.nextHole(instant);
