@@ -12,7 +12,7 @@
     </script>
 
     <!-- A-Frame and 3rd party component libraries -->
-    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@0d23f9b/dist/aframe-master.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@090b5f8f0abe949ddcfdbbc14c75822322a2dd53/dist/aframe-master.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/christmas-scene@4a6a774/lib/physx.release.js"></script>
@@ -194,7 +194,11 @@
         ></a-asset-item>
         <a-asset-item
           id="environment-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v17_v005.glb?v=1666128668055"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v18.glb?v=1666294073859"
+        ></a-asset-item>
+        <a-asset-item
+          id="environment-greens-glb"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v18_green.glb?v=1666294070986"
         ></a-asset-item>
         <a-asset-item
           id="water-glb"
@@ -202,7 +206,7 @@
         ></a-asset-item>
         <a-asset-item
           id="walkmesh"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/walkmesh-v11.glb?v=1666271493104"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Walkmesh_v18.glb?v=1666294068811"
         ></a-asset-item>
         <a-asset-item
           id="club-collider-glb"
@@ -510,6 +514,8 @@
       ></a-entity>
 
       <a-gltf-model id="environment-art" src="#environment-glb"></a-gltf-model>
+
+      <a-gltf-model id="environment-art" src="#environment-greens-glb"></a-gltf-model>
 
       <a-gltf-model src="#plates-glb"></a-gltf-model>
 
