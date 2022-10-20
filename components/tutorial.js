@@ -8,8 +8,8 @@ AFRAME.registerComponent("tutorial", {
     //general values
     this.fontKnockout =
       "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
-    this.boxWidth = 3;
-    this.boxHeight = 1.75;
+    this.boxWidth = 2.49 * 0.75;
+    this.boxHeight = 1.23 * 0.75;
     this.boxDepth = 0.1;
     this.offWhite = "#FFFFD5";
     this.yellow = "#ECEC43";
@@ -23,7 +23,7 @@ AFRAME.registerComponent("tutorial", {
 
     this.tutorialPosition = this.tutorialTarget.target.position;
 
-    this.el.sceneEl.renderer.toneMappingExposure = 1;
+    this.el.sceneEl.renderer.toneMappingExposure = 0.8;
     this.el.sceneEl.renderer.gammaFactor = 2.2;
 
     this.tutorialContent = [
@@ -32,8 +32,8 @@ AFRAME.registerComponent("tutorial", {
         icon1:
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut1.png?v=1665089713416",
         iconWidth: 0.13,
-        iconHeight: 0.13,
-        body: "Take a look at your watch any time to track your strokes and see your score.",
+        iconHeight: 0.18,
+        body: "Take a look at your watch any time to track \n  your strokes and see your score. \n Press A,B,X, or Y to continue.",
         id: "tut1",
       },
       {
@@ -42,7 +42,7 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
         iconWidth: 0.7,
         iconHeight: 0.13,
-        body: "Press the X/Y or A/B buttons on either  controller to change your club hand. ",
+        body: "Press the X/Y or A/B buttons on either  \n controller  to change your club hand.   \n Press A,B,X, or Y to continue.",
         id: "tut2",
       },
       {
@@ -51,7 +51,7 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut3.png?v=1665089713417",
         iconWidth: 0.4,
         iconHeight: 0.13,
-        body: "Use the joystick to navigate manually, or use the trigger to teleport directly to the ball. ",
+        body: "Use the joystick to navigate manually, or  \n use the trigger to teleport directly to the ball.  \n Press A,B,X, or Y to continue.",
         id: "tut3",
       },
     ];
@@ -122,8 +122,7 @@ AFRAME.registerComponent("tutorial", {
     this.tutBase.setAttribute("visible", true);
     this.tutBase.setAttribute("color", "white");
     this.tutBase.setAttribute("material", {
-      src: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tutorial_bg.png?v=1665001918390",
-      transparent: true,
+      src: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tutorial_bg_v003.png?v=1666282664748",
       flatshading: true,
     });
     this.tutBase.object3D.updateMatrix();
@@ -132,25 +131,6 @@ AFRAME.registerComponent("tutorial", {
     this.tutBase.addEventListener("loaded", () => {
       this.tutorialTarget.target.add(this.tutBase.object3D);
       this.tutBase.object3D.updateMatrix();
-    });
-
-    //TUTORIAL BASE
-    this.container = document.createElement("a-plane");
-    this.container.setAttribute("width", this.boxWidth);
-    this.container.setAttribute("height", this.boxHeight);
-    this.container.setAttribute("position", "0 2 -1.5");
-    this.container.setAttribute("visible", true);
-    this.container.setAttribute("color", "white");
-    this.container.setAttribute("material", {
-      transparent: true,
-      opacity: 0.0,
-    });
-    this.container.object3D.updateMatrix();
-    this.el.sceneEl.appendChild(this.container);
-    this.container.classList.add("container");
-    this.container.addEventListener("loaded", () => {
-      this.tutorialTarget.target.add(this.container.object3D);
-      this.container.object3D.updateMatrix();
     });
 
     //TEXT: HEADER
@@ -162,23 +142,24 @@ AFRAME.registerComponent("tutorial", {
       font: this.fontKnockout,
       align: "center",
     });
-    headerText.setAttribute("position", `0 0.05 0.01`);
+    headerText.setAttribute("position", `0 0.24 0.01`);
     headerText.classList.add("headerText");
-    this.container.appendChild(headerText);
+    this.tutBase.appendChild(headerText);
 
     //TEXT: BODY
     const bodyText = document.createElement("a-entity");
     bodyText.setAttribute("troika-text", {
       value: this.tutorialContent[this.tutIndex]?.body,
-      fontSize: 0.08,
+      fontSize: 0.065,
       color: this.offWhite,
       font: this.fontKnockout,
       align: "center",
       maxWidth: 1,
+      lineHeight: 1.2,
     });
-    bodyText.setAttribute("position", `0 -0.35 0.01`);
+    bodyText.setAttribute("position", `0 -0.24 0.01`);
     bodyText.classList.add("bodyText");
-    this.container.appendChild(bodyText);
+    this.tutBase.appendChild(bodyText);
 
     //ICON
     const tutIcon1 = document.createElement("a-plane");
@@ -193,11 +174,12 @@ AFRAME.registerComponent("tutorial", {
     tutIcon1.setAttribute("material", {
       src: this.tutorialContent[this.tutIndex]?.icon1,
       transparent: true,
+      flatshading: true,
     });
-    tutIcon1.setAttribute("position", `0 -0.15 0.01`);
+    tutIcon1.setAttribute("position", `0 0.02 0.01`);
     tutIcon1.classList.add("tutIcon1");
 
-    this.container.appendChild(tutIcon1);
+    this.tutBase.appendChild(tutIcon1);
   },
 
   removeContent() {
