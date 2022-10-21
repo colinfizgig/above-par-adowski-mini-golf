@@ -114,8 +114,6 @@ AFRAME.registerComponent("putt", {
       // }
     });
 
-    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile());
-
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
       "enter-vr",
@@ -128,6 +126,10 @@ AFRAME.registerComponent("putt", {
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
+        setTimeout(function () {
+          this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+          this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+        }.bind(this), 2000)
       }.bind(this)
     );
     this.el.addEventListener(
@@ -191,9 +193,6 @@ AFRAME.registerComponent("putt", {
 
     gtag("event", "gameInit");
 
-    this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
-    this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
-
     document.addEventListener("restart-game", (e) => {
       this.el.sceneEl.enterVR();
 
@@ -210,8 +209,8 @@ AFRAME.registerComponent("putt", {
   togglePhysicsOnThumbstick: function(event) {
     console.log("thumbstick callback")
     if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
+      this.removeCollision();
       if (this.clubPhysicsEnabled) {
-        this.removeCollision();
         this.clubPhysicsEnabled = false;
       }
     }
@@ -226,7 +225,9 @@ AFRAME.registerComponent("putt", {
   },
 
   removeCollision: function() {
+    this.clubHeadContainerEl.removeAttribute("physx-material");
     this.clubHeadContainerEl.removeAttribute("physx-body");
+    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
   },
 
   enableCollision: function() {
@@ -234,6 +235,8 @@ AFRAME.registerComponent("putt", {
       type: "kinematic",
       highPrecision: true,
     });
+    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
+    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
   },
 
   /**
@@ -289,7 +292,7 @@ AFRAME.registerComponent("putt", {
     this.cameraRig.object3D.matrixNeedsUpdate = true;
     setTimeout(() => {
       this.enableCollision();
-    }, 500)
+    }, 2000)
   },
 
   putt: function () {
@@ -406,6 +409,8 @@ AFRAME.registerComponent("putt", {
       "physx-material",
       "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
     );
+
+    if (this.activeHoleIndex > 1) this.moviesEl.pause();
 
     this.activeFloor.setAttribute("ground-listener", "");
     //set floor collider invisible but still colliding, false to make it visible
