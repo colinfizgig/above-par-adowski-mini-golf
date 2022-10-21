@@ -4,8 +4,10 @@ AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
     // Player els:
+    this.clubPhysicsEnabled = true;
     this.clubEl = document.querySelector("#club-wrapper");
     this.clubHeadCenterEl = this.clubEl.querySelector(".club-head-center");
+    this.clubHeadContainerEl = this.clubEl.querySelector(".club-head-container")
     this.hmdTextEl = document.querySelector("#hmdText");
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
@@ -125,6 +127,7 @@ AFRAME.registerComponent("putt", {
         gtag("event", "enteredVR");
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
+        this.clubHeadContainerEl.components["physx-body"].rigidBody.setRigidBodyFlag(PhysX.PxRigidBodyFlag.eENABLE_SPECULATIVE_CCD, true);
         this.moviesEl.play();
       }.bind(this)
     );
@@ -189,6 +192,9 @@ AFRAME.registerComponent("putt", {
 
     gtag("event", "gameInit");
 
+    this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+    this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+
     document.addEventListener("restart-game", (e) => {
       this.el.sceneEl.enterVR();
 
@@ -202,11 +208,41 @@ AFRAME.registerComponent("putt", {
     });
   },
 
+  togglePhysicsOnThumbstick: function(event) {
+    console.log("thumbstick callback")
+    if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
+      if (this.clubPhysicsEnabled) {
+        this.removeCollision();
+        this.clubPhysicsEnabled = false;
+      }
+    }
+    else {
+      if (!this.clubPhysicsEnabled) {
+        this.clubPhysicsEnabled = true;
+        setTimeout(() => {
+          this.enableCollision();
+        }, 1000);
+      }
+    }
+  },
+
+  removeCollision: function() {
+    this.clubHeadContainerEl.removeAttribute("physx-body");
+  },
+
+  enableCollision: function() {
+    this.clubHeadContainerEl.setAttribute("physx-body", {
+      type: "kinematic",
+      highPrecision: true,
+    });
+  },
+
   /**
    * Move and rotate the player to the ball
    */
   teleportToBall: function () {
     // Move player towards the ball
+    this.removeCollision();
     const ballPos = this.ballEl.object3D.position;
     let intersects;
     this.ballShadowRaycaster.set(ballPos, this.downVector);
@@ -252,6 +288,9 @@ AFRAME.registerComponent("putt", {
 
     this.cameraRig.object3D.rotation.y += angle * direction;
     this.cameraRig.object3D.matrixNeedsUpdate = true;
+    setTimeout(() => {
+      this.enableCollision();
+    }, 500)
   },
 
   putt: function () {
