@@ -127,7 +127,7 @@ AFRAME.registerComponent("putt", {
         gtag("event", "enteredVR");
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
-        this.clubHeadContainerEl.components["physx-body"].rigidBody.setRigidBodyFlag(PhysX.PxRigidBodyFlag.eENABLE_SPECULATIVE_CCD, true);
+        this.clubHeadContainerEl.components["physx-body"]?.rigidBody.setRigidBodyFlag(PhysX.PxRigidBodyFlag.eENABLE_SPECULATIVE_CCD, true);
         this.moviesEl.play();
       }.bind(this)
     );
