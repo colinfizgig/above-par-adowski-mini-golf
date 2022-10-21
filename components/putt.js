@@ -410,7 +410,8 @@ AFRAME.registerComponent("putt", {
       "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
     );
 
-    if (this.activeHoleIndex > 1) this.moviesEl.pause();
+    if (this.activeHoleIndex > 1 && this.activeHoleIndex < 7) this.moviesEl.pause();
+    else this.moviesEl.play();
 
     this.activeFloor.setAttribute("ground-listener", "");
     //set floor collider invisible but still colliding, false to make it visible
