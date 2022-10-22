@@ -102,18 +102,8 @@ AFRAME.registerComponent("putt", {
     // Set/update the values on the player's 3D watch in VR
     this.updateWatch();
 
-    // Start the animated blocker, which can't autoplay due to setting the startEvents prop
-    //this.blocker.emit("startanimup", null, true);
-
     this.el.addEventListener("loaded", () => {
       this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
-
-      // let colliderMat = new THREE.MeshStandardMaterial({ color: 0x808080, side: THREE.FrontSide });
-      // for (let i = 0; i < this.courseColliders.length; i++) {
-      //   this.courseColliders[i].object3D.traverse(node => {
-      //     if (node.isMesh) node.material = colliderMat;
-      //   });
-      // }
     });
 
     // Don't start listening to raycaster until VR is entered
@@ -231,7 +221,7 @@ AFRAME.registerComponent("putt", {
     const dir = new THREE.Vector3()
       .subVectors(flagPos, ballIntersectPos)
       .normalize();
-    dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(1); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
+    dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(.5); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
     if (this.el.sceneEl.systems["handedness"].data.hand === "right")
       dir.subVectors(ballIntersectPos, dir); // if right-handed, subVectors
     else dir.addVectors(ballIntersectPos, dir); // if left-handed, addVectors
