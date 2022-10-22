@@ -4,8 +4,11 @@ AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
     // Player els:
+    this.clubPhysicsEnabled = true;
     this.clubEl = document.querySelector("#club-wrapper");
     this.clubHeadCenterEl = this.clubEl.querySelector(".club-head-center");
+    this.clubHeadContainerEl = this.clubEl.querySelector(".club-head-container")
+    this.clubHeadModel = this.clubEl.querySelector(".club-head")
     this.hmdTextEl = document.querySelector("#hmdText");
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
@@ -112,8 +115,6 @@ AFRAME.registerComponent("putt", {
       // }
     });
 
-    console.log("IS MOBILE???????", AFRAME.utils.device.isMobile());
-
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
       "enter-vr",
@@ -126,6 +127,10 @@ AFRAME.registerComponent("putt", {
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
+        setTimeout(function () {
+          this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+          this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+        }.bind(this), 2000)
       }.bind(this)
     );
     this.el.addEventListener(
@@ -202,11 +207,47 @@ AFRAME.registerComponent("putt", {
     });
   },
 
+  togglePhysicsOnThumbstick: function(event) {
+    console.log("thumbstick callback")
+    if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
+      this.removeCollision();
+      if (this.clubPhysicsEnabled) {
+        this.clubPhysicsEnabled = false;
+      }
+    }
+    else {
+      if (!this.clubPhysicsEnabled) {
+        this.clubPhysicsEnabled = true;
+        setTimeout(() => {
+          this.enableCollision();
+        }, 1000);
+      }
+    }
+  },
+
+  removeCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
+    this.clubHeadContainerEl.removeAttribute("physx-material");
+    this.clubHeadContainerEl.removeAttribute("physx-body");
+    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
+  },
+
+  enableCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:occlusion;rimOpacity:.5;coreOpacity:0;");
+    this.clubHeadContainerEl.setAttribute("physx-body", {
+      type: "kinematic",
+      highPrecision: true,
+    });
+    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
+    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
+  },
+
   /**
    * Move and rotate the player to the ball
    */
   teleportToBall: function () {
     // Move player towards the ball
+    this.removeCollision();
     const ballPos = this.ballEl.object3D.position;
     let intersects;
     this.ballShadowRaycaster.set(ballPos, this.downVector);
@@ -252,6 +293,9 @@ AFRAME.registerComponent("putt", {
 
     this.cameraRig.object3D.rotation.y += angle * direction;
     this.cameraRig.object3D.matrixNeedsUpdate = true;
+    setTimeout(() => {
+      this.enableCollision();
+    }, 2000)
   },
 
   putt: function () {
@@ -368,6 +412,9 @@ AFRAME.registerComponent("putt", {
       "physx-material",
       "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
     );
+
+    if (this.activeHoleIndex > 1 && this.activeHoleIndex < 7) this.moviesEl.pause();
+    else this.moviesEl.play();
 
     this.activeFloor.setAttribute("ground-listener", "");
     //set floor collider invisible but still colliding, false to make it visible
