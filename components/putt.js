@@ -31,8 +31,6 @@ AFRAME.registerComponent("putt", {
     this.ballHaloEl = document.querySelector("#ballHalo");
     this.flagEl = document.querySelector("#flag");
     this.courseColliders = document.querySelectorAll(".colliders");
-    //this.blocker = document.querySelector("#blocker");
-    //this.credits = document.querySelector("#credits");
     this.driveInScreen = document.querySelector("#drive-in-screen");
     this.creditsScreen = document.querySelector("#credits-screen");
     this.moviesEl = document.querySelector("#movies");
@@ -68,6 +66,7 @@ AFRAME.registerComponent("putt", {
     this.activeHoleScore = 0;
     this.scores[this.activeHoleIndex] = 0;
     this.tickCounter = 0;
+    this.thumbstickTimeout = 2000;
     this.parInfo = {
       "-3": {
         name: "Albatross",
@@ -121,18 +120,8 @@ AFRAME.registerComponent("putt", {
     // Set/update the values on the player's 3D watch in VR
     this.updateWatch();
 
-    // Start the animated blocker, which can't autoplay due to setting the startEvents prop
-    //this.blocker.emit("startanimup", null, true);
-
     this.el.addEventListener("loaded", () => {
       this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
-
-      // let colliderMat = new THREE.MeshStandardMaterial({ color: 0x808080, side: THREE.FrontSide });
-      // for (let i = 0; i < this.courseColliders.length; i++) {
-      //   this.courseColliders[i].object3D.traverse(node => {
-      //     if (node.isMesh) node.material = colliderMat;
-      //   });
-      // }
     });
 
     // Don't start listening to raycaster until VR is entered
@@ -227,47 +216,17 @@ AFRAME.registerComponent("putt", {
     });
   },
 
-  togglePhysicsOnThumbstick: function(event) {
-    console.log("thumbstick callback")
-    if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
-      this.removeCollision();
-      if (this.clubPhysicsEnabled) {
-        this.clubPhysicsEnabled = false;
-      }
-    }
-    else {
-      if (!this.clubPhysicsEnabled) {
-        this.clubPhysicsEnabled = true;
-        setTimeout(() => {
-          this.enableCollision();
-        }, 1000);
-      }
-    }
-  },
-
-  removeCollision: function() {
-    this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
-    this.clubHeadContainerEl.removeAttribute("physx-material");
-    this.clubHeadContainerEl.removeAttribute("physx-body");
-    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
-  },
-
-  enableCollision: function() {
-    this.clubHeadModel.setAttribute("highlight", "mode:occlusion;rimOpacity:.5;coreOpacity:0;");
-    this.clubHeadContainerEl.setAttribute("physx-body", {
-      type: "kinematic",
-      highPrecision: true,
-    });
-    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
-    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
-  },
-
   /**
    * Move and rotate the player to the ball
    */
   teleportToBall: function () {
     // Move player towards the ball
-    this.removeCollision();
+    this.thumbstickTimeout = Math.min(Math.max(this.thumbstickTimeout + 2000, 0), 2000);
+    if (this.clubPhysicsEnabled) {
+      this.clubPhysicsEnabled = false;
+      console.log(this.thumbstickTimeout);
+      this.removeCollision();
+    }
     const ballPos = this.ballEl.object3D.position;
     let intersects;
     this.ballShadowRaycaster.set(ballPos, this.downVector);
@@ -280,7 +239,7 @@ AFRAME.registerComponent("putt", {
     const dir = new THREE.Vector3()
       .subVectors(flagPos, ballIntersectPos)
       .normalize();
-    dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(1); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
+    dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(.5); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
     if (this.el.sceneEl.systems["handedness"].data.hand === "right")
       dir.subVectors(ballIntersectPos, dir); // if right-handed, subVectors
     else dir.addVectors(ballIntersectPos, dir); // if left-handed, addVectors
@@ -313,9 +272,6 @@ AFRAME.registerComponent("putt", {
 
     this.cameraRig.object3D.rotation.y += angle * direction;
     this.cameraRig.object3D.matrixNeedsUpdate = true;
-    setTimeout(() => {
-      this.enableCollision();
-    }, 2000)
   },
 
   putt: function () {
@@ -607,7 +563,44 @@ AFRAME.registerComponent("putt", {
     gtag("event", "restartGame");
   },
 
+  togglePhysicsOnThumbstick: function(event) {
+    console.log("thumbstick callback")
+    if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
+      this.thumbstickTimeout = Math.min(Math.max(this.thumbstickTimeout + 2000, 0), 2000);
+
+      if (this.clubPhysicsEnabled) {
+        this.clubPhysicsEnabled = false;
+        console.log(this.thumbstickTimeout);
+        this.removeCollision();
+      }
+    }
+  },
+
+  removeCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
+    this.clubHeadContainerEl.removeAttribute("physx-material");
+    this.clubHeadContainerEl.removeAttribute("physx-body");
+    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
+  },
+
+  enableCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:occlusion;rimOpacity:.5;coreOpacity:0.5;");
+    this.clubHeadContainerEl.setAttribute("physx-body", {
+      type: "kinematic",
+      highPrecision: true,
+    });
+    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
+    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
+  },
+
   tick: function (t, dt) {
+    if (this.thumbstickTimeout > 0) {
+      this.thumbstickTimeout -= dt;
+    } else if (this.thumbstickTimeout <= 0 && !this.clubPhysicsEnabled) {
+      this.clubPhysicsEnabled = true;
+      this.enableCollision();
+    }
+
     if (!this.holeOver) {
       if (!this.holeOver) {
         /* THIS IS THE WIN CONDITION CHECK! */
