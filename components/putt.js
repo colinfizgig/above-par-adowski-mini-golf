@@ -42,12 +42,21 @@ AFRAME.registerComponent("putt", {
     this.activeFloor = document.querySelector(".floor");
     this.downVector = new THREE.Vector3(0, -1, 0);
     // SFX els:
-    this.eagleSoundEl = document.querySelector("#eagle-sound");
-    this.birdieSoundEl = document.querySelector("#birdie-sound");
-    this.parSoundEl = document.querySelector("#par-sound");
-    this.bogeySoundEl = document.querySelector("#bogey-sound");
-    this.doubleBogeySoundEl = document.querySelector("#double-bogey-sound");
-    this.tripleBogeySoundEl = document.querySelector("#triple-bogey-sound");
+    this.aw1CrowdSoundEl = document.querySelector("#aw1-crowd-sound");
+    this.aw2CrowdSoundEl = document.querySelector("#aw2-crowd-sound");
+    this.parCrowdSoundEl = document.querySelector("#par-crowd-sound");
+    this.eagleCrowdSoundEl = document.querySelector("#eagle-crowd-sound");
+    this.birdieCrowdSoundEl = document.querySelector("#birdie-crowd-sound");
+    
+    this.albatrossEffectSoundEl = document.querySelector("#albatross-effect-sound");
+    this.eagleEffectSoundEl = document.querySelector("#eagle-effect-sound");
+    this.birdieEffectSoundEl = document.querySelector("#birdie-effect-sound");
+    this.parEffectSoundEl = document.querySelector("#par-effect-sound");
+    this.bogeyEffectSoundEl = document.querySelector("#bogey-effect-sound");
+    this.bogey2EffectSoundEl = document.querySelector("#bogey2-effect-sound");
+    this.bogey3EffectSoundEl = document.querySelector("#bogey3-effect-sound");
+    this.oofEffectSoundEl = document.querySelector("#oof-effect-sound");
+
     this.lastHit = new THREE.Vector3();
     // Game logic and scoring stuff:
     this.holeOver = false;
@@ -62,38 +71,49 @@ AFRAME.registerComponent("putt", {
     this.parInfo = {
       "-3": {
         name: "Albatross",
-        soundEl: this.eagleSoundEl,
+        effectSoundEl: this.albatrossEffectSoundEl, 
+        crowdSoundEl: this.eagleCrowdSoundEl,
         particleMultiplier: 5,
       },
       "-2": {
         name: "Eagle",
-        soundEl: this.eagleSoundEl,
+        effectSoundEl: this.eagleEffectSoundEl, 
+        crowdSoundEl: this.eagleCrowdSoundEl,
         particleMultiplier: 3,
       },
       "-1": {
         name: "Birdie",
-        soundEl: this.birdieSoundEl,
+        effectSoundEl: this.birdieEffectSoundEl, 
+        crowdSoundEl: this.birdieCrowdSoundEl,
         particleMultiplier: 1.5,
       },
-      0: { name: "Par", soundEl: this.parSoundEl, particleMultiplier: 1 },
+      0: { 
+        name: "Par",
+        effectSoundEl: this.parEffectSoundEl, 
+        crowdSoundEl: this.parCrowdSoundEl, 
+        particleMultiplier: 1 },
       1: {
         name: "Bogey",
-        soundEl: this.bogeySoundEl,
+        effectSoundEl: this.bogeyEffectSoundEl,
+        crowdSoundEl: this.aw1CrowdSoundEl,
         particleMultiplier: 0.05,
       },
       2: {
         name: "Double Bogey",
-        soundEl: this.doubleBogeySoundEl,
+        effectSoundEl: this.bogey2EffectSoundEl,
+        crowdSoundEl: this.aw2CrowdSoundEl,
         particleMultiplier: 0,
       },
       3: {
         name: "Triple Bogey",
-        soundEl: this.tripleBogeySoundEl,
+        effectSoundEl: this.bogey3EffectSoundEl,
+        crowdSoundEl: this.aw1CrowdSoundEl,
         particleMultiplier: 0,
       },
       4: {
         name: "Oof",
-        soundEl: this.tripleBogeySoundEl,
+        effectSoundEl: this.oofEffectSoundEl,
+        crowdSoundEl: this.aw2CrowdSoundEl,
         particleMultiplier: 0,
       },
     };
@@ -457,7 +477,8 @@ AFRAME.registerComponent("putt", {
     console.log(parScore);
     if (parScore > 4) parScore = 4; // for purposes of accessing parInfo for SFX and VFX
     let parString = this.parInfo[parScore]?.name;
-    this.parInfo[parScore].soundEl.play();
+    this.parInfo[parScore].crowdSoundEl.play();
+    this.parInfo[parScore].effectSoundEl.play();
     const multiplier = this.parInfo[parScore].particleMultiplier;
     if (multiplier > 0) {
       this.flagEl.setAttribute(
