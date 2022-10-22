@@ -4,7 +4,7 @@ AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
     // Player els:
-    this.clubPhysicsEnabled = true;
+    this.clubPhysicsEnabled = false;
     this.clubEl = document.querySelector("#club-wrapper");
     this.clubHeadCenterEl = this.clubEl.querySelector(".club-head-center");
     this.clubHeadContainerEl = this.clubEl.querySelector(".club-head-container")
@@ -59,6 +59,7 @@ AFRAME.registerComponent("putt", {
     this.activeHoleScore = 0;
     this.scores[this.activeHoleIndex] = 0;
     this.tickCounter = 0;
+    this.thumbstickTimeout = 2000;
     this.parInfo = {
       "-3": {
         name: "Albatross",
@@ -207,47 +208,17 @@ AFRAME.registerComponent("putt", {
     });
   },
 
-  togglePhysicsOnThumbstick: function(event) {
-    console.log("thumbstick callback")
-    if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
-      this.removeCollision();
-      if (this.clubPhysicsEnabled) {
-        this.clubPhysicsEnabled = false;
-      }
-    }
-    else {
-      if (!this.clubPhysicsEnabled) {
-        this.clubPhysicsEnabled = true;
-        setTimeout(() => {
-          this.enableCollision();
-        }, 1000);
-      }
-    }
-  },
-
-  removeCollision: function() {
-    this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
-    this.clubHeadContainerEl.removeAttribute("physx-material");
-    this.clubHeadContainerEl.removeAttribute("physx-body");
-    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
-  },
-
-  enableCollision: function() {
-    this.clubHeadModel.setAttribute("highlight", "mode:occlusion;rimOpacity:.5;coreOpacity:0;");
-    this.clubHeadContainerEl.setAttribute("physx-body", {
-      type: "kinematic",
-      highPrecision: true,
-    });
-    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
-    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
-  },
-
   /**
    * Move and rotate the player to the ball
    */
   teleportToBall: function () {
     // Move player towards the ball
-    this.removeCollision();
+    this.thumbstickTimeout = Math.min(Math.max(this.thumbstickTimeout + 2000, 0), 2000);
+    if (this.clubPhysicsEnabled) {
+      this.clubPhysicsEnabled = false;
+      console.log(this.thumbstickTimeout);
+      this.removeCollision();
+    }
     const ballPos = this.ballEl.object3D.position;
     let intersects;
     this.ballShadowRaycaster.set(ballPos, this.downVector);
@@ -293,9 +264,6 @@ AFRAME.registerComponent("putt", {
 
     this.cameraRig.object3D.rotation.y += angle * direction;
     this.cameraRig.object3D.matrixNeedsUpdate = true;
-    setTimeout(() => {
-      this.enableCollision();
-    }, 2000)
   },
 
   putt: function () {
@@ -586,7 +554,44 @@ AFRAME.registerComponent("putt", {
     gtag("event", "restartGame");
   },
 
+  togglePhysicsOnThumbstick: function(event) {
+    console.log("thumbstick callback")
+    if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
+      this.thumbstickTimeout = Math.min(Math.max(this.thumbstickTimeout + 2000, 0), 2000);
+
+      if (this.clubPhysicsEnabled) {
+        this.clubPhysicsEnabled = false;
+        console.log(this.thumbstickTimeout);
+        this.removeCollision();
+      }
+    }
+  },
+
+  removeCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
+    this.clubHeadContainerEl.removeAttribute("physx-material");
+    this.clubHeadContainerEl.removeAttribute("physx-body");
+    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
+  },
+
+  enableCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:occlusion;rimOpacity:.5;coreOpacity:0.5;");
+    this.clubHeadContainerEl.setAttribute("physx-body", {
+      type: "kinematic",
+      highPrecision: true,
+    });
+    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
+    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
+  },
+
   tick: function (t, dt) {
+    if (this.thumbstickTimeout > 0) {
+      this.thumbstickTimeout -= dt;
+    } else if (this.thumbstickTimeout <= 0 && !this.clubPhysicsEnabled) {
+      this.clubPhysicsEnabled = true;
+      this.enableCollision();
+    }
+
     if (!this.holeOver) {
       if (!this.holeOver) {
         /* THIS IS THE WIN CONDITION CHECK! */
