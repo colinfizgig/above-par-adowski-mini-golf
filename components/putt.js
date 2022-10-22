@@ -8,6 +8,7 @@ AFRAME.registerComponent("putt", {
     this.clubEl = document.querySelector("#club-wrapper");
     this.clubHeadCenterEl = this.clubEl.querySelector(".club-head-center");
     this.clubHeadContainerEl = this.clubEl.querySelector(".club-head-container")
+    this.clubHeadModel = this.clubEl.querySelector(".club-head")
     this.hmdTextEl = document.querySelector("#hmdText");
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
@@ -225,12 +226,14 @@ AFRAME.registerComponent("putt", {
   },
 
   removeCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
     this.clubHeadContainerEl.removeAttribute("physx-material");
     this.clubHeadContainerEl.removeAttribute("physx-body");
     this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
   },
 
   enableCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:occlusion;rimOpacity:.5;coreOpacity:0;");
     this.clubHeadContainerEl.setAttribute("physx-body", {
       type: "kinematic",
       highPrecision: true,
