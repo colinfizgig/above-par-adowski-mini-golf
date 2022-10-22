@@ -4,7 +4,7 @@ AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
     // Player els:
-    this.clubPhysicsEnabled = false;
+    this.clubPhysicsEnabled = true;
     this.clubEl = document.querySelector("#club-wrapper");
     this.clubHeadCenterEl = this.clubEl.querySelector(".club-head-center");
     this.clubHeadContainerEl = this.clubEl.querySelector(".club-head-container")
@@ -31,8 +31,6 @@ AFRAME.registerComponent("putt", {
     this.ballHaloEl = document.querySelector("#ballHalo");
     this.flagEl = document.querySelector("#flag");
     this.courseColliders = document.querySelectorAll(".colliders");
-    //this.blocker = document.querySelector("#blocker");
-    //this.credits = document.querySelector("#credits");
     this.driveInScreen = document.querySelector("#drive-in-screen");
     this.creditsScreen = document.querySelector("#credits-screen");
     this.moviesEl = document.querySelector("#movies");
