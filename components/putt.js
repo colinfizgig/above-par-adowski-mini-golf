@@ -575,8 +575,9 @@ AFRAME.registerComponent("putt", {
   tick: function (t, dt) {
     if (this.thumbstickTimeout > 0) {
       this.thumbstickTimeout -= dt;
-    } else if (this.thumbstickTimeout <= 0 && !this.clubPhysicsEnabled) {
+    } else if (!this.clubPhysicsEnabled) {
       this.clubPhysicsEnabled = true;
+      this.thumbstickTimeout = 0;
       this.enableCollision();
     }
 
