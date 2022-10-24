@@ -69,6 +69,8 @@ function startGame() {
   closeModal();
   backingTrack.play();
   if (!AFRAME.utils.device.isMobile()) sceneEl.enterVR();
+
+  // && AFRAME.utils.device.checkHeadsetConnected()
 }
 
 function showAbout() {

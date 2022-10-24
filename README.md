@@ -69,3 +69,4 @@ Another generic A-Frame utilized for SFX and backing track cues.
 - Ashford Stamper
 - Chris Prestemon
 - Caroline May
+- Eric Bowman

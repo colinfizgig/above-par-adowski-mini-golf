@@ -5,12 +5,9 @@
  */
 
 /* global THREE, AFRAME, gtag, Stats */
-import * as THREE from "three";
-
 import "./systems/handedness.js";
 import "./systems/avatar-targets.js";
 import "./components/putt.js";
-// import "./components/tutorial.js";
 import "./components/watch-face.js";
 import "./components/shadow-shader.js";
 import "./components/endgame.js";
@@ -31,8 +28,8 @@ AFRAME.registerComponent("ground-listener", {
     this.clubHeadContainer = document.querySelector(
       "#club-wrapper .club-head-container"
     );
-    this.clubShaft.object3D.scale.setZ(1.5 - 0.13);
-    this.clubHeadContainer.object3D.position.setZ(-1.5 + 0.13);
+    this.clubShaft.object3D.scale.setZ(1.15 - 0.13);
+    this.clubHeadContainer.object3D.position.setZ(-1.15 + 0.13);
     // Use events to figure out what raycaster is listening
     this.el.addEventListener("raycaster-intersected", (evt) => {
       this.raycasterEl = evt.detail.el;
@@ -40,10 +37,6 @@ AFRAME.registerComponent("ground-listener", {
     this.el.addEventListener("raycaster-intersected-cleared", (evt) => {
       this.raycasterEl = null;
     });
-
-    this.head = document.querySelector("#head");
-    // this.head.setAttribute("tutorial", "");
-    this.head.setAttribute("endgame", "");
   },
 
   tick: function () {
