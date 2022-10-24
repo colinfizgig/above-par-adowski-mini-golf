@@ -8,9 +8,9 @@
 import "./systems/handedness.js";
 import "./systems/avatar-targets.js";
 import "./components/putt.js";
-import "./components/tutorial.js";
 import "./components/watch-face.js";
 import "./components/shadow-shader.js";
+import "./components/endgame.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   document.querySelector("a-scene").setAttribute("webxr", {

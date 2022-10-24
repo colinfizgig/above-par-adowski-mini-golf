@@ -124,8 +124,6 @@ AFRAME.registerComponent("putt", {
       this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
     });
 
-    // console.log("IS MOBILE???????", AFRAME.utils.device.isMobile());
-
     this.head.setAttribute("tutorial", {
       activeHoleIndex: this.activeHoleIndex,
     });
@@ -207,6 +205,8 @@ AFRAME.registerComponent("putt", {
         this.putt(); // iterate put count
       } else if (event.code == "KeyN") {
         this.teleportToBall(); // iterate put count
+      } else if (event.code == "KeyH") {
+        this.madePutt(); // iterate put count
       }
     });
 
@@ -339,6 +339,11 @@ AFRAME.registerComponent("putt", {
     } else {
       // game over
       this.gameOver = true;
+      console.log("gameOver");
+
+      // this.head = document.querySelector("#head");
+      // this.head.setAttribute("endgame", "");
+      this.head?.components["endgame"]?.createContent();
 
       // this.credits.setAttribute("visible", true);
       // this.credits.emit("rollCredits", null, true);
@@ -445,6 +450,7 @@ AFRAME.registerComponent("putt", {
       score - this.courseColliders[this.activeHoleIndex].dataset.par;
     console.log(parScore);
     if (parScore > 4) parScore = 4; // for purposes of accessing parInfo for SFX and VFX
+    else if (parScore < -3) parScore = -3;
     let parString = this.parInfo[parScore]?.name;
     this.parInfo[parScore].crowdSoundEl.play();
     this.parInfo[parScore].effectSoundEl.play();
@@ -552,6 +558,11 @@ AFRAME.registerComponent("putt", {
     }
   },
 
+  getScore: function () {
+    this.finalScore = this.scores.reduce((a, b) => parseInt(a) + parseInt(b));
+    return this.finalScore;
+  },
+
   restartGame(instant = false) {
     // Reset overall game state
     this.gameOver = false;
@@ -560,6 +571,8 @@ AFRAME.registerComponent("putt", {
     let hole = parseInt(params.get("hole"));
     this.activeHoleIndex = hole ? hole - 1 : 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
+    this.head?.components["endgame"]?.removeContent();
+    this.head.removeAttribute("endgame", "");
 
     // Hide the credits or endscreen content
     // this.credits.setAttribute("visible", false);
@@ -571,6 +584,8 @@ AFRAME.registerComponent("putt", {
 
     // Start Next Game
     this.nextHole(instant);
+
+    this.head.setAttribute("endgame", "");
 
     // Track analytics of user choice to restart
     gtag("event", "restartGame");
