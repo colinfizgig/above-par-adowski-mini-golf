@@ -4,8 +4,11 @@ AFRAME.registerComponent("putt", {
   schema: {},
   init: function () {
     // Player els:
+    this.clubPhysicsEnabled = true;
     this.clubEl = document.querySelector("#club-wrapper");
     this.clubHeadCenterEl = this.clubEl.querySelector(".club-head-center");
+    this.clubHeadContainerEl = this.clubEl.querySelector(".club-head-container")
+    this.clubHeadModel = this.clubEl.querySelector(".club-head")
     this.hmdTextEl = document.querySelector("#hmdText");
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
@@ -28,8 +31,6 @@ AFRAME.registerComponent("putt", {
     this.ballHaloEl = document.querySelector("#ballHalo");
     this.flagEl = document.querySelector("#flag");
     this.courseColliders = document.querySelectorAll(".colliders");
-    //this.blocker = document.querySelector("#blocker");
-    //this.credits = document.querySelector("#credits");
     this.driveInScreen = document.querySelector("#drive-in-screen");
     this.creditsScreen = document.querySelector("#credits-screen");
     this.moviesEl = document.querySelector("#movies");
@@ -39,12 +40,21 @@ AFRAME.registerComponent("putt", {
     this.activeFloor = document.querySelector(".floor");
     this.downVector = new THREE.Vector3(0, -1, 0);
     // SFX els:
-    this.eagleSoundEl = document.querySelector("#eagle-sound");
-    this.birdieSoundEl = document.querySelector("#birdie-sound");
-    this.parSoundEl = document.querySelector("#par-sound");
-    this.bogeySoundEl = document.querySelector("#bogey-sound");
-    this.doubleBogeySoundEl = document.querySelector("#double-bogey-sound");
-    this.tripleBogeySoundEl = document.querySelector("#triple-bogey-sound");
+    this.aw1CrowdSoundEl = document.querySelector("#aw1-crowd-sound");
+    this.aw2CrowdSoundEl = document.querySelector("#aw2-crowd-sound");
+    this.parCrowdSoundEl = document.querySelector("#par-crowd-sound");
+    this.eagleCrowdSoundEl = document.querySelector("#eagle-crowd-sound");
+    this.birdieCrowdSoundEl = document.querySelector("#birdie-crowd-sound");
+    
+    this.albatrossEffectSoundEl = document.querySelector("#albatross-effect-sound");
+    this.eagleEffectSoundEl = document.querySelector("#eagle-effect-sound");
+    this.birdieEffectSoundEl = document.querySelector("#birdie-effect-sound");
+    this.parEffectSoundEl = document.querySelector("#par-effect-sound");
+    this.bogeyEffectSoundEl = document.querySelector("#bogey-effect-sound");
+    this.bogey2EffectSoundEl = document.querySelector("#bogey2-effect-sound");
+    this.bogey3EffectSoundEl = document.querySelector("#bogey3-effect-sound");
+    this.oofEffectSoundEl = document.querySelector("#oof-effect-sound");
+
     this.lastHit = new THREE.Vector3();
     // Game logic and scoring stuff:
     this.holeOver = false;
@@ -56,41 +66,53 @@ AFRAME.registerComponent("putt", {
     this.activeHoleScore = 0;
     this.scores[this.activeHoleIndex] = 0;
     this.tickCounter = 0;
+    this.thumbstickTimeout = 2000;
     this.parInfo = {
       "-3": {
         name: "Albatross",
-        soundEl: this.eagleSoundEl,
+        effectSoundEl: this.albatrossEffectSoundEl, 
+        crowdSoundEl: this.eagleCrowdSoundEl,
         particleMultiplier: 5,
       },
       "-2": {
         name: "Eagle",
-        soundEl: this.eagleSoundEl,
+        effectSoundEl: this.eagleEffectSoundEl, 
+        crowdSoundEl: this.eagleCrowdSoundEl,
         particleMultiplier: 3,
       },
       "-1": {
         name: "Birdie",
-        soundEl: this.birdieSoundEl,
+        effectSoundEl: this.birdieEffectSoundEl, 
+        crowdSoundEl: this.birdieCrowdSoundEl,
         particleMultiplier: 1.5,
       },
-      0: { name: "Par", soundEl: this.parSoundEl, particleMultiplier: 1 },
+      0: { 
+        name: "Par",
+        effectSoundEl: this.parEffectSoundEl, 
+        crowdSoundEl: this.parCrowdSoundEl, 
+        particleMultiplier: 1 },
       1: {
         name: "Bogey",
-        soundEl: this.bogeySoundEl,
+        effectSoundEl: this.bogeyEffectSoundEl,
+        crowdSoundEl: this.aw1CrowdSoundEl,
         particleMultiplier: 0.05,
       },
       2: {
         name: "Double Bogey",
-        soundEl: this.doubleBogeySoundEl,
+        effectSoundEl: this.bogey2EffectSoundEl,
+        crowdSoundEl: this.aw2CrowdSoundEl,
         particleMultiplier: 0,
       },
       3: {
         name: "Triple Bogey",
-        soundEl: this.tripleBogeySoundEl,
+        effectSoundEl: this.bogey3EffectSoundEl,
+        crowdSoundEl: this.aw1CrowdSoundEl,
         particleMultiplier: 0,
       },
       4: {
         name: "Oof",
-        soundEl: this.tripleBogeySoundEl,
+        effectSoundEl: this.oofEffectSoundEl,
+        crowdSoundEl: this.aw2CrowdSoundEl,
         particleMultiplier: 0,
       },
     };
@@ -98,18 +120,8 @@ AFRAME.registerComponent("putt", {
     // Set/update the values on the player's 3D watch in VR
     this.updateWatch();
 
-    // Start the animated blocker, which can't autoplay due to setting the startEvents prop
-    //this.blocker.emit("startanimup", null, true);
-
     this.el.addEventListener("loaded", () => {
       this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
-
-      // let colliderMat = new THREE.MeshStandardMaterial({ color: 0x808080, side: THREE.FrontSide });
-      // for (let i = 0; i < this.courseColliders.length; i++) {
-      //   this.courseColliders[i].object3D.traverse(node => {
-      //     if (node.isMesh) node.material = colliderMat;
-      //   });
-      // }
     });
 
     // console.log("IS MOBILE???????", AFRAME.utils.device.isMobile());
@@ -133,6 +145,10 @@ AFRAME.registerComponent("putt", {
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
+        setTimeout(function () {
+          this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+          this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
+        }.bind(this), 2000)
       }.bind(this)
     );
     this.el.addEventListener(
@@ -214,6 +230,12 @@ AFRAME.registerComponent("putt", {
    */
   teleportToBall: function () {
     // Move player towards the ball
+    this.thumbstickTimeout = Math.min(Math.max(this.thumbstickTimeout + 2000, 0), 2000);
+    if (this.clubPhysicsEnabled) {
+      this.clubPhysicsEnabled = false;
+      console.log(this.thumbstickTimeout);
+      this.removeCollision();
+    }
     const ballPos = this.ballEl.object3D.position;
     let intersects;
     this.ballShadowRaycaster.set(ballPos, this.downVector);
@@ -226,7 +248,7 @@ AFRAME.registerComponent("putt", {
     const dir = new THREE.Vector3()
       .subVectors(flagPos, ballIntersectPos)
       .normalize();
-    dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(1); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
+    dir.cross(new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(.5); // cross ball-to-hole vector with up vector, normalize, multiply scalar 1m
     if (this.el.sceneEl.systems["handedness"].data.hand === "right")
       dir.subVectors(ballIntersectPos, dir); // if right-handed, subVectors
     else dir.addVectors(ballIntersectPos, dir); // if left-handed, addVectors
@@ -380,6 +402,9 @@ AFRAME.registerComponent("putt", {
       "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
     );
 
+    if (this.activeHoleIndex > 1 && this.activeHoleIndex < 7) this.moviesEl.pause();
+    else this.moviesEl.play();
+
     this.activeFloor.setAttribute("ground-listener", "");
     //set floor collider invisible but still colliding, false to make it visible
     this.activeFloor.setAttribute("physx-hidden-collision", "");
@@ -421,7 +446,8 @@ AFRAME.registerComponent("putt", {
     console.log(parScore);
     if (parScore > 4) parScore = 4; // for purposes of accessing parInfo for SFX and VFX
     let parString = this.parInfo[parScore]?.name;
-    this.parInfo[parScore].soundEl.play();
+    this.parInfo[parScore].crowdSoundEl.play();
+    this.parInfo[parScore].effectSoundEl.play();
     const multiplier = this.parInfo[parScore].particleMultiplier;
     if (multiplier > 0) {
       this.flagEl.setAttribute(
@@ -454,7 +480,7 @@ AFRAME.registerComponent("putt", {
   },
 
   globalRAF(callback) {
-    const xrSession = this.el.sceneEl.renderer.xr.getSession();
+    const xrSession = this.el.sceneEl.renderer.xr?.getSession();
     if (!xrSession) return window.requestAnimationFrame(callback);
     return xrSession.requestAnimationFrame(callback);
   },
@@ -550,7 +576,45 @@ AFRAME.registerComponent("putt", {
     gtag("event", "restartGame");
   },
 
+  togglePhysicsOnThumbstick: function(event) {
+    console.log("thumbstick callback")
+    if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
+      this.thumbstickTimeout = Math.min(Math.max(this.thumbstickTimeout + 2000, 0), 2000);
+
+      if (this.clubPhysicsEnabled) {
+        this.clubPhysicsEnabled = false;
+        console.log(this.thumbstickTimeout);
+        this.removeCollision();
+      }
+    }
+  },
+
+  removeCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
+    this.clubHeadContainerEl.removeAttribute("physx-material");
+    this.clubHeadContainerEl.removeAttribute("physx-body");
+    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
+  },
+
+  enableCollision: function() {
+    this.clubHeadModel.setAttribute("highlight", "mode:occlusion;rimOpacity:.5;coreOpacity:0.5;");
+    this.clubHeadContainerEl.setAttribute("physx-body", {
+      type: "kinematic",
+      highPrecision: true,
+    });
+    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
+    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
+  },
+
   tick: function (t, dt) {
+    if (this.thumbstickTimeout > 0) {
+      this.thumbstickTimeout -= dt;
+    } else if (!this.clubPhysicsEnabled) {
+      this.clubPhysicsEnabled = true;
+      this.thumbstickTimeout = 0;
+      this.enableCollision();
+    }
+
     if (!this.holeOver) {
       if (!this.holeOver) {
         /* THIS IS THE WIN CONDITION CHECK! */
