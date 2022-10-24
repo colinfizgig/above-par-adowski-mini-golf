@@ -13,12 +13,8 @@ AFRAME.registerComponent("putt", {
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
 
-    this.touchControllerR = document.querySelector(
-      `[oculus-touch-controls="hand:right;model:false;"]`
-    );
-    this.touchControllerL = document.querySelector(
-      `[oculus-touch-controls="hand:left;model:false;"]`
-    );
+    this.touchControllerR = document.querySelector("#right-controller");
+    this.touchControllerL = document.querySelector("#left-controller");
     this.ballFinderEl = document.querySelector("#ball-finder");
     this.faderEl = document.querySelector("head-occlusion-fader");
     this.watchTextEl = document.querySelector(".watch-text");
@@ -124,8 +120,6 @@ AFRAME.registerComponent("putt", {
       this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
     });
 
-    // console.log("IS MOBILE???????", AFRAME.utils.device.isMobile());
-
     this.head.setAttribute("tutorial", {
       activeHoleIndex: this.activeHoleIndex,
     });
@@ -145,6 +139,7 @@ AFRAME.registerComponent("putt", {
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
+        this.activeFloor.setAttribute("ground-listener", "");
         setTimeout(function () {
           this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
           this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
@@ -207,6 +202,8 @@ AFRAME.registerComponent("putt", {
         this.putt(); // iterate put count
       } else if (event.code == "KeyN") {
         this.teleportToBall(); // iterate put count
+      } else if (event.code == "KeyH") {
+        this.madePutt(); // iterate put count
       }
     });
 
@@ -337,11 +334,10 @@ AFRAME.registerComponent("putt", {
     if (this.activeHoleIndex < this.courseColliders.length) {
       this.nextHole();
     } else {
-      // game over
+      console.log("gameOver"); // game over
       this.gameOver = true;
+      this.head.setAttribute("endgame", "");
 
-      // this.credits.setAttribute("visible", true);
-      // this.credits.emit("rollCredits", null, true);
       this.driveInScreen.setAttribute("visible", "false");
       this.creditsScreen.setAttribute("visible", "true");
       this.moviesEl.pause();
@@ -402,7 +398,7 @@ AFRAME.registerComponent("putt", {
       "restitution:0.05; dynamicFriction:.1; staticFriction:.85;"
     );
 
-    if (this.activeHoleIndex > 1 && this.activeHoleIndex < 7) this.moviesEl.pause();
+    if (this.activeHoleIndex > 1 || this.activeHoleIndex < 7) this.moviesEl.pause();
     else this.moviesEl.play();
 
     this.activeFloor.setAttribute("ground-listener", "");
@@ -445,6 +441,7 @@ AFRAME.registerComponent("putt", {
       score - this.courseColliders[this.activeHoleIndex].dataset.par;
     console.log(parScore);
     if (parScore > 4) parScore = 4; // for purposes of accessing parInfo for SFX and VFX
+    else if (parScore < -3) parScore = -3;
     let parString = this.parInfo[parScore]?.name;
     this.parInfo[parScore].crowdSoundEl.play();
     this.parInfo[parScore].effectSoundEl.play();
@@ -552,6 +549,11 @@ AFRAME.registerComponent("putt", {
     }
   },
 
+  getScore: function () {
+    this.finalScore = this.scores.reduce((a, b) => parseInt(a) + parseInt(b));
+    return this.finalScore;
+  },
+
   restartGame(instant = false) {
     // Reset overall game state
     this.gameOver = false;
@@ -560,10 +562,9 @@ AFRAME.registerComponent("putt", {
     let hole = parseInt(params.get("hole"));
     this.activeHoleIndex = hole ? hole - 1 : 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
+    this.head.removeAttribute("endgame", "");
 
     // Hide the credits or endscreen content
-    // this.credits.setAttribute("visible", false);
-    // this.credits.emit("pauseCredits", null, true);
     this.driveInScreen.setAttribute("visible", "true");
     this.creditsScreen.setAttribute("visible", "false");
     this.moviesEl.play();

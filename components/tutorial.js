@@ -34,7 +34,7 @@ AFRAME.registerComponent("tutorial", {
 
     this.tutorialContent = [
       {
-        header: "A few tips before you tee off. ",
+        header: "A few tips before you tee off.",
         icon1:
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut1.png?v=1665089713416",
         iconWidth: 0.13,
@@ -45,7 +45,7 @@ AFRAME.registerComponent("tutorial", {
         id: "tut1",
       },
       {
-        header: "A few tips before you tee off. ",
+        header: "A few tips before you tee off.",
         icon1:
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
         iconWidth: 0.7,
@@ -56,7 +56,7 @@ AFRAME.registerComponent("tutorial", {
         id: "tut2",
       },
       {
-        header: "A few tips before you tee off. ",
+        header: "A few tips before you tee off.",
         icon1:
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut3.png?v=1665089713417",
         iconWidth: 0.4,
@@ -82,12 +82,8 @@ AFRAME.registerComponent("tutorial", {
       this.createContent();
     });
 
-    this.touchControllerR = document.querySelector(
-      `[oculus-touch-controls="hand:right;model:false;"]`
-    );
-    this.touchControllerL = document.querySelector(
-      `[oculus-touch-controls="hand:left;model:false;"]`
-    );
+    this.touchControllerR = document.querySelector("#right-controller");
+    this.touchControllerL = document.querySelector("#left-controller");
 
     this.touchControllerR.addEventListener("abuttondown", () => {
       if (this.useButtons) {
@@ -225,6 +221,7 @@ AFRAME.registerComponent("tutorial", {
     const bodyText = document.querySelector(".bodyText");
     const headerText = document.querySelector(".headerText");
     const tutIcon = document.querySelector(".tutIcon1");
+    const circleButtonIcons = document.querySelector(".circleButtonIcons");
 
     if (bodyText) {
       bodyText.parentNode.removeChild(bodyText);
@@ -236,6 +233,10 @@ AFRAME.registerComponent("tutorial", {
 
     if (tutIcon) {
       tutIcon.parentNode.removeChild(tutIcon);
+    }
+
+    if (circleButtonIcons) {
+      circleButtonIcons.parentNode.removeChild(circleButtonIcons);
     }
   },
 
