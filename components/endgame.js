@@ -150,6 +150,7 @@ AFRAME.registerComponent("endgame", {
     const scoreText = document.querySelector(".scoreText");
     const headerText = document.querySelector(".headerText");
     const playAgainText = document.querySelector(".playAgainText");
+    const tutIcon2 = document.querySelector(".tutIcon2");
 
     if (scoreText) {
       scoreText.parentNode.removeChild(scoreText);
@@ -160,8 +161,11 @@ AFRAME.registerComponent("endgame", {
     if (playAgainText) {
       playAgainText.parentNode.removeChild(playAgainText);
     }
+    if (tutIcon2) {
+      playAgainText.parentNode.removeChild(tutIcon2);
+    }
 
-    this.endBase.setAttribute("visible", false);
+    //this.endBase.setAttribute("visible", false);
     this.endBase.object3D.parent.remove(this.endBase.object3D);
   },
 
