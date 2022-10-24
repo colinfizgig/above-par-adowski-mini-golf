@@ -562,7 +562,7 @@ AFRAME.registerComponent("putt", {
     let hole = parseInt(params.get("hole"));
     this.activeHoleIndex = hole ? hole - 1 : 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
-    this.head.removeAttribute("endgame", "");
+    this.head.removeAttribute("endgame");
 
     // Hide the credits or endscreen content
     this.driveInScreen.setAttribute("visible", "true");
