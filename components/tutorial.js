@@ -8,8 +8,8 @@ AFRAME.registerComponent("tutorial", {
     //general values
     this.fontKnockout =
       "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
-    this.boxWidth = 2.49 * 0.75;
-    this.boxHeight = 1.23 * 0.75;
+    this.boxWidth = 2.2 * 0.75;
+    this.boxHeight = 1.2 * 0.75;
     this.boxDepth = 0.1;
     this.offWhite = "#FFFFD5";
     this.yellow = "#ECEC43";
@@ -141,7 +141,7 @@ AFRAME.registerComponent("tutorial", {
     this.tutBase.setAttribute("visible", true);
     this.tutBase.setAttribute("color", "white");
     this.tutBase.setAttribute("material", {
-      src: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tutorial_bg_v003.png?v=1666282664748",
+      src: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tutorial_bg_v008.png?v=1666645719488",
       flatshading: true,
     });
     this.tutBase.object3D.updateMatrix();
@@ -159,9 +159,9 @@ AFRAME.registerComponent("tutorial", {
       fontSize: 0.1,
       color: this.yellow,
       font: this.fontKnockout,
-      align: "center",
+      align: "left",
     });
-    headerText.setAttribute("position", `0 0.275 0.01`);
+    headerText.setAttribute("position", `${-this.boxWidth / 5} 0.275 0.01`);
     headerText.classList.add("headerText");
     this.tutBase.appendChild(headerText);
 
@@ -172,11 +172,11 @@ AFRAME.registerComponent("tutorial", {
       fontSize: 0.065,
       color: this.offWhite,
       font: this.fontKnockout,
-      align: "center",
+      align: "left",
       maxWidth: 1,
       lineHeight: 1.2,
     });
-    bodyText.setAttribute("position", `0 -0.2 0.01`);
+    bodyText.setAttribute("position", `${-this.boxWidth / 5} -0.2 0.01`);
     bodyText.classList.add("bodyText");
     this.tutBase.appendChild(bodyText);
 
@@ -195,7 +195,7 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
       flatshading: true,
     });
-    tutIcon1.setAttribute("position", `0 0.09 0.01`);
+    tutIcon1.setAttribute("position", `${-this.boxWidth / 5} 0.09 0.01`);
     tutIcon1.classList.add("tutIcon1");
 
     this.tutBase.appendChild(tutIcon1);
@@ -212,7 +212,10 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
       flatshading: true,
     });
-    circleButtonIcons.setAttribute("position", `-.05 -0.32 0.01`);
+    circleButtonIcons.setAttribute(
+      "position",
+      ` ${-this.boxWidth / 5 - 0.05} -0.32 0.01`
+    );
     circleButtonIcons.classList.add("tutIcon2");
 
     this.tutBase.appendChild(circleButtonIcons);
