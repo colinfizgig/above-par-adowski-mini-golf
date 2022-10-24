@@ -13,12 +13,8 @@ AFRAME.registerComponent("putt", {
     this.cameraRig = document.querySelector("#cameraRig");
     this.head = document.querySelector("#head");
 
-    this.touchControllerR = document.querySelector(
-      `[oculus-touch-controls="hand:right;model:false;"]`
-    );
-    this.touchControllerL = document.querySelector(
-      `[oculus-touch-controls="hand:left;model:false;"]`
-    );
+    this.touchControllerR = document.querySelector("#right-controller");
+    this.touchControllerL = document.querySelector("#left-controller");
     this.ballFinderEl = document.querySelector("#ball-finder");
     this.faderEl = document.querySelector("head-occlusion-fader");
     this.watchTextEl = document.querySelector(".watch-text");

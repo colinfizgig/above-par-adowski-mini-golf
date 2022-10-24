@@ -27,14 +27,8 @@ AFRAME.registerComponent("endgame", {
 
     this.tutorialPosition = this.endGameTarget.target.position;
 
-    // this.createContent();
-
-    this.touchControllerR = document.querySelector(
-      `[oculus-touch-controls="hand:right;model:false;"]`
-    );
-    this.touchControllerL = document.querySelector(
-      `[oculus-touch-controls="hand:left;model:false;"]`
-    );
+    this.touchControllerR = document.querySelector("#right-controller");
+    this.touchControllerL = document.querySelector("#left-controller");
 
     this.touchControllerR.addEventListener("abuttondown", () => {
       this.el.sceneEl.components["putt"].restartGame();
