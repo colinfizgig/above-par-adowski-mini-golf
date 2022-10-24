@@ -30,18 +30,16 @@ AFRAME.registerComponent("endgame", {
     this.touchControllerR = document.querySelector("#right-controller");
     this.touchControllerL = document.querySelector("#left-controller");
 
-    this.touchControllerR.addEventListener("abuttondown", () => {
-      this.el.sceneEl.components["putt"].restartGame();
-    }, { once: true });
-    this.touchControllerR.addEventListener("bbuttondown", () => {
-      this.el.sceneEl.components["putt"].restartGame();
-    }, { once: true });
-    this.touchControllerL.addEventListener("xbuttondown", () => {
-      this.el.sceneEl.components["putt"].restartGame();
-    }, { once: true });
-    this.touchControllerL.addEventListener("ybuttondown", () => {
-      this.el.sceneEl.components["putt"].restartGame();
-    }, { once: true });
+    this.touchControllerR.addEventListener("abuttondown", this.restart.bind(this), { once: true });
+    this.touchControllerR.addEventListener("bbuttondown", this.restart.bind(this), { once: true });
+    this.touchControllerL.addEventListener("xbuttondown", this.restart.bind(this), { once: true });
+    this.touchControllerL.addEventListener("ybuttondown", this.restart.bind(this), { once: true });
+
+    this.createContent();
+  },
+
+  restart() {
+    this.el.sceneEl.components["putt"].restartGame();
   },
 
   createContent() {
@@ -142,15 +140,24 @@ AFRAME.registerComponent("endgame", {
       flatshading: true,
     });
     circleButtonIcons.setAttribute("position", `-.07 -0.35 0.01`);
-    circleButtonIcons.classList.add("tutIcon2");
+    circleButtonIcons.classList.add("circleButtonIcons");
     this.container.appendChild(circleButtonIcons);
+  },
+
+  remove() {
+    this.removeContent();
+
+    this.touchControllerR.removeEventListener("abuttondown", this.restart);
+    this.touchControllerR.removeEventListener("bbuttondown", this.restart);
+    this.touchControllerL.removeEventListener("xbuttondown", this.restart);
+    this.touchControllerL.removeEventListener("ybuttondown", this.restart);
   },
 
   removeContent() {
     const scoreText = document.querySelector(".scoreText");
     const headerText = document.querySelector(".headerText");
     const playAgainText = document.querySelector(".playAgainText");
-    const tutIcon2 = document.querySelector(".tutIcon2");
+    const tutIcon2 = document.querySelector(".circleButtonIcons");
 
     if (scoreText) {
       scoreText.parentNode.removeChild(scoreText);
@@ -165,8 +172,8 @@ AFRAME.registerComponent("endgame", {
       tutIcon2.parentNode.removeChild(tutIcon2);
     }
 
-    //this.endBase.setAttribute("visible", false);
-    this.endBase.object3D.parent.remove(this.endBase.object3D);
+    this.endBase.setAttribute("visible", false);
+    this.endBase.object3D.parent.remove(this.container.object3D);
   },
 
   tick() {

@@ -336,7 +336,7 @@ AFRAME.registerComponent("putt", {
     } else {
       console.log("gameOver"); // game over
       this.gameOver = true;
-      this.head?.components["endgame"]?.createContent();
+      this.head.setAttribute("endgame", "");
 
       this.driveInScreen.setAttribute("visible", "false");
       this.creditsScreen.setAttribute("visible", "true");
@@ -562,7 +562,6 @@ AFRAME.registerComponent("putt", {
     let hole = parseInt(params.get("hole"));
     this.activeHoleIndex = hole ? hole - 1 : 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
-    this.head?.components["endgame"]?.removeContent();
     this.head.removeAttribute("endgame", "");
 
     // Hide the credits or endscreen content
@@ -573,8 +572,6 @@ AFRAME.registerComponent("putt", {
 
     // Start Next Game
     this.nextHole(instant);
-
-    this.head.setAttribute("endgame", "");
 
     // Track analytics of user choice to restart
     gtag("event", "restartGame");

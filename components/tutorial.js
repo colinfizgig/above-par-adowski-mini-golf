@@ -210,7 +210,7 @@ AFRAME.registerComponent("tutorial", {
       flatshading: true,
     });
     circleButtonIcons.setAttribute("position", `-.2 -0.32 0.01`);
-    circleButtonIcons.classList.add("tutIcon2");
+    circleButtonIcons.classList.add("circleButtonIcons");
 
     this.tutBase.appendChild(circleButtonIcons);
   },
@@ -219,6 +219,7 @@ AFRAME.registerComponent("tutorial", {
     const bodyText = document.querySelector(".bodyText");
     const headerText = document.querySelector(".headerText");
     const tutIcon = document.querySelector(".tutIcon1");
+    const circleButtonIcons = document.querySelector(".circleButtonIcons");
 
     if (bodyText) {
       bodyText.parentNode.removeChild(bodyText);
@@ -230,6 +231,10 @@ AFRAME.registerComponent("tutorial", {
 
     if (tutIcon) {
       tutIcon.parentNode.removeChild(tutIcon);
+    }
+
+    if (circleButtonIcons) {
+      circleButtonIcons.parentNode.removeChild(circleButtonIcons);
     }
   },
 
