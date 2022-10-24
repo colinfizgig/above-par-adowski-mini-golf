@@ -26,6 +26,13 @@ AFRAME.registerComponent("tutorial", {
     this.el.sceneEl.renderer.toneMappingExposure = 0.8;
     this.el.sceneEl.renderer.gammaFactor = 2.2;
 
+    this.circleButtonContent = {
+      icon:
+          "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
+      iconWidth: 0.35,
+      iconHeight: 0.065,
+    };
+
     this.tutorialContent = [
       {
         header: "A few tips before you tee off. ",
@@ -33,7 +40,8 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut1.png?v=1665089713416",
         iconWidth: 0.13,
         iconHeight: 0.18,
-        body: "Take a look at your watch any time to track \n  your strokes and see your score. \n Press A,B,X, or Y to continue.",
+        body: "Take a look at your watch any time to track \n  your strokes and see your score. \n\n" +
+            "Press                                               to continue.",
         id: "tut1",
       },
       {
@@ -42,7 +50,8 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
         iconWidth: 0.7,
         iconHeight: 0.13,
-        body: "Press the X/Y or A/B buttons on either  \n controller  to change your club hand.   \n Press A,B,X, or Y to continue.",
+        body: "Press the X/Y or A/B buttons on either  \n controller  to change your club hand. \n\n" +
+            "Press                                               to continue.",
         id: "tut2",
       },
       {
@@ -51,7 +60,8 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut3.png?v=1665089713417",
         iconWidth: 0.4,
         iconHeight: 0.13,
-        body: "Use the joystick to navigate manually, or  \n use the trigger to teleport directly to the ball.  \n Press A,B,X, or Y to continue.",
+        body: "Use the joystick to navigate manually, or  \n use the trigger to teleport directly to the ball. \n\n" +
+            "Press                                               to continue.",
         id: "tut3",
       },
     ];
@@ -97,6 +107,13 @@ AFRAME.registerComponent("tutorial", {
         this.advanceTutorial();
       }
     });
+
+    document.addEventListener("keydown", (event) => {
+      console.log("onkeydown Button " + event.code);
+      if (event.code == "KeyG") {
+        this.advanceTutorial();
+      }
+    });
   },
 
   advanceTutorial() {
@@ -118,7 +135,7 @@ AFRAME.registerComponent("tutorial", {
     this.tutBase.setAttribute("width", this.boxWidth);
     this.tutBase.setAttribute("height", this.boxHeight);
     this.tutBase.setAttribute("depth", this.boxDepth);
-    this.tutBase.setAttribute("position", "0 2 -1.5");
+    this.tutBase.setAttribute("position", "-.375 1.86 -1.7");
     this.tutBase.setAttribute("visible", true);
     this.tutBase.setAttribute("color", "white");
     this.tutBase.setAttribute("material", {
@@ -142,7 +159,7 @@ AFRAME.registerComponent("tutorial", {
       font: this.fontKnockout,
       align: "center",
     });
-    headerText.setAttribute("position", `0 0.24 0.01`);
+    headerText.setAttribute("position", `0 0.275 0.01`);
     headerText.classList.add("headerText");
     this.tutBase.appendChild(headerText);
 
@@ -157,7 +174,7 @@ AFRAME.registerComponent("tutorial", {
       maxWidth: 1,
       lineHeight: 1.2,
     });
-    bodyText.setAttribute("position", `0 -0.24 0.01`);
+    bodyText.setAttribute("position", `0 -0.2 0.01`);
     bodyText.classList.add("bodyText");
     this.tutBase.appendChild(bodyText);
 
@@ -176,10 +193,30 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
       flatshading: true,
     });
-    tutIcon1.setAttribute("position", `0 0.02 0.01`);
+    tutIcon1.setAttribute("position", `0 0.09 0.01`);
     tutIcon1.classList.add("tutIcon1");
 
     this.tutBase.appendChild(tutIcon1);
+
+    //ICON
+    const circleButtonIcons = document.createElement("a-plane");
+    circleButtonIcons.setAttribute(
+        "width",
+        this.circleButtonContent.iconWidth
+    );
+    circleButtonIcons.setAttribute(
+        "height",
+        this.circleButtonContent.iconHeight
+    );
+    circleButtonIcons.setAttribute("material", {
+      src: this.circleButtonContent.icon,
+      transparent: true,
+      flatshading: true,
+    });
+    circleButtonIcons.setAttribute("position", `-.05 -0.32 0.01`);
+    circleButtonIcons.classList.add("tutIcon2");
+
+    this.tutBase.appendChild(circleButtonIcons);
   },
 
   removeContent() {
