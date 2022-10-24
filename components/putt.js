@@ -143,7 +143,6 @@ AFRAME.registerComponent("putt", {
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
-        this.head.setAttribute("endgame", "");
         setTimeout(function () {
           this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
           this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
@@ -585,6 +584,8 @@ AFRAME.registerComponent("putt", {
 
     // Start Next Game
     this.nextHole(instant);
+
+    this.head.setAttribute("endgame", "");
 
     // Track analytics of user choice to restart
     gtag("event", "restartGame");

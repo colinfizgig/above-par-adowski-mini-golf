@@ -7,6 +7,13 @@ AFRAME.registerComponent("endgame", {
     this.fontKnockout =
       "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
 
+    this.circleButtonContent = {
+      icon:
+          "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
+      iconWidth: 0.375,
+      iconHeight: 0.07,
+    };
+
     //general values
     this.offWhite = "#FFFFD5";
     this.yellow = "#ECEC43";
@@ -115,7 +122,7 @@ AFRAME.registerComponent("endgame", {
     //TEXT: BOTTOM TEXT
     const playAgainText = document.createElement("a-entity");
     playAgainText.setAttribute("troika-text", {
-      value: "press A, B, X, or Y to play again",
+      value: "Press                                         to play again",
       fontSize: 0.08,
       color: this.offWhite,
       font: this.fontKnockout,
@@ -124,6 +131,25 @@ AFRAME.registerComponent("endgame", {
     playAgainText.setAttribute("position", `0 -0.35 0.015`);
     playAgainText.classList.add("playAgainText");
     this.container.appendChild(playAgainText);
+
+    //ICON
+    const circleButtonIcons = document.createElement("a-plane");
+    circleButtonIcons.setAttribute(
+        "width",
+        this.circleButtonContent.iconWidth
+    );
+    circleButtonIcons.setAttribute(
+        "height",
+        this.circleButtonContent.iconHeight
+    );
+    circleButtonIcons.setAttribute("material", {
+      src: this.circleButtonContent.icon,
+      transparent: true,
+      flatshading: true,
+    });
+    circleButtonIcons.setAttribute("position", `-.07 -0.35 0.01`);
+    circleButtonIcons.classList.add("tutIcon2");
+    this.container.appendChild(circleButtonIcons);
   },
 
   removeContent() {
