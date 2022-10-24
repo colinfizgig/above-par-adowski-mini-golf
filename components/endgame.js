@@ -1,5 +1,5 @@
 /** @format */
-import "aframe-rounded";
+import "./aframe-rounded";
 
 AFRAME.registerComponent("endgame", {
   schema: {},
