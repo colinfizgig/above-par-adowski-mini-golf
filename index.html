@@ -582,17 +582,6 @@
         visible="false"
       ></a-video>
 
-      <!--      <a-entity-->
-      <!--        id="credits"-->
-      <!--        position="8.4 -10 -22"-->
-      <!--        rotation="0 -27 0"-->
-      <!--        visible="false"-->
-      <!--        text="width:20; color:black; align:center;-->
-      <!--        font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;-->
-      <!--        value:Created By:\n\n\nJames C. Kane\nDev & Design Lead\n\nAJ Johri\nColin Freeman\n3D Art\n\nEthan Michalicek\nSr. Dev\n\nSpecial thanks to:\nParadowski Creative\nAshford Stamper\nChris Prestemon\nCaroline May\nAda Rose Cannon\nNoeri Huisman\nWebXR Discord\n;"-->
-      <!--        animation__credits="property:object3D.position.y;to:20; dur: 30000; easing: linear; loop: true; startEvents: rollCredits; pauseEvents: pauseCredits;"-->
-      <!--      ></a-entity>-->
-
       <!-- 50m^2 box  positioned 5m below the playable area to detect when the ball goes out of bounds -->
       <a-box
         id="oob"
@@ -623,8 +612,8 @@
           accelerationSpread:1 0 1;"
       ></a-gltf-model>
 
-      <!-- animated blocker in the main path to add a timing challenge 
-
+      <!-- animated blocker in the main path to add a timing challenge
+           Not using this but an example of how to use A-frame animation on kinematic physx bodies
       <a-box
         id="blocker"
         depth=".5"
