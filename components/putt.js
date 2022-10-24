@@ -565,8 +565,6 @@ AFRAME.registerComponent("putt", {
     this.head.removeAttribute("endgame", "");
 
     // Hide the credits or endscreen content
-    // this.credits.setAttribute("visible", false);
-    // this.credits.emit("pauseCredits", null, true);
     this.driveInScreen.setAttribute("visible", "true");
     this.creditsScreen.setAttribute("visible", "false");
     this.moviesEl.play();

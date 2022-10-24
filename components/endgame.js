@@ -32,16 +32,16 @@ AFRAME.registerComponent("endgame", {
 
     this.touchControllerR.addEventListener("abuttondown", () => {
       this.el.sceneEl.components["putt"].restartGame();
-    });
+    }, { once: true });
     this.touchControllerR.addEventListener("bbuttondown", () => {
       this.el.sceneEl.components["putt"].restartGame();
-    });
+    }, { once: true }););
     this.touchControllerL.addEventListener("xbuttondown", () => {
       this.el.sceneEl.components["putt"].restartGame();
-    });
+    }, { once: true }););
     this.touchControllerL.addEventListener("ybuttondown", () => {
       this.el.sceneEl.components["putt"].restartGame();
-    });
+    }, { once: true }););
   },
 
   createContent() {
