@@ -139,6 +139,7 @@ AFRAME.registerComponent("putt", {
         this._isVR = true;
         this.hmdTextEl.setAttribute("text", `value:;`);
         this.moviesEl.play();
+        this.activeFloor.setAttribute("ground-listener", "");
         setTimeout(function () {
           this.touchControllerR.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));
           this.touchControllerL.addEventListener("thumbstickmoved", this.togglePhysicsOnThumbstick.bind(this));

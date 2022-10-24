@@ -162,7 +162,7 @@ AFRAME.registerComponent("endgame", {
       playAgainText.parentNode.removeChild(playAgainText);
     }
     if (tutIcon2) {
-      playAgainText.parentNode.removeChild(tutIcon2);
+      tutIcon2.parentNode.removeChild(tutIcon2);
     }
 
     //this.endBase.setAttribute("visible", false);
