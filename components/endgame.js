@@ -19,6 +19,14 @@ AFRAME.registerComponent("endgame", {
     this.yellow = "#ECEC43";
     this.green = "#1CB134";
 
+    this.cameraRig = document.querySelector("#cameraRig");
+    this.head = document.querySelector("#head");
+
+    this.scoreText;
+    this.headerText;
+    this.playAgainText;
+    this.circleButtonIcons;
+
     //target
     this.endGameTarget =
       this.el.sceneEl.systems[
@@ -36,6 +44,13 @@ AFRAME.registerComponent("endgame", {
     this.touchControllerL.addEventListener("ybuttondown", this.restart.bind(this), { once: true });
 
     this.createContent();
+
+    document.addEventListener("keydown", (event) => {
+      console.log("onkeydown Button " + event.code);
+      if (event.code == "KeyF") {
+        this.restart();
+      }
+    });
   },
 
   restart() {
@@ -145,44 +160,33 @@ AFRAME.registerComponent("endgame", {
   },
 
   remove() {
+    console.log("remove called")
+
     this.removeContent();
 
     this.touchControllerR.removeEventListener("abuttondown", this.restart);
     this.touchControllerR.removeEventListener("bbuttondown", this.restart);
     this.touchControllerL.removeEventListener("xbuttondown", this.restart);
     this.touchControllerL.removeEventListener("ybuttondown", this.restart);
+
+    console.log("end remove")
   },
 
   removeContent() {
-    const scoreText = document.querySelector(".scoreText");
-    const headerText = document.querySelector(".headerText");
-    const playAgainText = document.querySelector(".playAgainText");
-    const tutIcon2 = document.querySelector(".circleButtonIcons");
-
-    if (scoreText) {
-      scoreText.parentNode.removeChild(scoreText);
-    }
-    if (headerText) {
-      headerText.parentNode.removeChild(headerText);
-    }
-    if (playAgainText) {
-      playAgainText.parentNode.removeChild(playAgainText);
-    }
-    if (tutIcon2) {
-      tutIcon2.parentNode.removeChild(tutIcon2);
-    }
-
-    this.endBase.setAttribute("visible", false);
-    this.endBase.object3D.parent.remove(this.container.object3D);
+    document.querySelector(".scoreText")?.remove();
+    document.querySelector(".headerText")?.remove();
+    document.querySelector(".playAgainText")?.remove();
+    document.querySelector(".circleButtonIcons")?.remove();
+    if (this.container) this.container.remove()
+    if (this.endBase) this.endBase.remove();
   },
 
   tick() {
     const avatarRigWorld = new THREE.Vector3();
-    document
-      .querySelector("#cameraRig")
-      .object3D.getWorldPosition(avatarRigWorld);
+
+    this.cameraRig.object3D.getWorldPosition(avatarRigWorld);
     const avatarPovWorld = new THREE.Vector3();
-    document.querySelector("#head").object3D.getWorldPosition(avatarPovWorld);
+    this.head.object3D.getWorldPosition(avatarPovWorld);
     avatarPovWorld.y = avatarRigWorld.y;
 
     const avatarPovLocalToScene =
