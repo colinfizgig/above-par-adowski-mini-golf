@@ -8,7 +8,7 @@ AFRAME.registerComponent("tutorial", {
     //general values
     this.fontKnockout =
       "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
-    this.boxWidth = 2.49 * 0.75;
+    this.boxWidth = 2.3 * 0.75;
     this.boxHeight = 1.23 * 0.75;
     this.boxDepth = 0.1;
     this.offWhite = "#FFFFD5";
@@ -159,7 +159,7 @@ AFRAME.registerComponent("tutorial", {
       font: this.fontKnockout,
       align: "center",
     });
-    headerText.setAttribute("position", `0 0.275 0.01`);
+    headerText.setAttribute("position", `-.15 0.275 0.01`);
     headerText.classList.add("headerText");
     this.tutBase.appendChild(headerText);
 
@@ -174,7 +174,7 @@ AFRAME.registerComponent("tutorial", {
       maxWidth: 1,
       lineHeight: 1.2,
     });
-    bodyText.setAttribute("position", `0 -0.2 0.01`);
+    bodyText.setAttribute("position", `-.15 -0.2 0.01`);
     bodyText.classList.add("bodyText");
     this.tutBase.appendChild(bodyText);
 
@@ -193,7 +193,7 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
       flatshading: true,
     });
-    tutIcon1.setAttribute("position", `0 0.09 0.01`);
+    tutIcon1.setAttribute("position", `-.15 0.09 0.01`);
     tutIcon1.classList.add("tutIcon1");
 
     this.tutBase.appendChild(tutIcon1);
@@ -213,7 +213,7 @@ AFRAME.registerComponent("tutorial", {
       transparent: true,
       flatshading: true,
     });
-    circleButtonIcons.setAttribute("position", `-.05 -0.32 0.01`);
+    circleButtonIcons.setAttribute("position", `-.2 -0.32 0.01`);
     circleButtonIcons.classList.add("tutIcon2");
 
     this.tutBase.appendChild(circleButtonIcons);
