@@ -23,12 +23,11 @@ AFRAME.registerComponent("tutorial", {
 
     this.tutorialPosition = this.tutorialTarget.target.position;
 
-    this.el.sceneEl.renderer.toneMappingExposure = 0.8;
+    this.el.sceneEl.renderer.toneMappingExposure = 1.2;
     this.el.sceneEl.renderer.gammaFactor = 2.2;
 
     this.circleButtonContent = {
-      icon:
-          "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
+      icon: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
       iconWidth: 0.35,
       iconHeight: 0.065,
     };
@@ -40,8 +39,9 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut1.png?v=1665089713416",
         iconWidth: 0.13,
         iconHeight: 0.18,
-        body: "Take a look at your watch any time to track \n  your strokes and see your score. \n\n" +
-            "Press                                               to continue.",
+        body:
+          "Take a look at your watch any time to track \n  your strokes and see your score. \n\n" +
+          "Press                                               to continue.",
         id: "tut1",
       },
       {
@@ -50,8 +50,9 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
         iconWidth: 0.7,
         iconHeight: 0.13,
-        body: "Press the X/Y or A/B buttons on either  \n controller  to change your club hand. \n\n" +
-            "Press                                               to continue.",
+        body:
+          "Press the X/Y or A/B buttons on either  \n controller  to change your club hand. \n\n" +
+          "Press                                               to continue.",
         id: "tut2",
       },
       {
@@ -60,8 +61,9 @@ AFRAME.registerComponent("tutorial", {
           "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut3.png?v=1665089713417",
         iconWidth: 0.4,
         iconHeight: 0.13,
-        body: "Use the joystick to navigate manually, or  \n use the trigger to teleport directly to the ball. \n\n" +
-            "Press                                               to continue.",
+        body:
+          "Use the joystick to navigate manually, or  \n use the trigger to teleport directly to the ball. \n\n" +
+          "Press                                               to continue.",
         id: "tut3",
       },
     ];
@@ -200,13 +202,10 @@ AFRAME.registerComponent("tutorial", {
 
     //ICON
     const circleButtonIcons = document.createElement("a-plane");
+    circleButtonIcons.setAttribute("width", this.circleButtonContent.iconWidth);
     circleButtonIcons.setAttribute(
-        "width",
-        this.circleButtonContent.iconWidth
-    );
-    circleButtonIcons.setAttribute(
-        "height",
-        this.circleButtonContent.iconHeight
+      "height",
+      this.circleButtonContent.iconHeight
     );
     circleButtonIcons.setAttribute("material", {
       src: this.circleButtonContent.icon,
