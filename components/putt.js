@@ -337,16 +337,10 @@ AFRAME.registerComponent("putt", {
     if (this.activeHoleIndex < this.courseColliders.length) {
       this.nextHole();
     } else {
-      // game over
+      console.log("gameOver"); // game over
       this.gameOver = true;
-      console.log("gameOver");
-
-      // this.head = document.querySelector("#head");
-      // this.head.setAttribute("endgame", "");
       this.head?.components["endgame"]?.createContent();
 
-      // this.credits.setAttribute("visible", true);
-      // this.credits.emit("rollCredits", null, true);
       this.driveInScreen.setAttribute("visible", "false");
       this.creditsScreen.setAttribute("visible", "true");
       this.moviesEl.pause();
