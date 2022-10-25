@@ -106,7 +106,7 @@ AFRAME.registerComponent("putt", {
         particleMultiplier: 0,
       },
       4: {
-        name: "Oof",
+        name: "Nice Try",
         effectSoundEl: this.oofEffectSoundEl,
         crowdSoundEl: this.aw2CrowdSoundEl,
         particleMultiplier: 0,
