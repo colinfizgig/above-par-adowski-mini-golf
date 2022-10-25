@@ -40,7 +40,7 @@ AFRAME.registerComponent("tutorial", {
         iconWidth: 0.13,
         iconHeight: 0.18,
         body:
-          "Take a look at your watch any time to track \n  your strokes and see your score. \n\n" +
+          "Take a look at your watch any time to track\nyour strokes and see your score.\n\n" +
           "Press                                               to continue.",
         id: "tut1",
       },
@@ -51,7 +51,7 @@ AFRAME.registerComponent("tutorial", {
         iconWidth: 0.7,
         iconHeight: 0.13,
         body:
-          "Press the X/Y or A/B buttons on either  \n controller  to change your club hand. \n\n" +
+          "Press the X/Y or A/B buttons on either\ncontroller to change your club hand.\n\n" +
           "Press                                               to continue.",
         id: "tut2",
       },
@@ -62,7 +62,7 @@ AFRAME.registerComponent("tutorial", {
         iconWidth: 0.4,
         iconHeight: 0.13,
         body:
-          "Use the joystick to navigate manually, or  \n use the trigger to teleport directly to the ball. \n\n" +
+          "Use the joystick to navigate manually, or\nuse the trigger to teleport directly to the ball.\n\n" +
           "Press                                               to continue.",
         id: "tut3",
       },
@@ -155,7 +155,7 @@ AFRAME.registerComponent("tutorial", {
       fontSize: 0.1,
       color: this.yellow,
       font: this.fontKnockout,
-      align: "left",
+      align: "center",
     });
     headerText.setAttribute("position", `${-this.boxWidth / 5} 0.275 0.01`);
     headerText.classList.add("headerText");
@@ -168,7 +168,7 @@ AFRAME.registerComponent("tutorial", {
       fontSize: 0.065,
       color: this.offWhite,
       font: this.fontKnockout,
-      align: "left",
+      align: "center",
       maxWidth: 1,
       lineHeight: 1.2,
     });
