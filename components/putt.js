@@ -592,9 +592,7 @@ AFRAME.registerComponent("putt", {
 
   removeCollision: function() {
     this.clubHeadModel.setAttribute("highlight", "mode:visible;rimOpacity:1;coreColor:#FF0000;coreOpacity:1;");
-    this.clubHeadContainerEl.removeAttribute("physx-material");
     this.clubHeadContainerEl.removeAttribute("physx-body");
-    this.clubHeadContainerEl.querySelector(".club-collider").removeAttribute("physx-hidden-collision");
   },
 
   enableCollision: function() {
@@ -603,8 +601,6 @@ AFRAME.registerComponent("putt", {
       type: "kinematic",
       highPrecision: true,
     });
-    this.clubHeadContainerEl.setAttribute("physx-material", "restitution: .6; contactOffset: 0.0025;");
-    this.clubHeadContainerEl.querySelector(".club-collider").setAttribute("physx-hidden-collision", "");
   },
 
   tick: function (t, dt) {

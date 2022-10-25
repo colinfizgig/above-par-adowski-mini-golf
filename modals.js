@@ -17,6 +17,7 @@ const howToPlayButtonModal = document.querySelector("#howToPlayButtonModal");
 const closeBtn = document.querySelector(".closeBtn");
 const playInVrAbout = document.querySelector("#playInVrAbout");
 const playInVrHowTo = document.querySelector("#playInVrHowTo");
+const birdieSoundEl = document.querySelector("#birdie-effect-sound")
 
 hideMe(mainInGame);
 
@@ -25,6 +26,7 @@ document.addEventListener("exit-vr", function () {
 });
 
 playInVrIntro.onclick = function () {
+  birdieSoundEl.play();
   startGame();
 };
 

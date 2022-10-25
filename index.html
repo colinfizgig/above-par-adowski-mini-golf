@@ -453,6 +453,7 @@
             <a-entity
               class="club-head-container"
               position="0 0 -1"
+              physx-material="restitution: .6; contactOffset: 0.0025;"
             >
               <a-gltf-model
                 class="club-head"
@@ -472,6 +473,7 @@
               <a-gltf-model
                 class="club-collider"
                 src="#club-collider-glb"
+                physx-hidden-collision=""
                 visible="false"
               ></a-gltf-model>
             </a-entity>
