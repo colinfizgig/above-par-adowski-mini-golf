@@ -561,6 +561,7 @@ AFRAME.registerComponent("putt", {
     let params = new URLSearchParams(document.location.search);
     let hole = parseInt(params.get("hole"));
     this.activeHoleIndex = hole ? hole - 1 : 0;
+    this.activeHoleScore = 0;
     this.scores = new Array(this.courseColliders.length).fill("0");
     this.head.removeAttribute("endgame");
 
