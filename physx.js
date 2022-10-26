@@ -698,7 +698,7 @@ AFRAME.registerSystem('physx', {
     this.tickCounter++;
 
     if (this.tickCounter === 100) {
-      console.log(`Avg. physics tick duration: ${this.cumTime / 100} msecs`);
+      //console.log(`Avg. physics tick duration: ${this.cumTime / 100} msecs`);
       this.el.emit("physics-tick-timer", {msecs: this.cumTime / 100})
       this.tickCounter = 0;
       this.cumTime = 0;
