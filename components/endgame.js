@@ -1,6 +1,4 @@
 /** @format */
-import "./aframe-rounded.js";
-
 AFRAME.registerComponent("endgame", {
   schema: {},
   init: function () {
