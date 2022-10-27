@@ -240,7 +240,7 @@ AFRAME.registerComponent("putt", {
       document.querySelector(".navmesh").object3D
     );
 
-    const ballIntersectPos = intersects[0].point;
+    const ballIntersectPos = intersects[0]?.point ?? ballPos;
     const flagPos = this.flagEl.object3D.position;
     const dir = new THREE.Vector3()
       .subVectors(flagPos, ballIntersectPos)
