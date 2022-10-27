@@ -32,6 +32,26 @@ AFRAME.registerComponent("tutorial", {
       iconHeight: 0.065,
     };
 
+    this.desktopTutorialContent = [
+      {
+        header: "Take a mulligan.",
+        body:
+            "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
+            "but desktop players can use keyboard and mouse to explore the course!",
+        id: "desktopTut",
+      }
+    ]
+
+    this.mobileTutorialContent = [
+      {
+        header: "Take a mulligan.",
+        body:
+            "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
+            "but mobile players can pinch-and-zoom to explore the course!",
+        id: "desktopTut",
+      }
+    ]
+
     this.tutorialContent = [
       {
         header: "A few tips before you tee off.",
