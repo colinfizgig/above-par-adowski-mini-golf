@@ -308,6 +308,7 @@ AFRAME.registerComponent("putt", {
   madePutt: async function () {
     if (!this.holeOver) {
       console.log("MADE PUTT");
+      this.ballEl.removeAttribute("highlight");
       this.ballShadowEl.object3D.visible = false;
       this.clubShadowEl.object3D.visible = false;
       this.ballFinderEl.removeAttribute("ball-finder");
