@@ -117,15 +117,18 @@ AFRAME.registerComponent("putt", {
     this.updateWatch();
 
     this.el.addEventListener("loaded", () => {
-      this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
+      if (AFRAME.utils.device.checkHeadsetConnected()) this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
     });
 
-    this.head.setAttribute("tutorial", {
-      activeHoleIndex: this.activeHoleIndex,
-    });
-    document.addEventListener("remove-tutorial", () => {
-      this.head.removeAttribute("tutorial");
-    });
+    if (AFRAME.utils.device.checkHeadsetConnected()) {
+      this.head.setAttribute("tutorial", {
+        activeHoleIndex: this.activeHoleIndex,
+      });
+
+      document.addEventListener("remove-tutorial", () => {
+        this.head.removeAttribute("tutorial");
+      });
+    }
 
     // Don't start listening to raycaster until VR is entered
     this.el.addEventListener(
@@ -515,7 +518,7 @@ AFRAME.registerComponent("putt", {
         "contactbegin",
         this.collisionHandler.bind(this)
       );
-      this.ballFinderEl.setAttribute("ball-finder", "");
+      if (AFRAME.utils.device.checkHeadsetConnected()) this.ballFinderEl.setAttribute("ball-finder", "");
 
       newBallEl.setAttribute(
           "highlight",
