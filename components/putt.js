@@ -507,6 +507,10 @@ AFRAME.registerComponent("putt", {
         "sound",
         "src:#BallSoundSrc;autoplay:false;poolSize:4;"
       );
+      newBallEl.setAttribute(
+        "highlight",
+        "mode:occlusion;rimColor:#FFFFFF;"
+      );
 
       this.ballEl = newBallEl;
       this.el.sceneEl.appendChild(this.ballEl);
