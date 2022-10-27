@@ -508,10 +508,6 @@ AFRAME.registerComponent("putt", {
         "sound",
         "src:#BallSoundSrc;autoplay:false;poolSize:4;"
       );
-      newBallEl.setAttribute(
-        "highlight",
-        "mode:occlusion;rimColor:#FFFFFF;"
-      );
 
       this.ballEl = newBallEl;
       this.el.sceneEl.appendChild(this.ballEl);
@@ -520,6 +516,11 @@ AFRAME.registerComponent("putt", {
         this.collisionHandler.bind(this)
       );
       this.ballFinderEl.setAttribute("ball-finder", "");
+
+      newBallEl.setAttribute(
+          "highlight",
+          "mode:occlusion;rimColor:#FFFFFF;"
+      );
       this.ballEl.object3D.matrixNeedsUpdate = true;
 
       // RAF To make sure ball position update takes place
@@ -584,7 +585,6 @@ AFRAME.registerComponent("putt", {
   },
 
   togglePhysicsOnThumbstick: function(event) {
-    console.log("thumbstick callback")
     if (event.detail.y > 0.05 || event.detail.y < -0.05 || event.detail.x > 0.05 || event.detail.x < -0.05) {
       this.thumbstickTimeout = Math.min(Math.max(this.thumbstickTimeout + 2000, 0), 2000);
 
