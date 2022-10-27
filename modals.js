@@ -17,7 +17,70 @@ const howToPlayButtonModal = document.querySelector("#howToPlayButtonModal");
 const closeBtn = document.querySelector(".closeBtn");
 const playInVrAbout = document.querySelector("#playInVrAbout");
 const playInVrHowTo = document.querySelector("#playInVrHowTo");
-const birdieSoundEl = document.querySelector("#birdie-effect-sound")
+const birdieSoundEl = document.querySelector("#birdie-effect-sound");
+
+function shuffleArray(array) {
+  let curId = array.length;
+  // There remain elements to shuffle
+  while (0 !== curId) {
+    // Pick a remaining element
+    let randId = Math.floor(Math.random() * curId);
+    curId -= 1;
+    // Swap it with the current element.
+    let tmp = array[curId];
+    array[curId] = array[randId];
+    array[randId] = tmp;
+  }
+  return array;
+}
+
+const backingTracks = document.querySelectorAll(".backing-track");
+const backingTracksArray = shuffleArray(Array.from(backingTracks));// create an array from the node list and shuffle it
+let trackIndex = 0;
+let trackCount = backingTracks.length;
+let backingTrack = backingTracksArray[trackIndex];
+
+let playNextTrack = () => {
+  trackIndex++;
+  if (trackIndex == trackCount) trackIndex = 0;
+  backingTrack = backingTracksArray[trackIndex];
+  backingTrack.play();
+};
+
+for (var i = 0; i < trackCount; i++) {
+  let t = backingTracksArray[i];
+  t.volume = 0.25;
+  t.addEventListener("ended", playNextTrack);
+}
+
+// const backingTrack = document.querySelector("#backing-track");
+// backingTrack.volume = 0.5;
+
+let movementType = "teleport";
+const cameraRig = document.querySelector("#cameraRig");
+
+// If the user is teleporting disable movement-controls in XR
+const sceneEl = document.querySelector("a-scene");
+sceneEl.addEventListener("enter-vr", function () {
+  backingTrack.play();
+  document
+    .querySelector("#scene-preview")
+    .setAttribute("camera", "active:false;");
+  head.setAttribute("camera", "active:true;");
+  if (
+    movementType === "teleport" &&
+    AFRAME.utils.device.checkHeadsetConnected()
+  ) {
+    cameraRig.setAttribute("movement-controls", "enabled", false);
+  } else {
+  }
+});
+sceneEl.addEventListener("exit-vr", function () {
+  cameraRig.setAttribute("movement-controls", "enabled", true);
+  mainMenu.style = "display:block;";
+  mainIntro.style = "display:block;";
+  mainInGame.style = "display:none;";
+});
 
 hideMe(mainInGame);
 
