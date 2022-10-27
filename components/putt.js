@@ -477,9 +477,9 @@ AFRAME.registerComponent("putt", {
   },
 
   globalRAF(callback) {
-    const xrSession = !!this.el.sceneEl.renderer.xr?.getSession;
+    const xrSession = typeof this.el.sceneEl.renderer.xr?.getSession == "function" && this.el.sceneEl.renderer.xr.getSession();
     if (!xrSession) return window.requestAnimationFrame(callback);
-    return this.el.sceneEl.renderer.xr?.getSession()?.requestAnimationFrame(callback);
+    return xrSession.requestAnimationFrame(callback);
   },
 
   newBall: function (newballposition) {
