@@ -212,17 +212,16 @@
       loading-screen="enabled: false;"
       vr-mode-ui="enabled: false"
     >
-      <a-gltf-model id="flythrough" src="#fly-glb" animation-mixer="">
-        <a-box></a-box>
+      <a-gltf-model src="#fly-glb" animation-mixer=""
+                    camera="active:true;"
+                    id="scene-preview"
+                    position="5 2 14"
+                    rotation="15 90 0" >
       </a-gltf-model>
 
-      <a-entity
-        camera="active:true;"
-        id="scene-preview"
-        position="5 2 14"
-        rotation="15 90 0"
-        animation="property:object3D.position.z;from:14;to:24;dur:30000;loop:true;easing:linear;"
-      ></a-entity>
+<!--      <a-entity-->
+<!--        animation="property:object3D.position.z;from:14;to:24;dur:30000;loop:true;easing:linear;"-->
+<!--      ></a-entity>-->
 
       <a-assets>
         <!-- env art asset imports -->
@@ -298,9 +297,8 @@
         ></a-asset-item>
         <a-asset-item
           id="fly-glb"
-          src="https://cdn.glitch.global/e8758c77-95c1-498b-b3a2-32d80daefeac/flag-w-hole-v3%20(1).glb?v=1666372204847"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/flightpath1.glb?v=1666983528186"
         ></a-asset-item>
-        https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/fly-through1-with-billboard_camera%20(1).glb?v=1666980160959
         <!-- positional audio assets -->
         <audio
           id="BallSoundSrc"
