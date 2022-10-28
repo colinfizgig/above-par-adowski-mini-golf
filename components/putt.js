@@ -117,10 +117,11 @@ AFRAME.registerComponent("putt", {
     this.updateWatch();
 
     this.el.addEventListener("loaded", () => {
-      if (AFRAME.utils.device.checkHeadsetConnected()) this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
+      if (AFRAME.utils.device.checkHeadsetConnected())
+        this.ballFinderEl.setAttribute("ball-finder", ""); // Don't start ball-finding until the scene loads
     });
 
-    if (AFRAME.utils.device.checkHeadsetConnected()) {
+    if (!AFRAME.utils.device.isMobile()) {
       this.head.setAttribute("tutorial", {
         activeHoleIndex: this.activeHoleIndex,
       });
