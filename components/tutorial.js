@@ -42,15 +42,15 @@ AFRAME.registerComponent("tutorial", {
       }
     ]
 
-    this.mobileTutorialContent = [
-      {
-        header: "Take a mulligan.",
-        body:
-            "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
-            "but mobile players can pinch-and-zoom to explore the course!",
-        id: "desktopTut",
-      }
-    ]
+    // this.mobileTutorialContent = [
+    //   {
+    //     header: "Take a mulligan.",
+    //     body:
+    //         "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
+    //         "but mobile players can pinch-and-zoom to explore the course!",
+    //     id: "desktopTut",
+    //   }
+    // ]
 
     this.tutorialContent = [
       {
@@ -93,13 +93,16 @@ AFRAME.registerComponent("tutorial", {
 
     console.log("active hole", this.data.activeHoleIndex);
     if (this.data.activeHoleIndex == 0) {
-      this.createContent();
+      if (AFRAME.utils.device.checkHeadsetConnected()) this.createVRContent();
+      else {
+        this.createDesktopContent();
+      }
     }
 
     //tutorial header text
     document.addEventListener("advanced-tutorial", () => {
       this.removeContent();
-      this.createContent();
+      this.createVRContent();
     });
 
     this.touchControllerR = document.querySelector("#right-controller");
@@ -147,7 +150,7 @@ AFRAME.registerComponent("tutorial", {
     }
   },
 
-  createContent() {
+  createContentBase() {
     //TUTORIAL BASE
     this.tutBase = document.createElement("a-plane");
     this.tutBase.setAttribute("width", this.boxWidth);
@@ -167,6 +170,42 @@ AFRAME.registerComponent("tutorial", {
       this.tutorialTarget.target.add(this.tutBase.object3D);
       this.tutBase.object3D.updateMatrix();
     });
+  },
+
+  createDesktopContent() {
+    this.createContentBase();
+
+    //TEXT: HEADER
+    const headerText = document.createElement("a-entity");
+    headerText.setAttribute("troika-text", {
+      value: this.desktopTutorialContent[this.tutIndex]?.header,
+      fontSize: 0.1,
+      color: this.yellow,
+      font: this.fontKnockout,
+      align: "center",
+    });
+    headerText.setAttribute("position", `${-this.boxWidth / 5} 0.275 0.01`);
+    headerText.classList.add("headerText");
+    this.tutBase.appendChild(headerText);
+
+    //TEXT: BODY
+    const bodyText = document.createElement("a-entity");
+    bodyText.setAttribute("troika-text", {
+      value: this.desktopTutorialContent[this.tutIndex]?.body,
+      fontSize: 0.065,
+      color: this.offWhite,
+      font: this.fontKnockout,
+      align: "center",
+      maxWidth: 1,
+      lineHeight: 1.2,
+    });
+    bodyText.setAttribute("position", `${-this.boxWidth / 5} -0.2 0.01`);
+    bodyText.classList.add("bodyText");
+    this.tutBase.appendChild(bodyText);
+  },
+
+  createVRContent() {
+    this.createContentBase();
 
     //TEXT: HEADER
     const headerText = document.createElement("a-entity");
