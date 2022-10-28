@@ -8,6 +8,7 @@ const mainInGame = document.querySelector(".gameplayButtons");
 const resumeBtn = document.querySelector("#resumeBtn");
 const startOverBtn = document.querySelector("#startOverBtn");
 const aboutButton = document.querySelector(".aboutBtn");
+const scenePreviewCam = document.querySelector("#scene-preview")
 
 const introModal = document.querySelector(".intro-modal");
 const myInterface = document.querySelector("#my-interface");
@@ -63,8 +64,7 @@ const cameraRig = document.querySelector("#cameraRig");
 const sceneEl = document.querySelector("a-scene");
 sceneEl.addEventListener("enter-vr", function () {
   backingTrack.play();
-  document
-    .querySelector("#scene-preview")
+  scenePreviewCam
     .setAttribute("camera", "active:false;");
   head.setAttribute("camera", "active:true;");
   if (
@@ -72,7 +72,12 @@ sceneEl.addEventListener("enter-vr", function () {
     AFRAME.utils.device.checkHeadsetConnected()
   ) {
     cameraRig.setAttribute("movement-controls", "enabled", false);
+  } else if (AFRAME.utils.device.isMobile()) {
+    closeModal();
+    scenePreviewCam.removeAttribute("animation");
+    scenePreviewCam.setAttribute("animation-mixer", "");
   } else {
+    scenePreviewCam.components["animation-mixer"].mixer.playAction();
   }
 });
 sceneEl.addEventListener("exit-vr", function () {
