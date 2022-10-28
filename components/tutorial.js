@@ -37,7 +37,7 @@ AFRAME.registerComponent("tutorial", {
         header: "Take a mulligan.",
         body:
             "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
-            "but desktop players can use keyboard and mouse to explore the course!",
+            "but desktop players can use WASD keys plus\nkeyboard & mouse to explore the course!",
         id: "desktopTut",
       }
     ]
@@ -167,8 +167,14 @@ AFRAME.registerComponent("tutorial", {
     this.el.sceneEl.appendChild(this.tutBase);
     this.tutBase.classList.add("tutBase");
     this.tutBase.addEventListener("loaded", () => {
-      this.tutorialTarget.target.add(this.tutBase.object3D);
-      this.tutBase.object3D.updateMatrix();
+      if (AFRAME.utils.device.checkHeadsetConnected()) {
+        this.tutorialTarget.target.add(this.tutBase.object3D);
+        this.tutBase.object3D.updateMatrix();
+      } else {
+        this.tutBase.setAttribute("position", "-15 2.285 2.425");
+        this.tutBase.setAttribute("rotation", "0 -90 0");
+        this.tutBase.object3D.updateMatrix();
+      }
     });
   },
 
@@ -184,7 +190,7 @@ AFRAME.registerComponent("tutorial", {
       font: this.fontKnockout,
       align: "center",
     });
-    headerText.setAttribute("position", `${-this.boxWidth / 5} 0.275 0.01`);
+    headerText.setAttribute("position", `${-this.boxWidth / 5} 0.225 0.01`);
     headerText.classList.add("headerText");
     this.tutBase.appendChild(headerText);
 
@@ -199,7 +205,7 @@ AFRAME.registerComponent("tutorial", {
       maxWidth: 1,
       lineHeight: 1.2,
     });
-    bodyText.setAttribute("position", `${-this.boxWidth / 5} -0.2 0.01`);
+    bodyText.setAttribute("position", `${-this.boxWidth / 5} -.1 0.01`);
     bodyText.classList.add("bodyText");
     this.tutBase.appendChild(bodyText);
   },
