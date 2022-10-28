@@ -37,7 +37,7 @@ AFRAME.registerComponent("tutorial", {
         header: "Take a mulligan.",
         body:
             "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
-            "but desktop players can use WASD keys plus\nkeyboard & mouse to explore the course!",
+            "but desktop players can use keyboard\n and mouse to explore the course!",
         id: "desktopTut",
       }
     ]
