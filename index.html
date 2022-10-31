@@ -30,6 +30,7 @@
     <script src="./components/tutorial.js"></script>
     <script src="./components/aframe-rounded.js"></script>
     <script src="./components/endgame.js"></script>
+    <script src="./components/match-world-transform.js"></script>
     <script src="model-utils.js"></script>
     <script src="main.js"></script>
     <script src="trail.js"></script>
@@ -43,7 +44,10 @@
     <meta name="twitter:site" content="@paracreative" />
     <meta name="twitter:creator" content="@jamesckane" />
     <meta property="og:url" content="https://aboveparadowski.com" />
-    <meta name="description" content="WebXR mini-golf for Meta Quest by Paradowski Creative." />
+    <meta
+      name="description"
+      content="WebXR mini-golf for Meta Quest by Paradowski Creative."
+    />
     <meta
       property="og:description"
       content="WebXR mini-golf for Meta Quest by Paradowski Creative."
@@ -212,16 +216,19 @@
       loading-screen="enabled: false;"
       vr-mode-ui="enabled: false"
     >
-      <a-gltf-model src="#fly-glb" animation-mixer=""
-                    camera="active:true;"
-                    id="scene-preview"
-                    position="5 2 14"
-                    rotation="15 90 0" >
-      </a-gltf-model>
+      <a-entity
+        camera="active:true;"
+        id="scene-preview"
+        position="5 2 14"
+        rotation="15 90 0"
+        animation="property:object3D.position.z;from:14;to:24;dur:30000;loop:true;easing:linear;"
+      ></a-entity>
 
-<!--      <a-entity-->
-<!--        animation="property:object3D.position.z;from:14;to:24;dur:30000;loop:true;easing:linear;"-->
-<!--      ></a-entity>-->
+      <a-gltf-model
+        src="#fly-glb"
+        id="scene-preview-track"
+        visible="false"
+      ></a-gltf-model>
 
       <a-assets>
         <!-- env art asset imports -->
@@ -297,7 +304,7 @@
         ></a-asset-item>
         <a-asset-item
           id="fly-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/flightpath1.glb?v=1666983528186"
+          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/fly-through1-with-billboard_camera-v003.glb?v=1667236443192"
         ></a-asset-item>
         <!-- positional audio assets -->
         <audio
@@ -574,7 +581,10 @@
       ></a-entity>
 
       <a-gltf-model id="environment-art" src="#environment-glb"></a-gltf-model>
-      <a-gltf-model id="environment-art" src="#environment-greens-glb"></a-gltf-model>
+      <a-gltf-model
+        id="environment-art"
+        src="#environment-greens-glb"
+      ></a-gltf-model>
       <a-gltf-model id="billboard-art" src="#billboard-glb"></a-gltf-model>
       <a-gltf-model src="#plates-glb"></a-gltf-model>
       <a-gltf-model src="#water-glb" uv-scroll=""></a-gltf-model>
@@ -929,8 +939,6 @@
             </div>
           </div>
         </div>
-
-        
       </div>
     </div>
     <!-- Our custom logic -->
