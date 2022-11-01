@@ -55,7 +55,7 @@ body.aframe-inspector-opened .a-dom-overlay {
   color: white;
 }
 
-/* ------- main menu ------------------------------------------*/
+/* ------- main menu -------------------------------------------*/
 
 .main-menu {
   display: flex;
@@ -133,7 +133,7 @@ body.aframe-inspector-opened .a-dom-overlay {
   width: 100%;
   display: flex;
   flex-direction: row;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   transform: translateX(-2.25%);
 }
 
