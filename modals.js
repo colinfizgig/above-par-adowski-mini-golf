@@ -137,7 +137,6 @@ function startGame() {
   } else {
     scenePreviewCam.removeAttribute("animation");
     scenePreviewCamTrack.setAttribute("animation-mixer", "");
-    scenePreviewCamTrack.components["animation-mixer"].mixer._actions[0].play();
     let trackCube = null;
     scenePreviewCamTrack.object3D.traverse((obj) => {
       if (obj.name == "Cube") trackCube = obj;

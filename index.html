@@ -224,11 +224,7 @@
         animation="property:object3D.position.z;from:14;to:24;dur:30000;loop:true;easing:linear;"
       ></a-entity>
 
-      <a-gltf-model
-        src="#fly-glb"
-        id="scene-preview-track"
-        visible="false"
-      ></a-gltf-model>
+      
 
       <a-assets>
         <!-- env art asset imports -->
@@ -406,6 +402,12 @@
           blink-controls="rotateOnTeleport:false;cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"
         ></a-mixin>
       </a-assets>
+
+      <a-gltf-model
+        src="#fly-glb"
+        id="scene-preview-track"
+        visible="false"
+      ></a-gltf-model>
 
       <a-entity
         id="cameraRig"
