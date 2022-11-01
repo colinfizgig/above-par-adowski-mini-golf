@@ -8,6 +8,8 @@ const mainInGame = document.querySelector(".gameplayButtons");
 const resumeBtn = document.querySelector("#resumeBtn");
 const startOverBtn = document.querySelector("#startOverBtn");
 const aboutButton = document.querySelector(".aboutBtn");
+const scenePreviewCam = document.querySelector("#scene-preview");
+const scenePreviewCamTrack = document.querySelector("#scene-preview-track");
 
 const introModal = document.querySelector(".intro-modal");
 const myInterface = document.querySelector("#my-interface");
@@ -35,7 +37,7 @@ function shuffleArray(array) {
 }
 
 const backingTracks = document.querySelectorAll(".backing-track");
-const backingTracksArray = shuffleArray(Array.from(backingTracks));// create an array from the node list and shuffle it
+const backingTracksArray = shuffleArray(Array.from(backingTracks)); // create an array from the node list and shuffle it
 let trackIndex = 0;
 let trackCount = backingTracks.length;
 let backingTrack = backingTracksArray[trackIndex];
@@ -63,16 +65,13 @@ const cameraRig = document.querySelector("#cameraRig");
 const sceneEl = document.querySelector("a-scene");
 sceneEl.addEventListener("enter-vr", function () {
   backingTrack.play();
-  document
-    .querySelector("#scene-preview")
-    .setAttribute("camera", "active:false;");
+  scenePreviewCam.setAttribute("camera", "active:false;");
   head.setAttribute("camera", "active:true;");
   if (
     movementType === "teleport" &&
     AFRAME.utils.device.checkHeadsetConnected()
   ) {
     cameraRig.setAttribute("movement-controls", "enabled", false);
-  } else {
   }
 });
 sceneEl.addEventListener("exit-vr", function () {
@@ -131,9 +130,33 @@ playInVrHowTo.onclick = function () {
 
 function startGame() {
   hideMainMenu();
-  closeModal();
   backingTrack.play();
-  if (!AFRAME.utils.device.isMobile()) sceneEl.enterVR();
+  if (!AFRAME.utils.device.isMobile()) {
+    closeModal();
+    sceneEl.enterVR();
+  } else {
+    scenePreviewCam.removeAttribute("animation");
+    scenePreviewCamTrack.setAttribute("animation-mixer", "");
+    scenePreviewCamTrack.components["animation-mixer"].mixer._actions[0].play();
+    let trackCube = null;
+    scenePreviewCamTrack.object3D.traverse((obj) => {
+      if (obj.name == "Cube") trackCube = obj;
+    });
+
+    if (trackCube) {
+      const offsetQuaternion = new THREE.Quaternion();
+      offsetQuaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -90);
+
+      scenePreviewCam.setAttribute("match-world-transform", {
+        objectToMatch: trackCube,
+        offsetQuaternion: offsetQuaternion.toArray(),
+      });
+
+      closeModal();
+    } else {
+      console.error("No cube found for camera to track!");
+    }
+  }
 
   // && AFRAME.utils.device.checkHeadsetConnected()
 }
@@ -180,4 +203,13 @@ function showMe(el) {
 function hideMe(el) {
   el.classList.add("hide");
   el.classList.remove("show");
+}
+
+if (AFRAME.utils.device.isMobile()) {
+  console.log("is Mobile")
+  this.hideMe(howToPlayButtonMain)
+  this.hideMe(howToPlayButtonModal)
+  introModal.style.left = "5vw"
+  document.querySelector("#playInVr").textContent = "MOBILE FLY-THROUGH"
+  document.querySelector("#playInVrAbout").textContent = "MOBILE FLY-THROUGH"
 }
