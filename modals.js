@@ -204,3 +204,12 @@ function hideMe(el) {
   el.classList.add("hide");
   el.classList.remove("show");
 }
+
+if (AFRAME.utils.device.isMobile()) {
+  console.log("is Mobile")
+  this.hideMe(howToPlayButtonMain)
+  this.hideMe(howToPlayButtonModal)
+  introModal.style.left = "5vw"
+  document.querySelector("#playInVr").textContent = "MOBILE FLY-THROUGH"
+  document.querySelector("#playInVrAbout").textContent = "MOBILE FLY-THROUGH"
+}
