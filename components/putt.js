@@ -521,15 +521,14 @@ AFRAME.registerComponent("putt", {
       );
       if (AFRAME.utils.device.checkHeadsetConnected()) this.ballFinderEl.setAttribute("ball-finder", "");
 
-      newBallEl.setAttribute(
-          "highlight",
-          "mode:occlusion;rimColor:#FFFFFF;"
-      );
       this.ballEl.object3D.matrixNeedsUpdate = true;
 
       // RAF To make sure ball position update takes place
       this.globalRAF(() => {
-        resolve();
+        resolve();      newBallEl.setAttribute(
+            "highlight",
+            "mode:occlusion;rimColor:#FFFFFF;"
+        );
       });
     });
   },
