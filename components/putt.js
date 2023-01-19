@@ -513,6 +513,11 @@ AFRAME.registerComponent("putt", {
         "src:#BallSoundSrc;autoplay:false;poolSize:4;"
       );
 
+      newBallEl.setAttribute(
+          "highlight",
+          "mode:occlusion;rimColor:#FFFFFF;"
+      );
+
       this.ballEl = newBallEl;
       this.el.sceneEl.appendChild(this.ballEl);
       this.ballEl.addEventListener(
@@ -525,10 +530,7 @@ AFRAME.registerComponent("putt", {
 
       // RAF To make sure ball position update takes place
       this.globalRAF(() => {
-        resolve();      newBallEl.setAttribute(
-            "highlight",
-            "mode:occlusion;rimColor:#FFFFFF;"
-        );
+        resolve();
       });
     });
   },
@@ -551,7 +553,7 @@ AFRAME.registerComponent("putt", {
     ) {
       this.putt();
     } else if (e.detail.otherComponent.el.id == "oob") {
-      this.outOfBounds();
+      setTimeout(() => this.outOfBounds(),0);
     } else {
       // TODO: modulate bounce sound depending on velocity of ball
       this.ballEl.components.sound.playSoundBound();
