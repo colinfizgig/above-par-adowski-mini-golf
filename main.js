@@ -6,13 +6,14 @@
 
 /* global THREE, AFRAME, gtag, Stats */
 
-
-document.addEventListener("DOMContentLoaded", (event) => {
-  document.querySelector("a-scene").setAttribute("webxr", {
-    optionalFeatures: "dom-overlay",
-    overlayElement: "#dom-overlay",
-  });
-});
+//
+// document.addEventListener("DOMContentLoaded", (event) => {
+//   document.querySelector("a-scene").setAttribute("webxr", {
+//     optionalFeatures: "dom-overlay",
+//     requiredFeatures: "local-floor",
+//     overlayElement: "#dom-overlay",
+//   });
+// });
 
 /* This component automatically sets club height based on raycast intersections w/ the floor */
 AFRAME.registerComponent("ground-listener", {

@@ -513,6 +513,11 @@ AFRAME.registerComponent("putt", {
         "src:#BallSoundSrc;autoplay:false;poolSize:4;"
       );
 
+      newBallEl.setAttribute(
+          "highlight",
+          "mode:occlusion;rimColor:#FFFFFF;"
+      );
+
       this.ballEl = newBallEl;
       this.el.sceneEl.appendChild(this.ballEl);
       this.ballEl.addEventListener(
@@ -521,10 +526,6 @@ AFRAME.registerComponent("putt", {
       );
       if (AFRAME.utils.device.checkHeadsetConnected()) this.ballFinderEl.setAttribute("ball-finder", "");
 
-      newBallEl.setAttribute(
-          "highlight",
-          "mode:occlusion;rimColor:#FFFFFF;"
-      );
       this.ballEl.object3D.matrixNeedsUpdate = true;
 
       // RAF To make sure ball position update takes place
@@ -552,7 +553,7 @@ AFRAME.registerComponent("putt", {
     ) {
       this.putt();
     } else if (e.detail.otherComponent.el.id == "oob") {
-      this.outOfBounds();
+      setTimeout(() => this.outOfBounds(),0);
     } else {
       // TODO: modulate bounce sound depending on velocity of ball
       this.ballEl.components.sound.playSoundBound();
@@ -595,7 +596,7 @@ AFRAME.registerComponent("putt", {
       if (this.clubPhysicsEnabled) {
         this.clubPhysicsEnabled = false;
         console.log(this.thumbstickTimeout);
-        this.removeCollision();
+        setTimeout(() => this.removeCollision(), 0);
       }
     }
   },
@@ -619,7 +620,7 @@ AFRAME.registerComponent("putt", {
     } else if (!this.clubPhysicsEnabled) {
       this.clubPhysicsEnabled = true;
       this.thumbstickTimeout = 0;
-      this.enableCollision();
+      setTimeout(() => this.enableCollision(), 0);
     }
 
     if (!this.holeOver) {
