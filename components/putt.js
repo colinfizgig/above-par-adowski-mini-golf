@@ -596,7 +596,7 @@ AFRAME.registerComponent("putt", {
       if (this.clubPhysicsEnabled) {
         this.clubPhysicsEnabled = false;
         console.log(this.thumbstickTimeout);
-        this.removeCollision();
+        setTimeout(() => this.removeCollision(), 0);
       }
     }
   },
@@ -620,7 +620,7 @@ AFRAME.registerComponent("putt", {
     } else if (!this.clubPhysicsEnabled) {
       this.clubPhysicsEnabled = true;
       this.thumbstickTimeout = 0;
-      this.enableCollision();
+      setTimeout(() => this.enableCollision(), 0);
     }
 
     if (!this.holeOver) {
