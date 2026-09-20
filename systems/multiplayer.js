@@ -144,9 +144,13 @@
     const tintOwnBall = () => {
       const ball = document.querySelector("#ball");
       if (ball && ball.dataset.mpTint !== playerColor) {
-        // toneMapped off so the color reads true under the scene's exposure
-        ball.setAttribute("material", "color", playerColor);
-        ball.setAttribute("material", "toneMapped", false);
+        // flat + toneMapped off: unshaded, so the color reads at full
+        // strength from any angle under the scene's exposure
+        ball.setAttribute("material", {
+          shader: "flat",
+          color: playerColor,
+          toneMapped: false,
+        });
         ball.dataset.mpTint = playerColor;
       }
     };
