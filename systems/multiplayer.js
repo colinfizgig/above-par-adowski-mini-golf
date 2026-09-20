@@ -102,8 +102,7 @@
   if (!room) return; // single player: nothing below runs
 
   // Relay used when the page host can't be one (e.g. GitHub Pages).
-  // Set this to your deployed relay origin, e.g. "https://above-par-relay.onrender.com"
-  const DEFAULT_RELAY = "";
+  const DEFAULT_RELAY = "https://above-par-relay.onrender.com";
 
   document.addEventListener("DOMContentLoaded", () => {
     const scene = document.querySelector("a-scene");
