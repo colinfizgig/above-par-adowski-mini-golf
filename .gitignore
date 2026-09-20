@@ -2,3 +2,4 @@ node_modules
 .idea
 .idea/*
 .claude/settings.local.json*
+server/node_modules

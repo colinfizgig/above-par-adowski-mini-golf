@@ -1,0 +1,15 @@
+{
+  "name": "above-par-relay",
+  "version": "1.0.0",
+  "description": "Networked-Aframe relay server for Above Par-adowski multiplayer",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.3",
+    "open-easyrtc": "^2.1.8",
+    "socket.io": "^4.8.1"
+  }
+}

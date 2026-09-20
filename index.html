@@ -22,6 +22,11 @@
     <script src="./systems/aframe-particle-system-component.js"></script>
     <script src="./systems/aframe-troika-text.min.js"></script>
 
+    <!-- Multiplayer (networked-aframe) - inert unless ?room= is in the URL -->
+    <script src="./systems/socket.io.min.js"></script>
+    <script src="./systems/easyrtc.js"></script>
+    <script src="./systems/networked-aframe.min.js"></script>
+
     <!-- Our custom logic -->
     <script src="./systems/avatar-targets.js"></script>
     <script src="./components/putt.js"></script>
@@ -32,6 +37,7 @@
     <script src="./components/endgame.js"></script>
     <script src="./components/match-world-transform.js"></script>
     <script src="./components/desktop-golf.js"></script>
+    <script src="./systems/multiplayer.js"></script>
     <script src="model-utils.js"></script>
     <script src="main.js"></script>
     <script src="trail.js"></script>
@@ -403,6 +409,42 @@
           id="blink"
           blink-controls="snapTurn:true;rotateOnTeleport:false;cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"
         ></a-mixin>
+
+        <!-- multiplayer avatar templates (instantiated for remote players) -->
+        <template id="mp-avatar-template">
+          <a-entity>
+            <a-sphere
+              radius="0.14"
+              material="shader:flat;color:#f0693f;"
+            ></a-sphere>
+            <a-box
+              width="0.2"
+              height="0.06"
+              depth="0.05"
+              position="0 0.02 -0.12"
+              material="shader:flat;color:#03210f;"
+            ></a-box>
+            <a-entity
+              class="nametag"
+              face-camera
+              troika-text="value:golfer;fontSize:0.09;color:#fffed5;outlineWidth:0.006;outlineColor:#03210f;anchorX:center;"
+              position="0 0.32 0"
+            ></a-entity>
+          </a-entity>
+        </template>
+        <template id="mp-club-template">
+          <a-entity>
+            <a-gltf-model src="#club-handle-glb" position="0 0 .15"></a-gltf-model>
+            <a-gltf-model src="#club-shaft-glb" scale="1 1 1.02"></a-gltf-model>
+            <a-gltf-model src="#club-head-glb" position="0 0 -1.02"></a-gltf-model>
+          </a-entity>
+        </template>
+        <template id="mp-ball-template">
+          <a-sphere
+            radius="0.0275"
+            material="src:#ball-texture;color:#ffffff;"
+          ></a-sphere>
+        </template>
       </a-assets>
 
       <a-gltf-model
@@ -824,6 +866,7 @@
     <div id="dom-overlay">
       <div id="desktop-hud" class="hide"></div>
       <div id="desktop-hint" class="hide"></div>
+      <div id="mp-scoreboard" class="hide"></div>
       <div class="overlay-footer">
         <div class="main-menu">
           <div class="main-menu-container">
