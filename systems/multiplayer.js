@@ -19,6 +19,33 @@
   const room = params.get("room");
   const playerName = (params.get("name") || "golfer").slice(0, 16);
 
+  // Each player gets a color shared by their head, ball, name tag and
+  // scoreboard row. ?color=%23ff00aa overrides; otherwise picked from the
+  // palette by a hash of the connection id.
+  const PALETTE = [
+    "#f0693f", // orange
+    "#3b82f6", // blue
+    "#22c55e", // green
+    "#eab308", // yellow
+    "#a855f7", // purple
+    "#ec4899", // pink
+    "#14b8a6", // teal
+    "#ef4444", // red
+  ];
+  const colorParam = params.get("color");
+  const customColor =
+    colorParam && /^#[0-9a-fA-F]{6}$/.test(colorParam) ? colorParam : null;
+  let playerColor = customColor || PALETTE[0];
+
+  const pickColor = (clientId) => {
+    if (customColor) return customColor;
+    let hash = 0;
+    for (let i = 0; i < clientId.length; i++) {
+      hash = (hash * 31 + clientId.charCodeAt(i)) >>> 0;
+    }
+    return PALETTE[hash % PALETTE.length];
+  };
+
   // Mirrors a source element's world transform onto this (scene-root)
   // proxy entity, which is what NAF actually syncs. The ball element gets
   // destroyed and recreated by the game, so the proxy re-queries each tick
@@ -37,13 +64,28 @@
     },
   });
 
-  // Synced across the room via the avatar template's schema; on remote
-  // replicas it writes the player's name onto the name tag
+  // Synced across the room via the template schemas; on remote replicas it
+  // writes the player's name onto the name tag and tints the meshes marked
+  // .mp-tint (head, ball) with the player's color. Template children can
+  // attach a beat after the component data arrives, so tinting retries.
   AFRAME.registerComponent("player-info", {
-    schema: { name: { default: "golfer" } },
+    schema: { name: { default: "golfer" }, color: { default: "#f0693f" } },
     update: function () {
+      this.apply(0);
+    },
+    apply: function (attempt) {
       const tag = this.el.querySelector(".nametag");
-      if (tag) tag.setAttribute("troika-text", "value", this.data.name);
+      if (tag) {
+        tag.setAttribute("troika-text", "value", this.data.name);
+        tag.setAttribute("troika-text", "color", this.data.color);
+      }
+      const tintables = this.el.querySelectorAll(".mp-tint");
+      tintables.forEach((child) =>
+        child.setAttribute("material", "color", this.data.color)
+      );
+      if (!tintables.length && attempt < 10) {
+        setTimeout(() => this.apply(attempt + 1), 300);
+      }
     },
   });
 
@@ -65,9 +107,13 @@
       params.get("server") ||
       document.location.protocol + "//" + document.location.host;
 
-    // Sync the player's name along with the avatar's transform
+    // Sync name + color along with the transforms
     NAF.schemas.add({
       template: "#mp-avatar-template",
+      components: ["position", "rotation", "player-info"],
+    });
+    NAF.schemas.add({
+      template: "#mp-ball-template",
       components: ["position", "rotation", "player-info"],
     });
 
@@ -77,25 +123,45 @@
         `serverURL:${server};audio:false;debug:false;connectOnLoad:true;`
     );
 
-    const spawnProxy = (template, selector, withName) => {
+    const spawnProxy = (template, selector) => {
       const proxy = document.createElement("a-entity");
       proxy.setAttribute(
         "networked",
         `template:${template};attachTemplateToLocal:false;`
       );
       proxy.setAttribute("mp-follow", `selector:${selector};`);
-      if (withName) proxy.setAttribute("player-info", `name:${playerName};`);
+      proxy.setAttribute(
+        "player-info",
+        `name:${playerName};color:${playerColor};`
+      );
       scene.appendChild(proxy);
       return proxy;
     };
 
+    // Your own ball gets your color too, so you can spot it among the
+    // others. The game recreates the ball element every hole/respawn,
+    // so re-tint whenever a fresh one appears.
+    const tintOwnBall = () => {
+      const ball = document.querySelector("#ball");
+      if (ball && ball.dataset.mpTint !== playerColor) {
+        // toneMapped off so the color reads true under the scene's exposure
+        ball.setAttribute("material", "color", playerColor);
+        ball.setAttribute("material", "toneMapped", false);
+        ball.dataset.mpTint = playerColor;
+      }
+    };
+
     // NAF dispatches its lifecycle events on document.body
     document.body.addEventListener("connected", () => {
-      console.log(`[multiplayer] connected to room "${room}" as ${playerName}`);
+      playerColor = pickColor(NAF.clientId || playerName);
+      console.log(
+        `[multiplayer] connected to room "${room}" as ${playerName} (${playerColor})`
+      );
       // Head and ball only - clubs stay local so they don't clutter
       // other players' greens
-      spawnProxy("#mp-avatar-template", "#head", true);
+      spawnProxy("#mp-avatar-template", "#head");
       spawnProxy("#mp-ball-template", "#ball");
+      setInterval(tintOwnBall, 800);
       startScoreboard(scene);
     });
 
@@ -117,15 +183,18 @@
     const render = () => {
       if (!board) return;
       board.classList.remove("hide");
-      const rows = Object.values(scores)
+      board.textContent = "";
+      Object.values(scores)
         .sort((a, b) => a.total - b.total)
-        .map(
-          (s) =>
-            `<div class="mp-row">${s.name} &middot; ` +
-            `HOLE ${s.hole} &middot; +${s.strokes} &middot; ` +
-            `TOTAL ${s.total}</div>`
-        );
-      board.innerHTML = rows.join("");
+        .forEach((s) => {
+          const row = document.createElement("div");
+          row.className = "mp-row";
+          // names come from other players - textContent keeps them inert
+          row.textContent =
+            `${s.name} · HOLE ${s.hole} · +${s.strokes} · TOTAL ${s.total}`;
+          if (/^#[0-9a-fA-F]{6}$/.test(s.color || "")) row.style.color = s.color;
+          board.appendChild(row);
+        });
     };
 
     NAF.connection.subscribeToDataChannel(
@@ -149,6 +218,7 @@
       const total = putt.scores.reduce((a, b) => parseInt(a) + parseInt(b));
       const mine = {
         name: playerName,
+        color: playerColor,
         hole: putt.activeHoleIndex + 1,
         strokes: putt.activeHoleScore,
         total: total,

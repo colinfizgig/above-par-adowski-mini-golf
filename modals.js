@@ -99,6 +99,24 @@ if (playOnDesktopBtn)
     startDesktopGame();
   };
 
+const playOnlineBtn = document.querySelector("#playOnline");
+if (playOnlineBtn)
+  playOnlineBtn.onclick = function () {
+    const current = new URLSearchParams(document.location.search);
+    const roomName = prompt(
+      "Room name - friends who enter the same room name play together:",
+      current.get("room") || "paradowski"
+    );
+    if (!roomName || !roomName.trim()) return;
+    const playerName = prompt(
+      "Your player name:",
+      current.get("name") || "golfer"
+    );
+    current.set("room", roomName.trim());
+    current.set("name", (playerName || "golfer").trim());
+    document.location.search = current.toString();
+  };
+
 function startDesktopGame() {
   window.APDesktopMode = true;
   hideMainMenu();
@@ -202,8 +220,10 @@ function closeModal() {
 function showMainIntro() {
   showMe(mainMenu);
   showMe(mainIntro);
-  if (playOnDesktopBtn && !AFRAME.utils.device.isMobile())
-    showMe(playOnDesktopBtn);
+  if (!AFRAME.utils.device.isMobile()) {
+    if (playOnDesktopBtn) showMe(playOnDesktopBtn);
+    if (playOnlineBtn) showMe(playOnlineBtn);
+  }
   hideMe(mainInGame);
 }
 
@@ -212,12 +232,14 @@ function showMainInGame() {
   showMe(mainInGame);
   hideMe(mainIntro);
   if (playOnDesktopBtn) hideMe(playOnDesktopBtn);
+  if (playOnlineBtn) hideMe(playOnlineBtn);
 }
 
 function hideMainMenu() {
   hideMe(mainMenu);
   hideMe(mainIntro);
   if (playOnDesktopBtn) hideMe(playOnDesktopBtn);
+  if (playOnlineBtn) hideMe(playOnlineBtn);
   hideMe(mainInGame);
 }
 
@@ -236,6 +258,7 @@ if (AFRAME.utils.device.isMobile()) {
   this.hideMe(howToPlayButtonMain)
   this.hideMe(howToPlayButtonModal)
   if (playOnDesktopBtn) this.hideMe(playOnDesktopBtn)
+  if (playOnlineBtn) this.hideMe(playOnlineBtn)
   introModal.style.left = "5vw"
   document.querySelector("#playInVr").textContent = "MOBILE FLY-THROUGH"
   document.querySelector("#playInVrAbout").textContent = "MOBILE FLY-THROUGH"

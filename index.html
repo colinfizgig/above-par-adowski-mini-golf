@@ -414,15 +414,16 @@
         <template id="mp-avatar-template">
           <a-entity>
             <a-sphere
+              class="mp-tint"
               radius="0.14"
-              material="shader:flat;color:#f0693f;"
+              material="shader:flat;color:#f0693f;toneMapped:false;"
             ></a-sphere>
             <a-box
               width="0.2"
               height="0.06"
               depth="0.05"
               position="0 0.02 -0.12"
-              material="shader:flat;color:#03210f;"
+              material="shader:flat;color:#03210f;toneMapped:false;"
             ></a-box>
             <a-entity
               class="nametag"
@@ -433,10 +434,13 @@
           </a-entity>
         </template>
         <template id="mp-ball-template">
-          <a-sphere
-            radius="0.0275"
-            material="src:#ball-texture;color:#ffffff;"
-          ></a-sphere>
+          <a-entity>
+            <a-sphere
+              class="mp-tint"
+              radius="0.0275"
+              material="src:#ball-texture;color:#ffffff;toneMapped:false;"
+            ></a-sphere>
+          </a-entity>
         </template>
       </a-assets>
 
@@ -869,6 +873,9 @@
               </button>
               <button class="mainButton introBtn" id="playOnDesktop">
                 PLAY ON DESKTOP
+              </button>
+              <button class="mainButton introBtn" id="playOnline">
+                PLAY ONLINE
               </button>
               <div class="gameplayButtons">
                 <button class="mainButton" id="startOverBtn">RESTART</button>
