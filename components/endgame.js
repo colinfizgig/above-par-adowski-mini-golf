@@ -3,11 +3,11 @@ AFRAME.registerComponent("endgame", {
   schema: {},
   init: function () {
     this.fontKnockout =
-      "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
+      "./assets/fonts/knockout-htf48-featherweight-webfont.woff";
 
     this.circleButtonContent = {
       icon:
-          "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
+          "./assets/images/tut2.png",
       iconWidth: 0.375,
       iconHeight: 0.07,
     };

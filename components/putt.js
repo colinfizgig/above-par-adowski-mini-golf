@@ -159,6 +159,19 @@ AFRAME.registerComponent("putt", {
       }.bind(this)
     );
 
+    // Desktop (non-VR) mode start - mirrors the enter-vr bootstrap without the headset bits
+    this.el.addEventListener("start-desktop-game", () => {
+      if (this.firstTimeEnteringVR) {
+        this.firstTimeEnteringVR = false;
+        this.restartGame(true);
+      }
+      gtag("event", "startedDesktopMode");
+      this._isVR = false;
+      this.hmdTextEl.setAttribute("text", `value:;`);
+      this.moviesEl.play();
+      document.dispatchEvent(new Event("remove-tutorial"));
+    });
+
     // On trigger, teleport to ball - logic in handler below
     this.touchControllerR.addEventListener(
       "triggerdown",
@@ -214,6 +227,10 @@ AFRAME.registerComponent("putt", {
     gtag("event", "gameInit");
 
     document.addEventListener("restart-game", (e) => {
+      if (window.APDesktopMode) {
+        this.restartGame(true);
+        return;
+      }
       this.el.sceneEl.enterVR();
 
       document.addEventListener(

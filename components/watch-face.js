@@ -11,7 +11,7 @@ AFRAME.registerComponent("watch-face", {
     const width = 0.03;
     const height = 0.04;
     const font =
-      "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/NewReasonBold.ttf?v=1664908851162";
+      "./assets/fonts/NewReasonBold.ttf";
     const red = "#E60000";
     const offWhite = "#FFFB1A";
 

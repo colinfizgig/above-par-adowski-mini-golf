@@ -92,6 +92,24 @@ playInVrIntro.onclick = function () {
   startGame();
 };
 
+const playOnDesktopBtn = document.querySelector("#playOnDesktop");
+if (playOnDesktopBtn)
+  playOnDesktopBtn.onclick = function () {
+    birdieSoundEl.play();
+    startDesktopGame();
+  };
+
+function startDesktopGame() {
+  window.APDesktopMode = true;
+  hideMainMenu();
+  closeModal();
+  backingTrack.play();
+  scenePreviewCam.removeAttribute("animation");
+  scenePreviewCam.setAttribute("camera", "active:false;");
+  document.querySelector("#head").setAttribute("camera", "active:true;");
+  sceneEl.emit("start-desktop-game");
+}
+
 aboutButton.onclick = function () {
   hideMainMenu();
   showAbout();
@@ -103,11 +121,16 @@ howToPlayButtonMain.onclick = function () {
 };
 
 resumeBtn.onclick = function () {
+  if (window.APDesktopMode) {
+    hideMainMenu();
+    return;
+  }
   sceneEl.enterVR();
   hideMainMenu();
 };
 
 startOverBtn.onclick = function () {
+  if (window.APDesktopMode) hideMainMenu();
   document.dispatchEvent(new Event("restart-game"));
 };
 
@@ -179,6 +202,8 @@ function closeModal() {
 function showMainIntro() {
   showMe(mainMenu);
   showMe(mainIntro);
+  if (playOnDesktopBtn && !AFRAME.utils.device.isMobile())
+    showMe(playOnDesktopBtn);
   hideMe(mainInGame);
 }
 
@@ -186,11 +211,13 @@ function showMainInGame() {
   showMe(mainMenu);
   showMe(mainInGame);
   hideMe(mainIntro);
+  if (playOnDesktopBtn) hideMe(playOnDesktopBtn);
 }
 
 function hideMainMenu() {
   hideMe(mainMenu);
   hideMe(mainIntro);
+  if (playOnDesktopBtn) hideMe(playOnDesktopBtn);
   hideMe(mainInGame);
 }
 
@@ -208,6 +235,7 @@ if (AFRAME.utils.device.isMobile()) {
   console.log("is Mobile")
   this.hideMe(howToPlayButtonMain)
   this.hideMe(howToPlayButtonModal)
+  if (playOnDesktopBtn) this.hideMe(playOnDesktopBtn)
   introModal.style.left = "5vw"
   document.querySelector("#playInVr").textContent = "MOBILE FLY-THROUGH"
   document.querySelector("#playInVrAbout").textContent = "MOBILE FLY-THROUGH"

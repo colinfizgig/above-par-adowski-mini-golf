@@ -7,7 +7,7 @@ AFRAME.registerComponent("tutorial", {
   init: function () {
     //general values
     this.fontKnockout =
-      "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/knockout-htf48-featherweight-webfont.woff?v=1664908792370";
+      "./assets/fonts/knockout-htf48-featherweight-webfont.woff";
     this.boxWidth = 2.2 * 0.75;
     this.boxHeight = 1.2 * 0.75;
     this.boxDepth = 0.1;
@@ -27,7 +27,7 @@ AFRAME.registerComponent("tutorial", {
     this.el.sceneEl.renderer.gammaFactor = 2.2;
 
     this.circleButtonContent = {
-      icon: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
+      icon: "./assets/images/tut2.png",
       iconWidth: 0.35,
       iconHeight: 0.065,
     };
@@ -56,7 +56,7 @@ AFRAME.registerComponent("tutorial", {
       {
         header: "A few tips before you tee off.",
         icon1:
-          "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut1.png?v=1665089713416",
+          "./assets/images/tut1.png",
         iconWidth: 0.13,
         iconHeight: 0.18,
         body:
@@ -67,7 +67,7 @@ AFRAME.registerComponent("tutorial", {
       {
         header: "A few tips before you tee off.",
         icon1:
-          "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut2.png?v=1665089713417",
+          "./assets/images/tut2.png",
         iconWidth: 0.7,
         iconHeight: 0.13,
         body:
@@ -78,7 +78,7 @@ AFRAME.registerComponent("tutorial", {
       {
         header: "A few tips before you tee off.",
         icon1:
-          "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tut3.png?v=1665089713417",
+          "./assets/images/tut3.png",
         iconWidth: 0.4,
         iconHeight: 0.13,
         body:
@@ -160,7 +160,7 @@ AFRAME.registerComponent("tutorial", {
     this.tutBase.setAttribute("visible", true);
     this.tutBase.setAttribute("color", "white");
     this.tutBase.setAttribute("material", {
-      src: "https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/tutorial_bg_v008.png?v=1666645719488",
+      src: "./assets/images/tutorial_bg_v008.png",
       flatshading: true,
     });
     this.tutBase.object3D.updateMatrix();

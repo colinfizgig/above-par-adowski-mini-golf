@@ -15,7 +15,7 @@
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@fb96ab2/dist/aframe-extras.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/christmas-scene@4a6a774/lib/physx.release.js"></script>
+    <script src="./physx.release.js"></script>
     <script src="./physx.js"></script>
     <script src="./systems/highlight.umd.min.js"></script>
     <script src="./systems/aframe-blink-controls.min.js"></script>
@@ -31,6 +31,7 @@
     <script src="./components/aframe-rounded.js"></script>
     <script src="./components/endgame.js"></script>
     <script src="./components/match-world-transform.js"></script>
+    <script src="./components/desktop-golf.js"></script>
     <script src="model-utils.js"></script>
     <script src="main.js"></script>
     <script src="trail.js"></script>
@@ -55,12 +56,12 @@
     <link
       rel="icon"
       type="image/x-icon"
-      href="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AP_FAV_512.ico?v=1664909969907"
+      href="./assets/images/AP_FAV_512.ico"
     />
 
     <meta
       property="og:image"
-      content="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AbovePar-Thumbnail-2.jpg?v=1666820337886"
+      content="./assets/images/AbovePar-Thumbnail-2.jpg"
     />
     <link rel="stylesheet" href="style.css" />
 
@@ -88,131 +89,132 @@
     <audio
       id="backing-track-1"
       class="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/King_Flamingo_Seaside_Samba_instrumental_1_44.mp3?v=1666471111413"
+      src="./assets/audio/King_Flamingo_Seaside_Samba_instrumental_1_44.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="backing-track-2"
       class="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/King_Flamingo_Cidade_Da_Paixao_instrumental_2_34.mp3?v=1666471111394"
+      src="./assets/audio/King_Flamingo_Cidade_Da_Paixao_instrumental_2_34.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="backing-track-3"
       class="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/King_Flamingo_Clash_Of_The_Claves_instrumental_1_48.mp3?v=1666471111439"
+      src="./assets/audio/King_Flamingo_Clash_Of_The_Claves_instrumental_1_48.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="backing-track-4"
       class="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/King_Flamingo_Coastal_Dreaming_instrumental_3_17.mp3?v=1666471109987"
+      src="./assets/audio/King_Flamingo_Coastal_Dreaming_instrumental_3_17.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="backing-track-5"
       class="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/King_Flamingo_Soul_Salsa_instrumental_3_53.mp3?v=1666471112257"
+      src="./assets/audio/King_Flamingo_Soul_Salsa_instrumental_3_53.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="backing-track-6"
       class="backing-track"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/King_Flamingo_In_The_Money_instrumental_2_02.mp3?v=1666471109935"
+      src="./assets/audio/King_Flamingo_In_The_Money_instrumental_2_02.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="bogey-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-bogey.mp3?v=1666468825383"
+      src="./assets/audio/effect-bogey.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="bogey2-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-bogey2.mp3?v=1666468825546"
+      src="./assets/audio/effect-bogey2.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="bogey3-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-bogey3.mp3?v=1666468825289"
+      src="./assets/audio/effect-bogey3.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="oof-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-oof.mp3?v=1666468825338"
+      src="./assets/audio/effect-oof.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="par-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-par.mp3?v=1666468825325"
+      src="./assets/audio/effect-par.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="birdie-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-birdie.mp3?v=1666468825560"
+      src="./assets/audio/effect-birdie.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="eagle-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-eagle.mp3?v=1666468825497"
+      src="./assets/audio/effect-eagle.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="albatross-effect-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/effect-albatross.mp3?v=1666468825484"
+      src="./assets/audio/effect-albatross.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="par-crowd-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/par-track_1.mp3?v=1661609456796"
+      src="./assets/audio/par-track_1.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="birdie-crowd-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/birdie-track_1.mp3?v=1661609456511"
+      src="./assets/audio/birdie-track_1.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="eagle-crowd-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/eagle-track_1.mp3?v=1661609456763"
+      src="./assets/audio/eagle-track_1.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="aw1-crowd-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/aw1.mp3?v=1666468825289"
+      src="./assets/audio/aw1.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
     <audio
       id="aw2-crowd-sound"
-      src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/aw2.mp3?v=1666468825358"
+      src="./assets/audio/aw2.mp3"
       preload="auto"
       crossorigin="anonymous"
     ></audio>
 
     <a-scene
-      physx="autoLoad: true; wrapBounds: true; delay: 1000; wasmUrl: https://cdn.jsdelivr.net/gh/c-frame/physx/wasm/physx.release.wasm; useDefaultScene: false;"
+      physx="autoLoad: true; wrapBounds: true; delay: 1000; wasmUrl: ./physx.release.wasm; useDefaultScene: false;"
       webxr="optionalFeatures:dom-overlay;overlayElement:#dom-overlay;"
       background="color:skyblue;"
       exposure="1"
       renderer="highRefreshRate:true;depth:true;"
       putt=""
+      desktop-golf=""
       loading-screen="enabled: false;"
       vr-mode-ui="enabled: false"
     >
@@ -231,170 +233,170 @@
         <video
           id="movies"
           loop="true"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/movies1%20(2).mp4?v=1665160042384"
+          src="./assets/video/movies1_2.mp4"
           crossorigin="anonymous"
         ></video>
         <video
           id="credits"
           loop="true"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/AboveParCredits_v2_3.mp4?v=1665160044645"
+          src="./assets/video/AboveParCredits_v2_3.mp4"
           crossorigin="anonymous"
         ></video>
         <img
           id="ball-texture"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/golfball.png?v=1659211388493"
+          src="./assets/images/golfball.png"
           crossorigin="anonymous"
         />
         <img
           id="shadow-texture"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/ball-shadow.webp?v=1661866500698"
+          src="./assets/images/ball-shadow.webp"
           crossorigin="anonymous"
         />
         <a-asset-item
           id="environment-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v22-v005.glb?v=1666967321801"
+          src="./assets/models/Course_ENV_v22-v005.glb"
         ></a-asset-item>
         <a-asset-item
           id="environment-greens-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v22_green-v004.glb?v=1666822409286"
+          src="./assets/models/Course_ENV_v22_green-v004.glb"
         ></a-asset-item>
         <a-asset-item
           id="billboard-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v22-Billboard_PS_v002%20(1).glb?v=1666977657980"
+          src="./assets/models/Course_ENV_v22-Billboard_PS_v002_1.glb"
         ></a-asset-item>
         <a-asset-item
           id="water-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20%20v22_water-v005.glb?v=1666822531693"
+          src="./assets/models/Course_ENV_v22_water-v005.glb"
         ></a-asset-item>
         <a-asset-item
           id="walkmesh"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Course%20ENV%20Walkmesh_v22_v005.glb?v=1666828391039"
+          src="./assets/models/Course_ENV_Walkmesh_v22_v005.glb"
         ></a-asset-item>
         <a-asset-item
           id="plates-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Plates-v1.glb?v=1665061302423"
+          src="./assets/models/Plates-v1.glb"
         ></a-asset-item>
         <a-asset-item
           id="club-collider-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/bigredcolliderorigin0.glb?v=1660410369069"
+          src="./assets/models/bigredcolliderorigin0.glb"
         ></a-asset-item>
         <a-asset-item
           id="club-shaft-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/shaft%20flat.glb?v=1666379240947"
+          src="./assets/models/shaft_flat.glb"
         ></a-asset-item>
         <a-asset-item
           id="club-head-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Putter%20head%20unlit.glb?v=1666379578167"
+          src="./assets/models/Putter_head_unlit.glb"
         ></a-asset-item>
         <a-asset-item
           id="club-handle-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Handle_Glove_Unlit.glb?v=1666379425914"
+          src="./assets/models/Handle_Glove_Unlit.glb"
         ></a-asset-item>
         <a-asset-item
           id="ball-finder-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Ball_finder_v2.glb?v=1666271497285"
+          src="./assets/models/Ball_finder_v2.glb"
         ></a-asset-item>
         <a-asset-item
           id="Course-Flag"
-          src="https://cdn.glitch.global/e8758c77-95c1-498b-b3a2-32d80daefeac/flag-w-hole-v3%20(1).glb?v=1666372204847"
+          src="./assets/models/flag-w-hole-v3_1.glb"
         ></a-asset-item>
         <a-asset-item
           id="fly-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/fly-through1-with-billboard_camera-v003.glb?v=1667236443192"
+          src="./assets/models/fly-through1-with-billboard_camera-v003.glb"
         ></a-asset-item>
         <!-- positional audio assets -->
         <audio
           id="BallSoundSrc"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/ballHit.mp3?v=1659204297563"
+          src="./assets/audio/ballHit.mp3"
           preload="auto"
           crossorigin="anonymous"
         ></audio>
         <audio
           id="HoleSoundSrc"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-sound.mp3?v=1662476956602"
+          src="./assets/audio/hole-sound.mp3"
           preload="auto"
           crossorigin="anonymous"
         ></audio>
         <!-- convex physics collider asset imports, hole 1 -->
         <a-asset-item
           id="hole-one-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-one-floor-v2.glb?v=1665059563968"
+          src="./assets/models/hole-one-floor-v2.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-one-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-one-walls-v2.glb?v=1665059566577"
+          src="./assets/models/hole-one-walls-v2.glb"
         ></a-asset-item>
         <!-- convex physics collider asset imports, hole 2 -->
         <a-asset-item
           id="hole-two-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-floor-v4.glb?v=1666393077905"
+          src="./assets/models/hole-two-floor-v4.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-two-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-two-walls-v2.glb?v=1665059914904"
+          src="./assets/models/hole-two-walls-v2.glb"
         ></a-asset-item>
         <!-- hole3 -->
         <a-asset-item
           id="hole-three-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-three-floor-v2%20(1).glb?v=1665148372941"
+          src="./assets/models/hole-three-floor-v2_1.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-three-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%203%20walls.glb?v=1664513884312"
+          src="./assets/models/9_holes_hole_3_walls.glb"
         ></a-asset-item>
         <!-- hole4 -->
         <a-asset-item
           id="hole-four-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%204%20floors.glb?v=1664513889523"
+          src="./assets/models/9_holes_hole_4_floors.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-four-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-4-bone-collision-v2.glb?v=1665060117421"
+          src="./assets/models/hole-4-bone-collision-v2.glb"
         ></a-asset-item>
         <!-- hole5 -->
         <a-asset-item
           id="hole-five-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-five-floor-v5.glb?v=1666042488686"
+          src="./assets/models/hole-five-floor-v5.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-five-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-five-walls-v5.glb?v=1666042492026"
+          src="./assets/models/hole-five-walls-v5.glb"
         ></a-asset-item>
         <!-- hole6 -->
         <a-asset-item
           id="hole-six-floor-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%206%20floors.glb?v=1664513913851"
+          src="./assets/models/9_holes_hole_6_floors.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-six-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-6-mine-collision-v2.glb?v=1665060203955"
+          src="./assets/models/hole-6-mine-collision-v2.glb"
         ></a-asset-item>
         <!-- hole7 -->
         <a-asset-item
           id="hole-seven-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole-seven-floor-v3.glb?v=1665691881178"
+          src="./assets/models/hole-seven-floor-v3.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-seven-walls-glb"
-          src="https://cdn.glitch.global/3f2db8c9-dc51-4eae-aa39-45d50b816099/9%20holes%20hole%207%20walls.glb?v=1664513944566"
+          src="./assets/models/9_holes_hole_7_walls.glb"
         ></a-asset-item>
         <!-- hole8 -->
         <a-asset-item
           id="hole-eight-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole_8_dino_floor_v002.glb?v=1666826082585"
+          src="./assets/models/hole_8_dino_floor_v002.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-eight-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/hole_8_dino_walls_v002.glb?v=1666826080259"
+          src="./assets/models/hole_8_dino_walls_v002.glb"
         ></a-asset-item>
         <!-- hole9 -->
         <a-asset-item
           id="hole-nine-floor-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Hole%209%20new%20floor%201.glb?v=1666791935831"
+          src="./assets/models/Hole_9_new_floor_1.glb"
         ></a-asset-item>
         <a-asset-item
           id="hole-nine-walls-glb"
-          src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Hole%209%20new%20walls%201.glb?v=1666791941349"
+          src="./assets/models/Hole_9_new_walls_1.glb"
         ></a-asset-item>
 
         <a-mixin
@@ -425,8 +427,8 @@
             id="hmdText"
             position="0 .25 -1"
             text="value:_;align:center;width:2;opacity:0;
-            font:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.fnt?v=1659208413147;
-            font-image:https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/Shrikhand.png?v=1659208413227;"
+            font:./assets/fonts/Shrikhand.fnt;
+            font-image:./assets/fonts/Shrikhand.png;"
             animation__hmdtextin="startEvents:cuehmdtextin;property:text.opacity;to:1;dur:2000;easing:easeOutBack;"
             animation__hmdtextdown="startEvents:cuehmdtextout;property:text.opacity;to:0;dur:2000;easing:easeOutBack;"
           ></a-entity>
@@ -568,7 +570,7 @@
       <a-entity
         id="ballParticles"
         particle-system="
-          texture:https://cdn.glitch.global/e8758c77-95c1-498b-b3a2-32d80daefeac/dust.png?v=1649077166207;
+          texture:./assets/images/dust.png;
           color:#FFFFFF;
           maxAge:.25;
           duration:.25;
@@ -629,7 +631,7 @@
         scale=".8 .8 .8"
         sound="src:#HoleSoundSrc;autoplay:false;"
         particle-system="
-          texture:https://cdn.glitch.global/e8758c77-95c1-498b-b3a2-32d80daefeac/dust.png?v=1649077166207;
+          texture:./assets/images/dust.png;
           color: #FFD700;
           size: 0.25;
           enabled:false;
@@ -820,12 +822,17 @@
     </a-scene>
 
     <div id="dom-overlay">
+      <div id="desktop-hud" class="hide"></div>
+      <div id="desktop-hint" class="hide"></div>
       <div class="overlay-footer">
         <div class="main-menu">
           <div class="main-menu-container">
             <div class="main-content">
               <button class="mainButton introBtn" id="playInVr">
                 PLAY IN VR
+              </button>
+              <button class="mainButton introBtn" id="playOnDesktop">
+                PLAY ON DESKTOP
               </button>
               <div class="gameplayButtons">
                 <button class="mainButton" id="startOverBtn">RESTART</button>
@@ -838,7 +845,7 @@
             </div>
 
             <img
-              src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/sign.png?v=1664901662305"
+              src="./assets/images/sign.png"
               alt="image of a stylized road sign that says above par-a-dowski, mini golf, webXR"
               id="sign"
             />
@@ -850,7 +857,7 @@
             <p class="modal-content">
               <div class="closeBtnConatiner">
                 <img
-                  src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/close.png?v=1664901648952"
+                  src="./assets/images/close.png"
                   alt="x icon"
                   class="closeBtn"
                 />
@@ -900,13 +907,13 @@
                 </p>
                 <div class="iconContainer">
                   <img
-                    src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/xy.png?v=1664901664937"
+                    src="./assets/images/xy.png"
                     alt="x and y buttons"
                     class="instructionIcons"
                   />
                   <p class="bodyText">or</p>
                   <img
-                    src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/ab.png?v=1664901638556"
+                    src="./assets/images/ab.png"
                     alt="a and b buttons"
                     class="instructionIcons"
                   />
@@ -933,7 +940,7 @@
               </div>
 
               <img
-                src="https://cdn.glitch.global/f43e6264-95fc-43e8-8049-dc53b985b1e3/popup_bg.png?v=1664901657610"
+                src="./assets/images/popup_bg.png"
                 alt=""
                 class="modal"
                 id="modalBackground"
