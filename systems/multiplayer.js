@@ -101,10 +101,16 @@
 
   if (!room) return; // single player: nothing below runs
 
+  // Relay used when the page host can't be one (e.g. GitHub Pages).
+  // Set this to your deployed relay origin, e.g. "https://above-par-relay.onrender.com"
+  const DEFAULT_RELAY = "";
+
   document.addEventListener("DOMContentLoaded", () => {
     const scene = document.querySelector("a-scene");
+    const isStaticHost = /github\.io$/.test(document.location.hostname);
     const server =
       params.get("server") ||
+      (isStaticHost && DEFAULT_RELAY) ||
       document.location.protocol + "//" + document.location.host;
 
     // Sync name + color along with the transforms

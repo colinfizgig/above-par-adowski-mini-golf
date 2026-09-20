@@ -1,0 +1,10 @@
+## Render blueprint: deploys the multiplayer relay (server/) as a free
+## web service. In the Render dashboard: New > Blueprint > pick this repo.
+services:
+  - type: web
+    name: above-par-relay
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
