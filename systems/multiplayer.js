@@ -92,8 +92,9 @@
     // NAF dispatches its lifecycle events on document.body
     document.body.addEventListener("connected", () => {
       console.log(`[multiplayer] connected to room "${room}" as ${playerName}`);
+      // Head and ball only - clubs stay local so they don't clutter
+      // other players' greens
       spawnProxy("#mp-avatar-template", "#head", true);
-      spawnProxy("#mp-club-template", "#club-wrapper");
       spawnProxy("#mp-ball-template", "#ball");
       startScoreboard(scene);
     });
