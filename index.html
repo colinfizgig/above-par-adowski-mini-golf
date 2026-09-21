@@ -37,6 +37,7 @@
     <script src="./components/endgame.js"></script>
     <script src="./components/match-world-transform.js"></script>
     <script src="./components/desktop-golf.js"></script>
+    <script src="./components/touch-golf.js"></script>
     <script src="./systems/multiplayer.js"></script>
     <script src="model-utils.js"></script>
     <script src="main.js"></script>
@@ -221,6 +222,7 @@
       renderer="highRefreshRate:true;depth:true;"
       putt=""
       desktop-golf=""
+      touch-golf=""
       loading-screen="enabled: false;"
       vr-mode-ui="enabled: false"
     >
@@ -864,6 +866,20 @@
       <div id="desktop-hud" class="hide"></div>
       <div id="desktop-hint" class="hide"></div>
       <div id="mp-scoreboard" class="hide"></div>
+
+      <!-- Touch controls (phones/tablets) - shown by touch-golf per mode -->
+      <div id="touch-ui" class="hide">
+        <button id="touch-menu" class="touch-btn">MENU</button>
+        <button id="touch-toball" class="touch-btn">GO TO BALL</button>
+        <button id="touch-exit" class="touch-btn">&#10005;</button>
+        <button id="touch-sight" class="touch-btn">SIGHT</button>
+        <div id="swing-pad">
+          <span>SWING<br />&#8675; pull &middot; flick &#8673;</span>
+        </div>
+        <div id="rotate-overlay">
+          <span>Rotate your phone<br />to play</span>
+        </div>
+      </div>
       <div class="overlay-footer">
         <div class="main-menu">
           <div class="main-menu-container">

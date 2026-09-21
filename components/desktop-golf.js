@@ -22,6 +22,7 @@ AFRAME.registerComponent("desktop-golf", {
     this.clubWrapper = document.querySelector("#club-wrapper");
     this.flagEl = document.querySelector("#flag");
     this.noLock = /[?&]nolock/.test(document.location.search);
+    this.touchMode = false; // set by touch-golf: swaps hints to gestures
 
     // Swing tuning
     this.ADDRESS_S = -0.22; // club head rest position behind the ball (m)
@@ -105,9 +106,7 @@ AFRAME.registerComponent("desktop-golf", {
       this.state = "walk";
       const hud = this.hud();
       if (hud) hud.classList.remove("hide");
-      this.setHint(
-        "WASD to walk, drag to look around - hold T to aim the teleporter - click near your ball to putt"
-      );
+      this.walkHint();
     });
 
     document.addEventListener("mousedown", (e) => this.onMouseDown(e));
@@ -255,6 +254,16 @@ AFRAME.registerComponent("desktop-golf", {
     if (!hint) return;
     hint.textContent = text;
     hint.classList.remove("hide");
+  },
+
+  walkHint: function () {
+    this.setHint(
+      this.touchMode
+        ? "Drag to look around - press and hold the ground to teleport - " +
+            "tap near your ball to putt"
+        : "WASD to walk, drag to look around - hold T to aim the teleporter " +
+            "- click near your ball to putt"
+    );
   },
 
   aimDir: function (target) {
@@ -511,9 +520,12 @@ AFRAME.registerComponent("desktop-golf", {
     this.shotTaken = false;
     this.scoreAtAimEnter = p.activeHoleScore;
     this.setHint(
-      "Mouse aims - hold RIGHT mouse (or Shift) to sight the hole - " +
-        "hold LEFT and drag along the line to swing " +
-        "(or hold SPACE, release to putt) - Esc to step away"
+      this.touchMode
+        ? "Drag the view to aim - hold SIGHT to see the hole - pull down " +
+            "and flick up on the SWING pad to putt"
+        : "Mouse aims - hold RIGHT mouse (or Shift) to sight the hole - " +
+            "hold LEFT and drag along the line to swing " +
+            "(or hold SPACE, release to putt) - Esc to step away"
     );
     if (!this.noLock && this.el.sceneEl.canvas.requestPointerLock) {
       // If the lock is denied, aiming still works from cursor deltas
@@ -649,9 +661,7 @@ AFRAME.registerComponent("desktop-golf", {
     this.autoPeekUntil = 0;
     this.following = false;
     this.head.setAttribute("camera", "fov", 80);
-    this.setHint(
-      "WASD to walk, drag to look around - hold T to aim the teleporter - click near your ball to putt"
-    );
+    this.walkHint();
   },
 
   updateHUD: function (p) {
@@ -722,12 +732,21 @@ AFRAME.registerComponent("desktop-golf", {
         // a fresh message (e.g. the too-far warning) gets time to be read
       } else if (near !== this._wasNearBall) {
         this._wasNearBall = near;
-        this.setHint(
-          near
-            ? "Click to step up to your ball - hold T to aim the teleporter"
-            : "Hold T to aim the teleporter, release to blink over to your " +
-                "ball (N jumps straight to it) - get within a few steps to putt"
-        );
+        if (this.touchMode) {
+          this.setHint(
+            near
+              ? "Tap your ball to putt - press and hold the ground to teleport"
+              : "Press and hold the ground to teleport - GO TO BALL jumps " +
+                  "straight to your ball"
+          );
+        } else {
+          this.setHint(
+            near
+              ? "Click to step up to your ball - hold T to aim the teleporter"
+              : "Hold T to aim the teleporter, release to blink over to your " +
+                  "ball (N jumps straight to it) - get within a few steps to putt"
+          );
+        }
       }
       return;
     }

@@ -220,10 +220,8 @@ function closeModal() {
 function showMainIntro() {
   showMe(mainMenu);
   showMe(mainIntro);
-  if (!AFRAME.utils.device.isMobile()) {
-    if (playOnDesktopBtn) showMe(playOnDesktopBtn);
-    if (playOnlineBtn) showMe(playOnlineBtn);
-  }
+  if (playOnDesktopBtn) showMe(playOnDesktopBtn);
+  if (playOnlineBtn) showMe(playOnlineBtn);
   hideMe(mainInGame);
 }
 
@@ -254,12 +252,13 @@ function hideMe(el) {
 }
 
 if (AFRAME.utils.device.isMobile()) {
-  console.log("is Mobile")
-  this.hideMe(howToPlayButtonMain)
-  this.hideMe(howToPlayButtonModal)
-  if (playOnDesktopBtn) this.hideMe(playOnDesktopBtn)
-  if (playOnlineBtn) this.hideMe(playOnlineBtn)
-  introModal.style.left = "5vw"
-  document.querySelector("#playInVr").textContent = "MOBILE FLY-THROUGH"
-  document.querySelector("#playInVrAbout").textContent = "MOBILE FLY-THROUGH"
+  console.log("is Mobile");
+  // Phones play the touch version of the desktop mode - the VR button
+  // becomes the passive fly-through instead
+  hideMe(howToPlayButtonMain);
+  hideMe(howToPlayButtonModal);
+  introModal.style.left = "5vw";
+  document.querySelector("#playInVr").textContent = "MOBILE FLY-THROUGH";
+  document.querySelector("#playInVrAbout").textContent = "MOBILE FLY-THROUGH";
+  if (playOnDesktopBtn) playOnDesktopBtn.textContent = "PLAY ON PHONE";
 }

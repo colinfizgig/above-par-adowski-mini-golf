@@ -46,6 +46,29 @@ ball and the hole share the screen; after each stroke a follow camera tracks
 the ball until it settles. Add `?nolock` to the URL to keep the cursor
 visible (no pointer lock).
 
+### Phone / tablet play - `components/touch-golf.js`
+
+Phones get a **PLAY ON PHONE** button and the same physical game - the touch
+layer only translates gestures into the desktop mode's club, so putts stay
+fully physical. Played in landscape (portrait shows a rotate prompt).
+
+| Walk mode | |
+| --- | --- |
+| One-finger drag | look around |
+| Press & hold the ground, drag, release | teleport (ribbon arc follows your finger) |
+| Tap near your ball | step into the putting stance |
+| GO TO BALL / MENU buttons | jump to the ball / pause menu |
+
+| Putting stance | |
+| --- | --- |
+| Drag the view | rotate the aim line |
+| Hold SIGHT | sight down the line at the hole |
+| SWING pad (right side) | pull down for the backswing, flick up to putt - flick speed is the power |
+| X | step away |
+
+Multiplayer rooms work the same on mobile, so phone, desktop and VR players
+can share a course.
+
 ### Multiplayer - `systems/multiplayer.js` + `server/`
 
 Parallel-play rooms via [networked-aframe]: each client runs its own complete
