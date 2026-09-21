@@ -76,19 +76,12 @@ AFRAME.registerComponent("touch-golf", {
     const renderer = this.el.sceneEl.renderer;
     if (renderer && renderer.getPixelRatio() > 1.5) renderer.setPixelRatio(1.5);
 
-    // Landscape is the played orientation (the rotate overlay covers the
-    // rest). Lock only works from fullscreen, and neither works on iOS -
-    // both fail quietly there.
-    const root = document.documentElement;
-    if (root.requestFullscreen) {
-      root
-        .requestFullscreen({ navigationUI: "hide" })
-        .then(() => {
-          if (screen.orientation && screen.orientation.lock)
-            return screen.orientation.lock("landscape");
-        })
-        .catch(() => {});
-    }
+    // Hide the browser bars. iOS supports element fullscreen from 16.4
+    // (older iPads only via the webkit prefix), and if this first request
+    // is refused, onTouchEnd retries on later taps until one lands. The
+    // rotate overlay covers devices where the landscape lock fails (iOS
+    // never grants it).
+    this.enterFullscreen();
 
     const canvas = this.el.sceneEl.canvas;
     const opts = { passive: false };
@@ -96,6 +89,33 @@ AFRAME.registerComponent("touch-golf", {
     canvas.addEventListener("touchmove", (e) => this.onTouchMove(e), opts);
     canvas.addEventListener("touchend", (e) => this.onTouchEnd(e), opts);
     canvas.addEventListener("touchcancel", (e) => this.onTouchCancel(e), opts);
+  },
+
+  isFullscreen: function () {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement);
+  },
+
+  enterFullscreen: function () {
+    const root = document.documentElement;
+    const request =
+      root.requestFullscreen ||
+      root.webkitRequestFullscreen ||
+      root.webkitRequestFullScreen;
+    if (!request || this.isFullscreen()) return;
+    try {
+      const p = request.call(root, { navigationUI: "hide" });
+      if (p && p.then) {
+        p.then(() => {
+          this.fullscreenWorked = true;
+          if (screen.orientation && screen.orientation.lock)
+            return screen.orientation.lock("landscape");
+        }).catch(() => {});
+      } else {
+        this.fullscreenWorked = true; // prefixed API returns undefined
+      }
+    } catch (e) {
+      /* not supported - the browser bars stay */
+    }
   },
 
   // ---- canvas gestures --------------------------------------------------
@@ -169,6 +189,11 @@ AFRAME.registerComponent("touch-golf", {
 
   onTouchEnd: function (e) {
     e.preventDefault();
+    // Some browsers refuse the fullscreen request made at game start (it
+    // rides in on an emitted event); a request from a direct touch is
+    // always honored where the API exists. Stop once it has worked once -
+    // if the player then swipes out of fullscreen, that's their choice.
+    if (!this.fullscreenWorked && !this.isFullscreen()) this.enterFullscreen();
     const dg = this.dg;
     for (const t of e.changedTouches) {
       if (this.walkTouch && t.identifier === this.walkTouch.id) {

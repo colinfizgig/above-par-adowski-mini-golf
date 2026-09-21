@@ -1,5 +1,19 @@
 {
-  "name": "Above Par-adowski WebXR Mini-Golf",
-  "display": "standalone",
-  "short_name": "Above Par-adowski"
- }
+  "name": "Above Par-adowski Mini Golf",
+  "short_name": "Above Par",
+  "description": "WebXR mini-golf - playable in VR, on desktop and on your phone",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#03210f",
+  "theme_color": "#03210f",
+  "start_url": ".",
+  "scope": ".",
+  "icons": [
+    {
+      "src": "./assets/images/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

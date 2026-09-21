@@ -69,6 +69,11 @@ fully physical. Played in landscape (portrait shows a rotate prompt).
 Multiplayer rooms work the same on mobile, so phone, desktop and VR players
 can share a course.
 
+The game asks the browser for fullscreen when you start; where that's not
+granted (older iOS), use **Add to Home Screen** - the page is an installable
+web app (`manifest.webmanifest`) and launches from the home screen with no
+browser bars at all.
+
 ### Multiplayer - `systems/multiplayer.js` + `server/`
 
 Parallel-play rooms via [networked-aframe]: each client runs its own complete
