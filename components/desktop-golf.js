@@ -48,10 +48,16 @@ AFRAME.registerComponent("desktop-golf", {
     // so the club's kinematic body can't sweep across the ball on a big
     // mouse move
     this.PUTT_RANGE = 3.0; // how close to the ball you must be to putt
-    this.AIM_ERR_MIN = THREE.MathUtils.degToRad(1); // stepping up never aims
-    this.AIM_ERR_MAX = THREE.MathUtils.degToRad(2); // dead at the hole - the
-    // default line lands 1-2 degrees off (random side) so every putt has
-    // to be lined up by hand
+    // Stepping up never aims dead at the hole: the default line lands off
+    // by 3-5 degrees (random side) so every putt has to be lined up by
+    // hand. The error scales with distance - biggest on tap-in range,
+    // where perfect aim would sink everything, easing off on long putts
+    // that are really about power.
+    this.AIM_ERR_NEAR_DEG = 5; // error at AIM_ERR_NEAR_DIST or closer
+    this.AIM_ERR_FAR_DEG = 3; // error at AIM_ERR_FAR_DIST or beyond
+    this.AIM_ERR_NEAR_DIST = 1.5; // m from the hole
+    this.AIM_ERR_FAR_DIST = 8; // m from the hole
+    this.AIM_ERR_JITTER_DEG = 0.5; // random extra so re-entering rerolls
     this.ARC_N = 24; // samples along the teleport arc
     this.ARC_WIDTH = 0.05; // ribbon width of the arc (m)
 
@@ -475,12 +481,27 @@ AFRAME.registerComponent("desktop-golf", {
       this.stanceBallPos.y - 0.0275
     );
 
-    // Default the aim NEAR the flag, but never right at it
+    // Default the aim NEAR the flag, but never right at it - the closer
+    // the hole, the further off the line starts
     const flagPos = this.flagEl.object3D.position;
+    const holeDist = Math.hypot(
+      flagPos.x - this.stanceBallPos.x,
+      flagPos.z - this.stanceBallPos.z
+    );
+    const closeness =
+      1 -
+      THREE.MathUtils.clamp(
+        (holeDist - this.AIM_ERR_NEAR_DIST) /
+          (this.AIM_ERR_FAR_DIST - this.AIM_ERR_NEAR_DIST),
+        0,
+        1
+      );
+    const errDeg =
+      this.AIM_ERR_FAR_DEG +
+      (this.AIM_ERR_NEAR_DEG - this.AIM_ERR_FAR_DEG) * closeness +
+      Math.random() * this.AIM_ERR_JITTER_DEG;
     const aimErr =
-      (this.AIM_ERR_MIN +
-        Math.random() * (this.AIM_ERR_MAX - this.AIM_ERR_MIN)) *
-      (Math.random() < 0.5 ? -1 : 1);
+      THREE.MathUtils.degToRad(errDeg) * (Math.random() < 0.5 ? -1 : 1);
     this.aimYaw =
       Math.atan2(
         -(flagPos.x - this.stanceBallPos.x),
