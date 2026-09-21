@@ -32,26 +32,6 @@ AFRAME.registerComponent("tutorial", {
       iconHeight: 0.065,
     };
 
-    this.desktopTutorialContent = [
-      {
-        header: "Take a mulligan.",
-        body:
-            "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
-            "but desktop players can use keyboard\n and mouse to explore the course!",
-        id: "desktopTut",
-      }
-    ]
-
-    // this.mobileTutorialContent = [
-    //   {
-    //     header: "Take a mulligan.",
-    //     body:
-    //         "This is a WebXR game meant to be played on\nvirtual reality headsets like Meta Quest 2,\n" +
-    //         "but mobile players can pinch-and-zoom to explore the course!",
-    //     id: "desktopTut",
-    //   }
-    // ]
-
     this.tutorialContent = [
       {
         header: "A few tips before you tee off.",
@@ -92,11 +72,11 @@ AFRAME.registerComponent("tutorial", {
     this.useButtons = true;
 
     console.log("active hole", this.data.activeHoleIndex);
+    // The tutorial board is VR-only: desktop and touch have their own
+    // on-screen hints (the old non-VR "explore the course" sign predates
+    // the playable desktop mode)
     if (this.data.activeHoleIndex == 0) {
       if (AFRAME.utils.device.checkHeadsetConnected()) this.createVRContent();
-      else {
-        this.createDesktopContent();
-      }
     }
 
     //tutorial header text
@@ -176,38 +156,6 @@ AFRAME.registerComponent("tutorial", {
         this.tutBase.object3D.updateMatrix();
       }
     });
-  },
-
-  createDesktopContent() {
-    this.createContentBase();
-
-    //TEXT: HEADER
-    const headerText = document.createElement("a-entity");
-    headerText.setAttribute("troika-text", {
-      value: this.desktopTutorialContent[this.tutIndex]?.header,
-      fontSize: 0.1,
-      color: this.yellow,
-      font: this.fontKnockout,
-      align: "center",
-    });
-    headerText.setAttribute("position", `${-this.boxWidth / 5} 0.225 0.01`);
-    headerText.classList.add("headerText");
-    this.tutBase.appendChild(headerText);
-
-    //TEXT: BODY
-    const bodyText = document.createElement("a-entity");
-    bodyText.setAttribute("troika-text", {
-      value: this.desktopTutorialContent[this.tutIndex]?.body,
-      fontSize: 0.065,
-      color: this.offWhite,
-      font: this.fontKnockout,
-      align: "center",
-      maxWidth: 1,
-      lineHeight: 1.2,
-    });
-    bodyText.setAttribute("position", `${-this.boxWidth / 5} -.1 0.01`);
-    bodyText.classList.add("bodyText");
-    this.tutBase.appendChild(bodyText);
   },
 
   createVRContent() {
