@@ -48,6 +48,10 @@ AFRAME.registerComponent("desktop-golf", {
     // so the club's kinematic body can't sweep across the ball on a big
     // mouse move
     this.PUTT_RANGE = 3.0; // how close to the ball you must be to putt
+    this.AIM_ERR_MIN = THREE.MathUtils.degToRad(1); // stepping up never aims
+    this.AIM_ERR_MAX = THREE.MathUtils.degToRad(2); // dead at the hole - the
+    // default line lands 1-2 degrees off (random side) so every putt has
+    // to be lined up by hand
     this.ARC_N = 24; // samples along the teleport arc
     this.ARC_WIDTH = 0.05; // ribbon width of the arc (m)
 
@@ -471,12 +475,17 @@ AFRAME.registerComponent("desktop-golf", {
       this.stanceBallPos.y - 0.0275
     );
 
-    // Default the aim right at the flag
+    // Default the aim NEAR the flag, but never right at it
     const flagPos = this.flagEl.object3D.position;
-    this.aimYaw = Math.atan2(
-      -(flagPos.x - this.stanceBallPos.x),
-      -(flagPos.z - this.stanceBallPos.z)
-    );
+    const aimErr =
+      (this.AIM_ERR_MIN +
+        Math.random() * (this.AIM_ERR_MAX - this.AIM_ERR_MIN)) *
+      (Math.random() < 0.5 ? -1 : 1);
+    this.aimYaw =
+      Math.atan2(
+        -(flagPos.x - this.stanceBallPos.x),
+        -(flagPos.z - this.stanceBallPos.z)
+      ) + aimErr;
     this.aimYawTarget = this.aimYaw;
 
     // Freeze the walking controls while in the stance
