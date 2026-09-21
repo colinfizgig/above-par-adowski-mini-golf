@@ -314,9 +314,16 @@ AFRAME.registerComponent("desktop-golf", {
       }
       return;
     }
-    // walk: while aiming the teleporter (T held), right-click blinks there
+    // walk: while aiming the teleporter (T held), a click (either button)
+    // blinks there AND ends the aim - otherwise the still-armed teleporter
+    // jumps a second time when T is released
+    if (this.teleAim && e.target === this.el.sceneEl.canvas) {
+      if (this._teleHitValid) this.teleportTo(this._teleHit);
+      this.teleAim = false; // tick hides the marker/arc and clears the hit
+      this.downTime = 0;
+      return;
+    }
     if (e.button === 2 && e.target === this.el.sceneEl.canvas) {
-      if (this.teleAim && this._teleHitValid) this.teleportTo(this._teleHit);
       this.downTime = 0;
       return;
     }
