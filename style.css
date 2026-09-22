@@ -414,6 +414,46 @@ h1 {
   margin-bottom: 4px;
 }
 
+#voice-btn {
+  position: fixed;
+  left: 14px;
+  bottom: 14px;
+  z-index: 6;
+  background: #03210fb0;
+  color: #fffed5;
+  border: 2px solid #fffed555;
+  border-radius: 12px;
+  font-family: "knockouthtf48-featherweight";
+  font-size: max(2.2vh, 13px);
+  letter-spacing: 0.08em;
+  padding: 10px 14px 6px 14px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#voice-btn[data-state="on"] {
+  background: #1cb134cc;
+  border-color: #d5ffdd88;
+}
+
+#voice-btn[data-state="muted"] {
+  background: #de4d1fcc;
+  border-color: #ffe3d588;
+}
+
+#voice-btn[data-state="blocked"] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* phones: the bottom-left corner belongs to GO TO BALL / SIGHT */
+@media (pointer: coarse) {
+  #voice-btn {
+    bottom: 92px;
+  }
+}
+
 /* ------- end-of-round replay button ---------------------------------*/
 
 #play-again-btn {

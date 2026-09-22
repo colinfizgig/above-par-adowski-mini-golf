@@ -173,6 +173,7 @@
       setInterval(tintOwnBall, 800);
       startScoreboard(scene);
       startMoments(scene);
+      startVoice();
     });
 
     document.body.addEventListener("connectError", (e) => {
@@ -251,6 +252,192 @@
         hole: e.detail.hole,
         strokes: e.detail.strokes,
       });
+    });
+  }
+
+  // ---- voice chat: opt-in, peer-to-peer -------------------------------
+  // Audio flows browser-to-browser over WebRTC; the relay only ferries
+  // the little signaling messages (over the existing NAF data channel).
+  // Each speaker opens a one-way send connection to every other player,
+  // and listeners answer receive-only - so nobody needs a microphone
+  // (or the mic permission) to HEAR the room, and there is never any
+  // renegotiation to get wrong. Mute keeps the connections and just
+  // disables the track, so unmute is instant.
+  const RTC_CONFIG = {
+    iceServers: [
+      { urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] },
+    ],
+  };
+
+  function startVoice() {
+    const btn = document.querySelector("#voice-btn");
+    if (!btn || !window.RTCPeerConnection) return;
+    btn.classList.remove("hide");
+
+    let micStream = null; // acquired on first opt-in
+    let micState = "off"; // off | on | muted | blocked
+    const roomClients = new Set();
+    const sendPCs = {}; // clientId -> RTCPeerConnection carrying our voice
+    const recvPCs = {}; // clientId -> RTCPeerConnection carrying theirs
+    const audioEls = {}; // clientId -> <audio> playing their stream
+
+    const LABELS = {
+      off: "VOICE OFF",
+      on: "VOICE ON",
+      muted: "VOICE MUTED",
+      blocked: "MIC BLOCKED",
+    };
+    const setBtn = () => {
+      btn.textContent = LABELS[micState];
+      btn.dataset.state = micState;
+      btn.title =
+        micState === "blocked"
+          ? "Microphone access is blocked - allow it in your browser's " +
+            "site settings (the padlock by the address bar)"
+          : "Toggle voice chat";
+    };
+    setBtn();
+
+    // If the mic was already blocked for this site, say so up front
+    // (and recover if the player unblocks it in browser settings)
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions
+        .query({ name: "microphone" })
+        .then((status) => {
+          const sync = () => {
+            if (status.state === "denied") {
+              micState = "blocked";
+              setBtn();
+            } else if (micState === "blocked") {
+              micState = "off";
+              setBtn();
+            }
+          };
+          sync();
+          status.onchange = sync;
+        })
+        .catch(() => {}); // Safari doesn't take this query - click will tell
+    }
+
+    const send = (to, msg) =>
+      NAF.connection.sendDataGuaranteed(to, "mp-voice", msg);
+
+    // Speaker side: one send-only connection per listener
+    const offerTo = (clientId) => {
+      if (!micStream || sendPCs[clientId] || clientId === NAF.clientId) return;
+      const pc = new RTCPeerConnection(RTC_CONFIG);
+      sendPCs[clientId] = pc;
+      micStream.getTracks().forEach((t) => pc.addTrack(t, micStream));
+      pc.onicecandidate = (e) => {
+        if (e.candidate) send(clientId, { t: "ice", dir: "send", cand: e.candidate });
+      };
+      pc.createOffer()
+        .then((offer) => pc.setLocalDescription(offer))
+        .then(() => send(clientId, { t: "offer", sdp: pc.localDescription }))
+        .catch(() => {});
+    };
+
+    const dropPeer = (clientId) => {
+      if (sendPCs[clientId]) sendPCs[clientId].close();
+      if (recvPCs[clientId]) recvPCs[clientId].close();
+      if (audioEls[clientId]) audioEls[clientId].srcObject = null;
+      delete sendPCs[clientId];
+      delete recvPCs[clientId];
+      delete audioEls[clientId];
+    };
+
+    document.body.addEventListener("clientConnected", (e) => {
+      roomClients.add(e.detail.clientId);
+      if (micState === "on" || micState === "muted") offerTo(e.detail.clientId);
+    });
+    document.body.addEventListener("clientDisconnected", (e) => {
+      roomClients.delete(e.detail.clientId);
+      dropPeer(e.detail.clientId);
+    });
+
+    // Listener side: answer receive-only, no permission needed
+    NAF.connection.subscribeToDataChannel("mp-voice", (senderId, type, msg) => {
+      if (!msg || typeof msg !== "object") return;
+      try {
+        if (msg.t === "offer") {
+          if (recvPCs[senderId]) recvPCs[senderId].close();
+          const pc = new RTCPeerConnection(RTC_CONFIG);
+          recvPCs[senderId] = pc;
+          pc.onicecandidate = (e) => {
+            if (e.candidate) send(senderId, { t: "ice", dir: "recv", cand: e.candidate });
+          };
+          pc.ontrack = (e) => {
+            let a = audioEls[senderId];
+            if (!a) {
+              a = new Audio();
+              a.autoplay = true;
+              audioEls[senderId] = a;
+            }
+            a.srcObject = e.streams[0];
+            a.play().catch(() => {
+              // autoplay refused (rare - the player has interacted by
+              // now): retry on their next input
+              const retry = () => {
+                a.play().catch(() => {});
+                document.removeEventListener("pointerdown", retry);
+              };
+              document.addEventListener("pointerdown", retry, { once: true });
+            });
+          };
+          pc.setRemoteDescription(msg.sdp)
+            .then(() => pc.createAnswer())
+            .then((answer) => pc.setLocalDescription(answer))
+            .then(() => send(senderId, { t: "answer", sdp: pc.localDescription }))
+            .catch(() => {});
+        } else if (msg.t === "answer") {
+          const pc = sendPCs[senderId];
+          if (pc) pc.setRemoteDescription(msg.sdp).catch(() => {});
+        } else if (msg.t === "ice") {
+          // their send-PC pairs with our recv-PC and vice versa
+          const pc = msg.dir === "send" ? recvPCs[senderId] : sendPCs[senderId];
+          if (pc && msg.cand) pc.addIceCandidate(msg.cand).catch(() => {});
+        }
+      } catch (err) {
+        /* malformed signaling from a peer never breaks the game */
+      }
+    });
+
+    btn.addEventListener("click", async () => {
+      if (micState === "blocked") return;
+      if (micState === "on") {
+        micStream.getAudioTracks().forEach((t) => (t.enabled = false));
+        micState = "muted";
+        return setBtn();
+      }
+      if (micState === "muted") {
+        micStream.getAudioTracks().forEach((t) => (t.enabled = true));
+        micState = "on";
+        return setBtn();
+      }
+      // off -> ask for the mic (this is the browser permission moment)
+      btn.textContent = "VOICE ...";
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+          },
+        });
+        micState = "on";
+        setBtn();
+        roomClients.forEach(offerTo);
+      } catch (err) {
+        const denied =
+          err && (err.name === "NotAllowedError" || err.name === "SecurityError");
+        micState = denied ? "blocked" : "off";
+        setBtn();
+        toast(
+          err && err.name === "NotFoundError"
+            ? "No microphone found - voice chat stays off"
+            : "Voice chat off - mic access was declined"
+        );
+      }
     });
   }
 

@@ -88,6 +88,14 @@ can share a room. In a room the backing music becomes a shared radio
 station scheduled by wall-clock time, so everyone hears the same song at
 the same moment - late joiners tune into the middle of whatever's playing.
 
+Voice chat is opt-in and peer-to-peer: press the **VOICE** button (bottom
+left) and allow the microphone when the browser asks. Audio streams flow
+directly between browsers over WebRTC - the relay only carries the tiny
+connection-setup messages. Pressing VOICE again mutes instantly; players
+who never opt in (or decline the mic) still hear everyone who did. If the
+mic was blocked, the button says so - re-enable it from the browser's site
+settings (the padlock by the address bar).
+
 Joining is link-based - no accounts. Click **PLAY ONLINE** and enter a room
 name, or share a URL; everyone using the same room name plays together:
 
