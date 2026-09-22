@@ -102,6 +102,11 @@ body.aframe-inspector-opened .a-dom-overlay {
     4.33px 4.33px #de4d1f, 4.66px 4.66px #de4d1f, 5px 5px #de4d1f;
 }
 
+.mainButton:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
 .mainButton:hover {
   background-color: #de4d1f;
   box-shadow: 0.33px 0.33px #b13f1c, 0.66px 0.66px #b13f1c, 1px 1px #b13f1c,

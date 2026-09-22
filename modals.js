@@ -262,3 +262,50 @@ if (AFRAME.utils.device.isMobile()) {
   document.querySelector("#playInVrAbout").textContent = "MOBILE FLY-THROUGH";
   if (playOnDesktopBtn) playOnDesktopBtn.textContent = "PLAY ON PHONE";
 }
+
+// ---- gate the play buttons until the course is actually ready --------
+// The menu is plain HTML, so on a first visit (cold cache) it's clickable
+// while the course models, the walkmesh and the PhysX wasm are still
+// downloading. Starting the game then teleports the player before there
+// is anywhere to stand - they end up stranded at the road. Hold the
+// buttons at LOADING... until the scene can really host a game.
+(function gatePlayButtons() {
+  const buttons = [
+    playInVrIntro,
+    playOnDesktopBtn,
+    playInVrAbout,
+    playInVrHowTo,
+  ].filter(Boolean);
+  const labels = buttons.map((b) => b.textContent);
+  const setLoading = (loading) =>
+    buttons.forEach((b, i) => {
+      b.disabled = loading;
+      b.textContent = loading ? "LOADING..." : labels[i];
+    });
+
+  let navmeshLoaded = false;
+  const nav = document.querySelector(".navmesh");
+  if (!nav || nav.getObject3D("mesh")) navmeshLoaded = true;
+  else
+    nav.addEventListener("model-loaded", () => (navmeshLoaded = true), {
+      once: true,
+    });
+
+  const ready = () =>
+    navmeshLoaded &&
+    sceneEl.hasLoaded &&
+    sceneEl.systems.physx &&
+    sceneEl.systems.physx.physXInitialized;
+
+  if (ready()) return;
+  setLoading(true);
+  const started = performance.now();
+  const poll = setInterval(() => {
+    // failsafe: never leave the menu dead forever if something (e.g.
+    // physics) refuses to initialize - after 2 minutes let them try
+    if (ready() || performance.now() - started > 120000) {
+      clearInterval(poll);
+      setLoading(false);
+    }
+  }, 250);
+})();
