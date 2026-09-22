@@ -37,10 +37,67 @@ function shuffleArray(array) {
 }
 
 const backingTracks = document.querySelectorAll(".backing-track");
-const backingTracksArray = shuffleArray(Array.from(backingTracks)); // create an array from the node list and shuffle it
+
+// In a multiplayer room everyone should hear the same music at the same
+// moment, so room mode tunes into a shared radio station: a fixed
+// playlist scheduled by wall-clock time. Each client computes the
+// station position independently (clocks agree to well under a second),
+// so no sync messages are needed - late joiners drop into the middle of
+// the same song, and every track boundary re-syncs any drift.
+// Solo play keeps the original shuffled playlist.
+const musicRoomMode = new URLSearchParams(document.location.search).has(
+  "room"
+);
+// Measured lengths (s) of the tracks in document order (ffprobe)
+const RADIO_SECONDS = [
+  104.071813, // Seaside Samba
+  154.331375, // Cidade Da Paixao
+  108.247438, // Clash Of The Claves
+  197.596168, // Coastal Dreaming
+  234.004875, // Soul Salsa
+  122.532494, // In The Money
+];
+
+const backingTracksArray = musicRoomMode
+  ? Array.from(backingTracks) // fixed order: it's a shared broadcast
+  : shuffleArray(Array.from(backingTracks));
 let trackIndex = 0;
 let trackCount = backingTracks.length;
 let backingTrack = backingTracksArray[trackIndex];
+
+const radioPosition = () => {
+  const total = RADIO_SECONDS.reduce((a, b) => a + b, 0);
+  let t = (Date.now() / 1000) % total;
+  let i = 0;
+  while (t >= RADIO_SECONDS[i]) {
+    t -= RADIO_SECONDS[i];
+    i++;
+  }
+  return { index: i, offset: t };
+};
+
+const playRadio = () => {
+  const pos = radioPosition();
+  const track = backingTracksArray[pos.index];
+  backingTrack = track;
+  const seek = () => {
+    const p = radioPosition(); // recompute: loading took real time
+    if (p.index !== pos.index) return playRadio();
+    try {
+      track.currentTime = p.offset;
+    } catch (e) {
+      /* not seekable yet - plays from the top, next boundary re-syncs */
+    }
+    track.play();
+  };
+  if (track.readyState >= 1) seek();
+  else {
+    track.addEventListener("loadedmetadata", seek, { once: true });
+    track.load();
+  }
+};
+
+const startMusic = () => (musicRoomMode ? playRadio() : backingTrack.play());
 
 let playNextTrack = () => {
   trackIndex++;
@@ -49,10 +106,27 @@ let playNextTrack = () => {
   backingTrack.play();
 };
 
+const onTrackEnded = (endedTrack) => {
+  if (!musicRoomMode) return playNextTrack();
+  const pos = radioPosition();
+  if (backingTracksArray[pos.index] === endedTrack) {
+    // the real file ran a hair shorter than the schedule - step past it
+    const next =
+      backingTracksArray[(pos.index + 1) % backingTracksArray.length];
+    backingTrack = next;
+    try {
+      next.currentTime = 0;
+    } catch (e) {}
+    next.play();
+  } else {
+    playRadio();
+  }
+};
+
 for (var i = 0; i < trackCount; i++) {
   let t = backingTracksArray[i];
   t.volume = 0.25;
-  t.addEventListener("ended", playNextTrack);
+  t.addEventListener("ended", () => onTrackEnded(t));
 }
 
 // const backingTrack = document.querySelector("#backing-track");
@@ -64,7 +138,7 @@ const cameraRig = document.querySelector("#cameraRig");
 // If the user is teleporting disable movement-controls in XR
 const sceneEl = document.querySelector("a-scene");
 sceneEl.addEventListener("enter-vr", function () {
-  backingTrack.play();
+  startMusic();
   scenePreviewCam.setAttribute("camera", "active:false;");
   head.setAttribute("camera", "active:true;");
   if (
@@ -121,7 +195,7 @@ function startDesktopGame() {
   window.APDesktopMode = true;
   hideMainMenu();
   closeModal();
-  backingTrack.play();
+  startMusic();
   scenePreviewCam.removeAttribute("animation");
   scenePreviewCam.setAttribute("camera", "active:false;");
   document.querySelector("#head").setAttribute("camera", "active:true;");
@@ -171,7 +245,7 @@ playInVrHowTo.onclick = function () {
 
 function startGame() {
   hideMainMenu();
-  backingTrack.play();
+  startMusic();
   if (!AFRAME.utils.device.isMobile()) {
     closeModal();
     sceneEl.enterVR();

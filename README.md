@@ -84,7 +84,9 @@ plus a live shared scoreboard. You hear other players' putts click from
 where their ball is, a toast announces whenever someone sinks a hole, and
 when your round ends a shared results board ranks the field and crowns the
 winner. Clubs stay local to each player's screen. Desktop and VR players
-can share a room.
+can share a room. In a room the backing music becomes a shared radio
+station scheduled by wall-clock time, so everyone hears the same song at
+the same moment - late joiners tune into the middle of whatever's playing.
 
 Joining is link-based - no accounts. Click **PLAY ONLINE** and enter a room
 name, or share a URL; everyone using the same room name plays together:
