@@ -122,6 +122,9 @@ AFRAME.registerComponent("desktop-golf", {
     document.addEventListener("mousedown", (e) => this.onMouseDown(e));
     document.addEventListener("mouseup", (e) => this.onMouseUp(e));
     document.addEventListener("mousemove", (e) => this.onMouseMove(e));
+    // Releasing a button (or key) outside the window never fires the up
+    // event here - drop every held state when focus leaves
+    window.addEventListener("blur", () => this.releaseHeldInput());
     document.addEventListener("contextmenu", (e) => this.onContextMenu(e));
     document.addEventListener("keydown", (e) => this.onKeyDown(e));
     document.addEventListener("keyup", (e) => this.onKeyUp(e));
@@ -318,6 +321,7 @@ AFRAME.registerComponent("desktop-golf", {
       if (this.following) return;
       if (e.button === 2) {
         this.peek = true;
+        this._peekMouse = true;
         this.swingDrag = false;
       } else if (e.button === 0 && this.peekBlend < 0.25) {
         this.swingDrag = true;
@@ -348,7 +352,10 @@ AFRAME.registerComponent("desktop-golf", {
   onMouseUp: function (e) {
     if (this.state === "aim") {
       if (e.button === 0) this.swingDrag = false;
-      else if (e.button === 2) this.peek = false;
+      else if (e.button === 2) {
+        this.peek = false;
+        this._peekMouse = false;
+      }
       return;
     }
     if (e.button !== 0) return;
@@ -376,7 +383,36 @@ AFRAME.registerComponent("desktop-golf", {
     return Math.hypot(ballPos.x - rigPos.x, ballPos.z - rigPos.z);
   },
 
+  // A mouseup outside the window is never delivered, which leaves drag
+  // states (ours and look-controls') stuck on. The button bitmask on
+  // every mousemove tells the truth - reconcile against it.
+  reconcileButtons: function (e) {
+    if (e.buttons === undefined) return;
+    if (this.swingDrag && !(e.buttons & 1)) this.swingDrag = false;
+    if (this._peekMouse && !(e.buttons & 2)) {
+      this._peekMouse = false;
+      this.peek = false;
+    }
+    if (this.state === "walk" && !(e.buttons & 3)) {
+      const lc = this.head.components["look-controls"];
+      if (lc && lc.mouseDown) lc.onMouseUp();
+      this.downTime = 0;
+    }
+  },
+
+  releaseHeldInput: function () {
+    this.swingDrag = false;
+    this.charging = false;
+    this.peek = false;
+    this._peekMouse = false;
+    this.teleAim = false; // no blink: the release wasn't seen
+    this.downTime = 0;
+    const lc = this.head.components["look-controls"];
+    if (lc && lc.mouseDown) lc.onMouseUp();
+  },
+
   onMouseMove: function (e) {
+    this.reconcileButtons(e);
     if (this.state !== "aim") {
       this.lastClientX = e.clientX;
       this.lastClientY = e.clientY;
