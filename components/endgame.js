@@ -36,12 +36,25 @@ AFRAME.registerComponent("endgame", {
     this.touchControllerR = document.querySelector("#right-controller");
     this.touchControllerL = document.querySelector("#left-controller");
 
+    // Desktop and touch have no controller buttons - they get a clickable
+    // PLAY AGAIN button under the floating scorecard instead
+    this.flatMode = !!window.APDesktopMode;
+
     this.touchControllerR.addEventListener("abuttondown", this.restart.bind(this), { once: true });
     this.touchControllerR.addEventListener("bbuttondown", this.restart.bind(this), { once: true });
     this.touchControllerL.addEventListener("xbuttondown", this.restart.bind(this), { once: true });
     this.touchControllerL.addEventListener("ybuttondown", this.restart.bind(this), { once: true });
 
     this.createContent();
+
+    if (this.flatMode) {
+      this.playAgainBtn = document.querySelector("#play-again-btn");
+      if (this.playAgainBtn) {
+        this._onPlayAgain = () => this.restart();
+        this.playAgainBtn.addEventListener("click", this._onPlayAgain);
+        this.playAgainBtn.classList.remove("hide");
+      }
+    }
 
     document.addEventListener("keydown", (event) => {
       console.log("onkeydown Button " + event.code);
@@ -124,10 +137,13 @@ AFRAME.registerComponent("endgame", {
     scoreText.classList.add("scoreText");
     this.container.appendChild(scoreText);
 
-    //TEXT: BOTTOM TEXT
+    //TEXT: BOTTOM TEXT (VR names the controller buttons; flat screens
+    //get the on-screen PLAY AGAIN button instead)
     const playAgainText = document.createElement("a-entity");
     playAgainText.setAttribute("troika-text", {
-      value: "Press                                         to play again",
+      value: this.flatMode
+        ? "One more round?"
+        : "Press                                         to play again",
       fontSize: 0.08,
       color: this.offWhite,
       font: this.fontKnockout,
@@ -136,6 +152,8 @@ AFRAME.registerComponent("endgame", {
     playAgainText.setAttribute("position", `0 -0.35 0.015`);
     playAgainText.classList.add("playAgainText");
     this.container.appendChild(playAgainText);
+
+    if (this.flatMode) return; // no controller icon on flat screens
 
     //ICON
     const circleButtonIcons = document.createElement("a-plane");
@@ -159,6 +177,11 @@ AFRAME.registerComponent("endgame", {
 
   remove() {
     console.log("remove called")
+
+    if (this.playAgainBtn) {
+      this.playAgainBtn.classList.add("hide");
+      this.playAgainBtn.removeEventListener("click", this._onPlayAgain);
+    }
 
     this.removeContent();
 

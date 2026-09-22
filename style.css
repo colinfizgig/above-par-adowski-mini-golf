@@ -369,6 +369,20 @@ h1 {
   margin-bottom: 2px;
 }
 
+/* ------- end-of-round replay button ---------------------------------*/
+
+#play-again-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 18vh;
+  transform: translateX(-50%);
+  z-index: 6;
+  font-size: max(2.6vh, 16px);
+  letter-spacing: 0.08em;
+  padding: 14px 26px 9px 26px;
+  cursor: pointer;
+}
+
 /* ------- touch (phone/tablet) controls ------------------------------*/
 
 #touch-ui {
