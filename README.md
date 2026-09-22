@@ -21,6 +21,14 @@ PhysX glue and wasm are self-hosted too, pinned to matching versions
 (c-frame/physx 0.1.x) - the previously unpinned CDN wasm had drifted and broke
 physics with a WebAssembly `LinkError`.
 
+A load-time pass keeps the first visit light: the course environment model
+is Draco-compressed (16.3 MB down to 5.4 MB), the menu art ships as WebP
+(10 MB down to 1 MB), and the six-track soundtrack streams on demand
+instead of preloading - roughly 29 MB of initial download cut to 12 MB.
+The menu's PLAY buttons show live loading progress and only unlock once
+the course, walkmesh and physics can actually host a game, so a first-time
+visitor on a slow connection can't start into a half-loaded world.
+
 ### Desktop (non-VR) play - `components/desktop-golf.js`
 
 The club remains a real kinematic PhysX body exactly as in VR, so contact,
@@ -29,7 +37,7 @@ spin and mishits are fully physical - the mouse only drives the club.
 | Walk mode | |
 | --- | --- |
 | `WASD` + mouse drag | walk and look around |
-| Hold `T`, release | aim the blink teleporter (ribbon arc + landing ring on the walkmesh), release to blink |
+| Hold `T`, release | aim the blink teleporter (ribbon arc + landing ring on the walkmesh); release - or click while aiming - to blink |
 | Left click near your ball | step into the putting stance (within ~3m; `N` jumps straight to the ball) |
 | `Esc` | pause menu |
 
@@ -45,6 +53,12 @@ The stance camera sits angled behind the putter with a widened lens so the
 ball and the hole share the screen; after each stroke a follow camera tracks
 the ball until it settles. Add `?nolock` to the URL to keep the cursor
 visible (no pointer lock).
+
+Stepping up never aims dead at the cup: the default line lands 3-5 degrees
+off on a random side - the closer the hole, the further off it starts - so
+every putt has to be lined up by hand. And when the round ends, the
+scorecard offers a clickable **PLAY AGAIN** on desktop and phone (VR keeps
+its controller-button prompt).
 
 ### Phone / tablet play - `components/touch-golf.js`
 
