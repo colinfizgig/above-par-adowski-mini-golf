@@ -123,16 +123,29 @@ AFRAME.registerShader("fade", {
     "}",
 });
 
+// The fader plane rides on the head, so its projected depth is degenerate
+// and three.js's transparent-pass sort can draw far-away transparent
+// surfaces (like the drive-in video screen) AFTER it, showing them over
+// the black. Force it to render last instead.
+AFRAME.registerComponent("fade-topmost", {
+  init: function () {
+    const apply = () => {
+      const mesh = this.el.getObject3D("mesh");
+      if (mesh) mesh.renderOrder = 9999;
+    };
+    apply();
+    this.el.addEventListener("object3dset", apply);
+  },
+});
+
 // The primitive used to display the above shader on a plane
 AFRAME.registerPrimitive("head-occlusion-fader", {
   defaultComponents: {
     material: { shader: "fade", transparent: true, depthTest: false },
     geometry: { primitive: "plane" },
-    "head-occlusion": { property: "material.intensity" },
+    "fade-topmost": {},
   },
-  mappings: {
-    objects: "head-occlusion.objects",
-  },
+  mappings: {},
 });
 
 /**
