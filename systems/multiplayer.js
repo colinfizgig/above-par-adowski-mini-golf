@@ -272,6 +272,11 @@
   function startVoice() {
     const btn = document.querySelector("#voice-btn");
     if (!btn || !window.RTCPeerConnection) return;
+    // Some in-app browsers and older iOS home-screen apps have no
+    // getUserMedia at all - those players stay listen-only
+    const canCapture = !!(
+      navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+    );
     btn.classList.remove("hide");
 
     let micStream = null; // acquired on first opt-in
@@ -340,7 +345,10 @@
     const dropPeer = (clientId) => {
       if (sendPCs[clientId]) sendPCs[clientId].close();
       if (recvPCs[clientId]) recvPCs[clientId].close();
-      if (audioEls[clientId]) audioEls[clientId].srcObject = null;
+      if (audioEls[clientId]) {
+        audioEls[clientId].srcObject = null;
+        audioEls[clientId].remove();
+      }
       delete sendPCs[clientId];
       delete recvPCs[clientId];
       delete audioEls[clientId];
@@ -369,8 +377,14 @@
           pc.ontrack = (e) => {
             let a = audioEls[senderId];
             if (!a) {
-              a = new Audio();
+              // a real in-DOM element with playsinline: iOS won't
+              // reliably play WebRTC audio through a detached Audio()
+              a = document.createElement("audio");
               a.autoplay = true;
+              a.playsInline = true;
+              a.setAttribute("playsinline", "");
+              a.style.display = "none";
+              document.body.appendChild(a);
               audioEls[senderId] = a;
             }
             a.srcObject = e.streams[0];
@@ -415,15 +429,26 @@
         return setBtn();
       }
       // off -> ask for the mic (this is the browser permission moment)
+      if (!canCapture) {
+        toast("This browser can't share a microphone - you can still hear others");
+        return;
+      }
       btn.textContent = "VOICE ...";
       try {
-        micStream = await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true,
-          },
-        });
+        micStream = await navigator.mediaDevices
+          .getUserMedia({
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true,
+            },
+          })
+          .catch((err) => {
+            // some mobile browsers choke on the constraints - retry plain
+            if (err && (err.name === "OverconstrainedError" || err.name === "TypeError"))
+              return navigator.mediaDevices.getUserMedia({ audio: true });
+            throw err;
+          });
         micState = "on";
         setBtn();
         roomClients.forEach(offerTo);
