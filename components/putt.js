@@ -315,6 +315,12 @@ AFRAME.registerComponent("putt", {
       this.ballParticles.object3D.position.copy(this.ballEl.object3D.position);
       this.ballParticles.components["particle-system"].startParticles();
       this.ballEl.components.sound.playSoundBound();
+      // multiplayer relays this as a remote click at the ball's position
+      document.dispatchEvent(
+        new CustomEvent("ap-stroke", {
+          detail: { pos: this.ballEl.object3D.position.toArray() },
+        })
+      );
       setTimeout(() => {
         this.ballParticles.components["particle-system"].stopParticles();
         this.puttDebounce = false;
@@ -340,6 +346,15 @@ AFRAME.registerComponent("putt", {
         this.touchControllerR.components.haptics.pulse(1, 1000);
       } else this.touchControllerL.components.haptics.pulse(1, 1000);
       const parString = this.parHandler(this.scores[this.activeHoleIndex]);
+      // multiplayer turns this into a toast on the other players' screens
+      document.dispatchEvent(
+        new CustomEvent("ap-hole-made", {
+          detail: {
+            hole: this.activeHoleIndex + 1,
+            strokes: parseInt(this.scores[this.activeHoleIndex]),
+          },
+        })
+      );
       this.hmdTextEl.setAttribute("text", `value:${parString}!;`);
       this.hmdTextEl.emit("cuehmdtextin");
       setTimeout(() => {

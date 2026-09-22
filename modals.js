@@ -277,10 +277,35 @@ if (AFRAME.utils.device.isMobile()) {
     playInVrHowTo,
   ].filter(Boolean);
   const labels = buttons.map((b) => b.textContent);
+
+  // Live progress: count preloaded assets as they land (plus the physics
+  // wasm and the walkmesh, tracked below). Item-counting isn't weighted
+  // by bytes, but with ~60 assets it moves smoothly enough to feel real.
+  const assetEls = Array.from(
+    document.querySelectorAll("a-assets > *")
+  ).filter((el) => el.tagName !== "TEMPLATE");
+  const assetDone = (el) => {
+    if (el.tagName === "A-ASSET-ITEM") return !!el.hasLoaded;
+    if (el.tagName === "IMG") return el.complete;
+    if (el.tagName === "AUDIO") return el.readyState >= 3;
+    if (el.tagName === "VIDEO") return el.readyState >= 1; // metadata only
+    return true;
+  };
+  let peakPct = 0; // never counts down, even if a readyState wobbles
+  const progressLabel = () => {
+    const done =
+      assetEls.filter(assetDone).length +
+      (navmeshLoaded ? 1 : 0) +
+      (sceneEl.systems.physx && sceneEl.systems.physx.physXInitialized ? 1 : 0);
+    const pct = Math.round((done / (assetEls.length + 2)) * 100);
+    peakPct = Math.max(peakPct, Math.min(99, pct));
+    return `LOADING ${peakPct}%`;
+  };
+
   const setLoading = (loading) =>
     buttons.forEach((b, i) => {
       b.disabled = loading;
-      b.textContent = loading ? "LOADING..." : labels[i];
+      b.textContent = loading ? progressLabel() : labels[i];
     });
 
   let navmeshLoaded = false;
@@ -306,6 +331,9 @@ if (AFRAME.utils.device.isMobile()) {
     if (ready() || performance.now() - started > 120000) {
       clearInterval(poll);
       setLoading(false);
+      return;
     }
+    const label = progressLabel();
+    buttons.forEach((b) => (b.textContent = label));
   }, 250);
 })();

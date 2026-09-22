@@ -80,8 +80,11 @@ Parallel-play rooms via [networked-aframe]: each client runs its own complete
 game (own ball, own PhysX, own scoring) and the network shares presence only -
 no shared physics, no authoritative server. Other players appear as name-tagged
 avatars with color-coded, unshaded balls (your own ball is tinted to match),
-plus a live shared scoreboard. Clubs stay local to each player's screen.
-Desktop and VR players can share a room.
+plus a live shared scoreboard. You hear other players' putts click from
+where their ball is, a toast announces whenever someone sinks a hole, and
+when your round ends a shared results board ranks the field and crowns the
+winner. Clubs stay local to each player's screen. Desktop and VR players
+can share a room.
 
 Joining is link-based - no accounts. Click **PLAY ONLINE** and enter a room
 name, or share a URL; everyone using the same room name plays together:

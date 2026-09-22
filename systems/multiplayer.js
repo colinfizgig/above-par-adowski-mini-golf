@@ -172,6 +172,7 @@
       spawnProxy("#mp-ball-template", "#ball");
       setInterval(tintOwnBall, 800);
       startScoreboard(scene);
+      startMoments(scene);
     });
 
     document.body.addEventListener("connectError", (e) => {
@@ -185,9 +186,110 @@
     });
   });
 
+  // "Moments": the little events that make a room feel shared. Strokes
+  // become a distance-faded click from where the ball is; holing out
+  // becomes a toast on everyone else's screen. Presence only - nothing
+  // here touches anyone's physics or score.
+  const momentsCamPos = new THREE.Vector3();
+  const momentsBallPos = new THREE.Vector3();
+
+  function toast(text, color) {
+    const holder = document.querySelector("#mp-toasts");
+    if (!holder) return;
+    const div = document.createElement("div");
+    div.className = "mp-toast";
+    div.textContent = text; // remote names stay inert
+    if (/^#[0-9a-fA-F]{6}$/.test(color || "")) div.style.color = color;
+    holder.appendChild(div);
+    setTimeout(() => div.remove(), 5000);
+  }
+
+  function startMoments(scene) {
+    // a small pool so overlapping strokes don't cut each other off
+    const pool = [new Audio(), new Audio(), new Audio()];
+    pool.forEach((a) => (a.src = "./assets/audio/ballHit.mp3"));
+    let poolIndex = 0;
+
+    NAF.connection.subscribeToDataChannel("mp-stroke", (id, type, data) => {
+      const pos = data && data.pos;
+      if (!Array.isArray(pos) || pos.length !== 3) return;
+      if (!pos.every((v) => typeof v === "number" && isFinite(v))) return;
+      const cam = scene.camera;
+      if (!cam) return;
+      cam.getWorldPosition(momentsCamPos);
+      const dist = momentsCamPos.distanceTo(momentsBallPos.fromArray(pos));
+      const a = pool[poolIndex++ % pool.length];
+      a.volume = Math.max(0.05, Math.min(0.6, 1 - dist / 40));
+      a.currentTime = 0;
+      a.play().catch(() => {});
+    });
+
+    NAF.connection.subscribeToDataChannel("mp-holeout", (id, type, data) => {
+      const name = String((data && data.name) || "golfer").slice(0, 16);
+      const hole = parseInt(data && data.hole);
+      const strokes = parseInt(data && data.strokes);
+      if (!hole || hole < 1 || hole > 18) return;
+      if (!strokes || strokes < 1 || strokes > 99) return;
+      toast(
+        `${name} sank hole ${hole} in ${strokes} ` +
+          (strokes === 1 ? "stroke!" : "strokes!"),
+        data.color
+      );
+    });
+
+    document.addEventListener("ap-stroke", (e) => {
+      if (!NAF.connection.isConnected()) return;
+      NAF.connection.broadcastDataGuaranteed("mp-stroke", {
+        pos: e.detail.pos,
+      });
+    });
+    document.addEventListener("ap-hole-made", (e) => {
+      if (!NAF.connection.isConnected()) return;
+      NAF.connection.broadcastDataGuaranteed("mp-holeout", {
+        name: playerName,
+        color: playerColor,
+        hole: e.detail.hole,
+        strokes: e.detail.strokes,
+      });
+    });
+  }
+
   function startScoreboard(scene) {
     const board = document.querySelector("#mp-scoreboard");
     const scores = {}; // clientId (or "me") -> {name, hole, strokes, total}
+
+    const resultsEl = document.querySelector("#mp-results");
+
+    // Once the local round is over, the corner scoreboard grows into a
+    // proper results board next to the endgame card, crowning the winner
+    // when the whole field is done
+    const renderResults = () => {
+      if (!resultsEl) return;
+      const putt = scene.components["putt"];
+      if (!putt || !putt.gameOver) {
+        resultsEl.classList.add("hide");
+        return;
+      }
+      resultsEl.classList.remove("hide");
+      resultsEl.textContent = "";
+      const all = Object.values(scores).sort((a, b) => a.total - b.total);
+      const allDone = all.length > 0 && all.every((s) => s.done);
+      const title = document.createElement("div");
+      title.className = "mp-results-title";
+      title.textContent = allDone
+        ? "FINAL SCORES"
+        : "SCORES · WAITING FOR THE FIELD";
+      resultsEl.appendChild(title);
+      all.forEach((s, i) => {
+        const row = document.createElement("div");
+        row.className = "mp-row";
+        row.textContent = s.done
+          ? `${allDone && i === 0 ? "WINNER · " : ""}${s.name} · ${s.total}`
+          : `${s.name} · ${s.total} thru ${Math.max(0, s.hole - 1)}`;
+        if (/^#[0-9a-fA-F]{6}$/.test(s.color || "")) row.style.color = s.color;
+        resultsEl.appendChild(row);
+      });
+    };
 
     const render = () => {
       if (!board) return;
@@ -204,6 +306,7 @@
           if (/^#[0-9a-fA-F]{6}$/.test(s.color || "")) row.style.color = s.color;
           board.appendChild(row);
         });
+      renderResults();
     };
 
     NAF.connection.subscribeToDataChannel(
@@ -231,6 +334,7 @@
         hole: putt.activeHoleIndex + 1,
         strokes: putt.activeHoleScore,
         total: total,
+        done: !!putt.gameOver,
       };
       scores["me"] = mine;
       if (NAF.connection.isConnected()) {

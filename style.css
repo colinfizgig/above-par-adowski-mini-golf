@@ -369,6 +369,51 @@ h1 {
   margin-bottom: 2px;
 }
 
+#mp-toasts {
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  text-align: center;
+  pointer-events: none;
+}
+
+.mp-toast {
+  background: #03210fb0;
+  color: #fffed5;
+  border-radius: 8px;
+  padding: 8px 14px 5px 14px;
+  font-family: "knockouthtf48-featherweight";
+  font-size: max(2.4vh, 13px);
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+#mp-results {
+  position: fixed;
+  bottom: 27vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  background: #03210fd0;
+  border-radius: 10px;
+  padding: 12px 20px 8px 20px;
+  color: #fffed5;
+  font-family: "knockouthtf48-featherweight";
+  font-size: max(2.4vh, 14px);
+  letter-spacing: 0.08em;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.mp-results-title {
+  color: #ecec43;
+  margin-bottom: 4px;
+}
+
 /* ------- end-of-round replay button ---------------------------------*/
 
 #play-again-btn {
